@@ -1,5 +1,6 @@
-# ailingo
-# Multiplatform Application
+# Client of ailingo project
+# Compose Multiplatform Application
+Web demo: https://ailingos.github.io/ailigo-app/
 ## Before running!
  - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
  - install JDK 17 on your machine

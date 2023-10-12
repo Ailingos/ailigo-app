@@ -1,5 +1,5 @@
-rootProject.name = "chat_application"
-include(":composeApp")
+rootProject.name = "ailingo"
+include(":app")
 
 pluginManagement {
     repositories {

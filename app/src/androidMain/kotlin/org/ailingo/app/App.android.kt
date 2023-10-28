@@ -7,7 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 class AndroidApp : Application() {
     companion object {
@@ -38,10 +42,9 @@ class AppActivity : ComponentActivity() {
             LaunchedEffect(key1 = recordAudioLauncher) {
                 recordAudioLauncher.launch(Manifest.permission.RECORD_AUDIO)
             }
+
             App(voiceToTextParser)
 
         }
     }
 }
-
-

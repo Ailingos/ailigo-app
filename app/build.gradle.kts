@@ -77,7 +77,12 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.ktor.client.okhttp)
-                implementation("com.google.cloud:google-cloud-speech:2.4.0")
+                implementation(libs.google.auth.library.credentials)
+                implementation(libs.google.cloud.library)
+                implementation (libs.protobuf)
+                implementation ("com.google.auth:google-auth-library-oauth2-http:1.7.0")
+                implementation("org.slf4j:slf4j-api:1.7.32")
+                implementation("ch.qos.logback:logback-classic:1.2.6")
             }
         }
 

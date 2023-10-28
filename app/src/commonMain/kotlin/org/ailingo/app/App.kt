@@ -1,72 +1,109 @@
 package org.ailingo.app
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import compose.icons.FeatherIcons
-import compose.icons.feathericons.Mic
-import compose.icons.feathericons.MicOff
-import compose.icons.feathericons.Send
+import org.ailingo.app.theme.AppTheme
 
 @Composable
 internal fun App(voiceToTextParser: VoiceToTextParser) {
-    ChatScreen(voiceToTextParser)
+    AppTheme {
+        ChatScreen(voiceToTextParser)
+    }
 }
 
 
 @Composable
 fun ChatScreen(voiceToTextParser: VoiceToTextParser) {
-    val state = voiceToTextParser.voiceState.collectAsState()
+    val voiceState = voiceToTextParser.voiceState.collectAsState()
+    val textField = remember {
+        mutableStateOf("")
+    }
+    val messages = remember { mutableStateListOf<Message>() }
 
-    Scaffold() { padding ->
-        Row(
-            modifier = Modifier.fillMaxSize()
-                .padding(padding)
-                .padding(8.dp),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = state.value.spokenText,
-                onValueChange = {
-//                    voice.lastText.value
-                },
-                trailingIcon = {
-                    Row {
-                        IconButton(onClick = {
-                            if (state.value.isSpeaking) {
-                                voiceToTextParser.stopListening()
-                            } else {
-                                voiceToTextParser.startListening()
-                            }
-                        }) {
-                            Icon(
-                                imageVector = if (state.value.isSpeaking) FeatherIcons.Mic else FeatherIcons.MicOff,
-                                contentDescription = null
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        IconButton(onClick = {
-
-                        }) {
-                            Icon(imageVector = FeatherIcons.Send, contentDescription = null)
-                        }
-                    }
-                }
+    LaunchedEffect(Unit) {
+        messages.addAll(
+            listOf(
+                Message("Привет, как я могу вам помочь?", false),
+                Message(
+                    "Привет! Я очень заинтересован в изучении нового языка. У меня много вопросов о том, как начать и как сделать процесс изучения более эффективным.",
+                    true
+                ),
+                Message(
+                    "Это замечательно, что вы решили изучать новый язык! Первый шаг - это определить цель изучения языка. Хотите вы научиться разговаривать на повседневные темы или подготовиться к экзамену? Понимание вашей цели поможет выбрать подходящие методы обучения.",
+                    false
+                ),
+                Message(
+                    "Да, я хочу освоить разговорный язык для путешествий и общения с носителями языка. Как я могу начать?",
+                    true
+                ),
+                Message(
+                    "Отлично! Начните с основ. Изучите базовые фразы, числа, дни недели и основные грамматические правила. Попробуйте найти языкового партнера или присоединитесь к языковой группе, где вы сможете практиковать разговор на новом языке. Также рекомендуется слушать музыку, смотреть фильмы и читать книги на изучаемом языке для погружения в языковую среду.",
+                    false
+                ),
+                Message(
+                    "Это звучит интересно! А как насчет грамматики? Я всегда путаюсь в грамматических правилах нового языка.",
+                    true
+                ),
+                Message(
+                    "Не переживайте из-за грамматики - это нормально на начальном этапе. Постепенно погружайтесь в грамматические правила, начиная с простых и постепенно переходите к более сложным. Практикуйте грамматику через разговоры и письменные упражнения. Со временем, с практикой, вы начнете понимать и запоминать грамматические конструкции.",
+                    false
+                ),
+                Message(
+                    "Спасибо за советы! Я попробую ваши рекомендации и начну свое языковое путешествие. Если у меня возникнут еще вопросы, я могу обратиться к вам?",
+                    true
+                ),
+                Message(
+                    "Конечно, всегда рад помочь! Удачи в изучении языка. Не стесняйтесь обращаться, если у вас будут вопросы или вам понадобится помощь. Всего наилучшего в вашем языковом путешествии!",
+                    false
+                )
             )
+        )
+    }
+
+    val listState = rememberLazyListState()
+
+    var lastSpokenText by remember { mutableStateOf("") }
+
+    LaunchedEffect(!voiceState.value.isSpeaking && voiceState.value.spokenText.isNotEmpty() && voiceState.value.spokenText != lastSpokenText) {
+        textField.value = voiceState.value.spokenText
+        lastSpokenText = voiceState.value.spokenText
+    }
+
+    Scaffold(
+        bottomBar = {
+            BottomAppBar {
+                BottomUserMessageBox(textField, voiceToTextParser, voiceState, messages, listState)
+            }
+        }
+    ) { padding ->
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(8.dp)
+        ) {
+            items(messages) { message ->
+                MessageItem(message)
+            }
         }
     }
 }
 
+
 internal expect fun openUrl(url: String?)
-
-
-
-

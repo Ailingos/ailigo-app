@@ -6,7 +6,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,15 +18,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.ailingo.app.theme.AppTheme
 
 @Composable
 internal fun App(voiceToTextParser: VoiceToTextParser) {
     AppTheme {
         ChatScreen(voiceToTextParser)
+        //RegistrationScreen()
+        //GetStartedScreen()
+        //LoginScreen()
+        //ResetPasswordScreen()
     }
 }
 
@@ -83,23 +92,47 @@ fun ChatScreen(voiceToTextParser: VoiceToTextParser) {
         textField.value = voiceState.value.spokenText
         lastSpokenText = voiceState.value.spokenText
     }
-
-    Scaffold(
-        bottomBar = {
-            BottomAppBar {
-                BottomUserMessageBox(textField, voiceToTextParser, voiceState, messages, listState)
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                AppDrawerContent()
             }
         }
-    ) { padding ->
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(8.dp)
-        ) {
-            items(messages) { message ->
-                MessageItem(message)
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    onOpenNavigation = {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+                )
+            },
+            bottomBar = {
+                BottomAppBar {
+                    BottomUserMessageBox(
+                        textField,
+                        voiceToTextParser,
+                        voiceState,
+                        messages,
+                        listState
+                    )
+                }
+            }
+        ) { padding ->
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+            ) {
+                items(messages) { message ->
+                    MessageItem(message)
+                }
             }
         }
     }

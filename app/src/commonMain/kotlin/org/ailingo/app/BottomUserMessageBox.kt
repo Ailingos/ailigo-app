@@ -34,7 +34,7 @@ fun BottomUserMessageBox(
     val scope = rememberCoroutineScope()
     Row(
         modifier = Modifier.fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+            .padding(8.dp),
     ) {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),

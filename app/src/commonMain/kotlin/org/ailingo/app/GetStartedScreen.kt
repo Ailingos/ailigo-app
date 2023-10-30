@@ -17,35 +17,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.compose.stringResource
 
-@Composable
-fun GetStartedScreen() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
-    ) {
-        Text(
-            stringResource(SharedRes.strings.get_started),
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Row {
-            Spacer(modifier = Modifier.weight(1f))
-            Button(modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small, onClick = {
 
-            }) {
-                Text(stringResource(SharedRes.strings.log_in))
+data class GetStartedScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize().padding(16.dp)
+        ) {
+            Text(
+                stringResource(SharedRes.strings.get_started),
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Button(shape = MaterialTheme.shapes.small, onClick = {
+                    navigator.push(LoginScreen(voiceToTextParser))
+                }) {
+                    Text(stringResource(SharedRes.strings.log_in))
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Button(shape = MaterialTheme.shapes.small, onClick = {
+                    navigator.push(RegistrationScreen(voiceToTextParser))
+                }) {
+                    Text(stringResource(SharedRes.strings.sign_up))
+                }
             }
-            Spacer(modifier = Modifier.width(16.dp))
-            Button(modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small, onClick = {
-
-            }) {
-                Text(stringResource(SharedRes.strings.sign_up))
-            }
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

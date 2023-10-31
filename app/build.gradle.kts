@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.libres)
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinx.serialization)
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -20,22 +21,24 @@ kotlin {
         }
     }
 
+//    listOf(
+//            iosX64(),
+//            iosArm64(),
+//            iosSimulatorArm64()
+//        ).forEach {
+//            it.binaries.framework {
+//                baseName = "ailingo"
+//                isStatic = true
+//                export("dev.icerock.moko:resources:0.23.0")
+//                export("dev.icerock.moko:graphics:0.9.0") // toUIColor here
+//            }
+//        }
+
     jvm("desktop")
 
     js {
         browser()
         binaries.executable()
-    }
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "ailingo"
-            isStatic = true
-        }
     }
 
     sourceSets {
@@ -53,6 +56,8 @@ kotlin {
                 implementation(libs.composeIcons.featherIcons)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.koin.core)
+                api("dev.icerock.moko:resources:0.23.0")
+                api("dev.icerock.moko:resources-compose:0.23.0") // for compose multiplatform
             }
         }
 
@@ -63,6 +68,7 @@ kotlin {
         }
 
         val androidMain by getting {
+            dependsOn(commonMain)
             dependencies {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.activityCompose)
@@ -77,7 +83,12 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.ktor.client.okhttp)
-                implementation("com.google.cloud:google-cloud-speech:2.4.0")
+                implementation(libs.google.auth.library.credentials)
+                implementation(libs.google.cloud.library)
+                implementation (libs.protobuf)
+                implementation ("com.google.auth:google-auth-library-oauth2-http:1.7.0")
+                implementation("org.slf4j:slf4j-api:1.7.32")
+                implementation("ch.qos.logback:logback-classic:1.2.6")
             }
         }
 
@@ -87,11 +98,11 @@ kotlin {
             }
         }
 
-        val iosMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
-        }
+//        val iosMain by getting {
+//            dependencies {
+//                implementation(libs.ktor.client.darwin)
+//            }
+//        }
 
     }
 }
@@ -141,8 +152,12 @@ tasks.getByPath("desktopProcessResources").dependsOn("libresGenerateResources")
 tasks.getByPath("desktopSourcesJar").dependsOn("libresGenerateResources")
 tasks.getByPath("jsProcessResources").dependsOn("libresGenerateResources")
 
-
 buildConfig {
     // BuildConfig configuration here.
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "org.ailingo.app" // required
+    multiplatformResourcesClassName = "SharedRes" // optional, default MR
 }

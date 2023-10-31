@@ -13,6 +13,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
     ) {
         window.minimumSize = Dimension(350, 600)
+
         val voiceToTextParser by lazy {
             VoiceToTextParser()
         }

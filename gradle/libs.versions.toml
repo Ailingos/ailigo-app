@@ -1,12 +1,14 @@
 [versions]
 
+googleAuthLibraryCredentials = "1.19.0"
 kotlin = "1.9.10"
 agp = "7.4.0"
 compose = "1.5.1"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.7.2"
-compose-uitooling = "1.5.1"
+compose-uitooling = "1.5.4"
 libres = "1.1.8"
+protobufJavaUtil = "3.21.1"
 voyager = "1.0.0-rc07"
 composeImageLoader = "1.6.7"
 napier = "2.6.1"
@@ -17,13 +19,18 @@ ktor = "2.3.5"
 composeIcons = "1.1.0"
 kotlinx-serialization = "1.6.0"
 koin = "3.5.0"
+credentials = "1.19.0"
+google-cloud-speech = "2.5.1"
+protobuf = "3.18.1"
 
 [libraries]
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
+google-auth-library-credentials = { module = "com.google.auth:google-auth-library-credentials", version.ref = "googleAuthLibraryCredentials" }
 libres = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
+protobuf-java-util-3_21_1 = { module = "com.google.protobuf:protobuf-java-util", version.ref = "protobufJavaUtil" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "composeImageLoader" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
@@ -36,6 +43,10 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 composeIcons-featherIcons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+firebase-appdistribution-gradle = { group = "com.google.firebase", name = "firebase-appdistribution-gradle", version = "4.0.1" }
+google-auth-library = {group = "com.google.auth", name = "google-auth-library-credentials", version.ref = "credentials"}
+google-cloud-library = {group = "com.google.cloud", name = "google-cloud-speech", version.ref = "google-cloud-speech"}
+protobuf = {group = "com.google.protobuf", name = "protobuf-java-util", version.ref = "protobuf"}
 
 [plugins]
 

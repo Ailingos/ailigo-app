@@ -1,59 +1,87 @@
 package org.ailingo.app
 
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import org.ailingo.app.core.util.VoiceStates
 import java.awt.Desktop
+import java.io.ByteArrayOutputStream
 import java.net.URI
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.DataLine
 import javax.sound.sampled.TargetDataLine
+import kotlin.math.sqrt
+
 
 internal actual fun openUrl(url: String?) {
     val uri = url?.let { URI.create(it) } ?: return
     Desktop.getDesktop().browse(uri)
 }
-actual class VoiceToTextParser {
-    private val _voiceState = MutableStateFlow(VoiceStates())
-    actual val voiceState = _voiceState.asStateFlow()
 
-    private var targetDataLine: TargetDataLine? = null
+fun recordAudio(
+    voiceState: MutableStateFlow<VoiceStates>
+): ByteArray {
+    val audioFormat = AudioFormat(44100f, 16, 1, true, false)
 
-    actual fun startListening() {
-        val audioFormat = AudioFormat(16000f, 16, 1, true, true)
-        val dataLineInfo = DataLine.Info(TargetDataLine::class.java, audioFormat)
+    val targetDataLineInfo = DataLine.Info(TargetDataLine::class.java, audioFormat)
+    if (!AudioSystem.isLineSupported(targetDataLineInfo)) {
+        return ByteArray(0)
+    }
 
-        if (!AudioSystem.isLineSupported(dataLineInfo)) {
-            _voiceState.value = _voiceState.value.copy(error = "Audio line not supported")
-            return
+    val targetDataLine = AudioSystem.getLine(targetDataLineInfo) as TargetDataLine
+    targetDataLine.open(audioFormat)
+    targetDataLine.start()
+
+    val audioBuffer = ByteArray(4096)
+    val byteArrayOutputStream = ByteArrayOutputStream()
+
+    // Start recording
+    targetDataLine.start()
+
+    // Variable to keep track of silence counter
+    var silenceCounter = 0
+
+    // How much silence is needed before ending the recording (adjust as needed)
+    val maxSilenceCounter = 50 // For example, 40 empty packets to end the recording
+
+    while (voiceState.value.isSpeaking) {
+        val bytesRead = targetDataLine.read(audioBuffer, 0, audioBuffer.size)
+
+        // Analyze sound level in the current audio buffer
+        val volume = calculateVolume(audioBuffer, bytesRead)
+
+        if (volume > 0.02) { // Threshold value
+            silenceCounter = 0 // Reset silence counter
+        } else {
+            silenceCounter++
         }
 
-        targetDataLine = AudioSystem.getLine(dataLineInfo) as TargetDataLine
-        targetDataLine?.open(audioFormat)
-        targetDataLine?.start()
+        if (silenceCounter >= maxSilenceCounter) {
+            // Reached maximum silence count, stop recording
+            break
+        }
 
-        val bufferSize = 4096
-        val buffer = ByteArray(bufferSize)
-        var bytesRead: Int
-
-        _voiceState.value = _voiceState.value.copy(isSpeaking = true, error = null)
-
-        Thread {
-            while (_voiceState.value.isSpeaking) {
-                bytesRead = targetDataLine?.read(buffer, 0, buffer.size) ?: 0
-                if (bytesRead > 0) {
-                    // Обработка данных из буфера
-                }
-            }
-
-            targetDataLine?.stop()
-            targetDataLine?.close()
-        }.start()
+        byteArrayOutputStream.write(audioBuffer, 0, bytesRead)
     }
 
-    actual fun stopListening() {
-        targetDataLine?.stop()
-        targetDataLine?.close()
-        _voiceState.value = _voiceState.value.copy(isSpeaking = false)
+    voiceState.update {
+        VoiceStates(spokenText = "Wait for transcripts...")
     }
+
+    byteArrayOutputStream.close()
+    targetDataLine.stop()
+    targetDataLine.close()
+
+    return byteArrayOutputStream.toByteArray()
+}
+
+// Function to calculate sound level in the buffer
+fun calculateVolume(audioBuffer: ByteArray, bytesRead: Int): Double {
+    var sum = 0.0
+    for (i in 0 until bytesRead / 2) {
+        val sample =
+            (audioBuffer[2 * i].toInt() or (audioBuffer[2 * i + 1].toInt() shl 8)) / 32768.0
+        sum += sample * sample
+    }
+    return sqrt(sum / (bytesRead / 2))
 }

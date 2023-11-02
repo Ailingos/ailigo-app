@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="my_string">My default localization string</string>
+    <string name="app_name">AILINGO</string>
+    <string name="app_name_underspace">AiLingo</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="continue_app">Continue</string>
+    <string name="dont_have_an_account">Dont have an account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="create_your_account">Create your account</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="log_in">Log in</string>
+    <string name="get_started">Get Started</string>
+    <string name="back_to_the_selection">Back to the selection</string>
+    <string name="reset_your_password">Reset your password</string>
+    <string name="free_mode">Free mode</string>
+    <string name="topics">Topics</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="exit">Exit</string>
+</resources>

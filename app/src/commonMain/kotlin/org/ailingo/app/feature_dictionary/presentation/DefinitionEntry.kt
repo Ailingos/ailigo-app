@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +28,10 @@ fun DefinitionEntry(index: Int, tr: Tr) {
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text((index + 1).toString(), modifier = Modifier.padding(bottom = 4.dp))
+        Text(
+            text = (index + 1).toString(),
+            modifier = Modifier.widthIn(min = 22.dp)
+        )
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
@@ -48,7 +51,7 @@ fun DefinitionEntry(index: Int, tr: Tr) {
     }
     val meanText = tr.mean?.joinToString(", ") { it.text }
     Row {
-        Spacer(modifier = Modifier.width(30.dp))
+        Spacer(modifier = Modifier.width(42.dp))
         if (meanText?.isNotBlank() == true) {
             Text(meanText, color = Color.LightGray, fontSize = 14.sp)
         }

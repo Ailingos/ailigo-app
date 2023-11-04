@@ -105,83 +105,90 @@ internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 internal fun AppTheme(
     content: @Composable() () -> Unit
 ) {
-    val fontFamilySofia: FontFamily = fontFamilyResource(SharedRes.fonts.SofiaSans.medium)
-    val fontFamilyAtypDisplay: FontFamily = fontFamilyResource(SharedRes.fonts.AtypDisplay.medium)
-    val fontFamilyJost: FontFamily = fontFamilyResource(SharedRes.fonts.Jost.regular)
-    val fontFamilyJura: FontFamily = fontFamilyResource(SharedRes.fonts.Jura.medium)
-    val fontFamilyPangolin: FontFamily = fontFamilyResource(SharedRes.fonts.Pangolin.regular)
-    val fontFamilyUbuntu: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.medium)
+    val fontFamilyAtypDisplayMedium: FontFamily = fontFamilyResource(SharedRes.fonts.AtypDisplay.medium)
+    val fontFamilyUbuntuLight: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.light)
+    val fontFamilyUbuntuRegular: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.regular)
+    val fontFamilyUbuntuMedium: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.medium)
+    val fontFamilyUbuntuBold: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.bold)
+    val fontFamilyNunitoSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.bold)
+    val fontFamilyNunitoSansSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.semiBold)
+    val fontFamilyNunitoSansSemiMedium: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.medium)
+    val fontFamilyNunitoSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.regular)
+    val fontFamilyNunitoSansLight: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.light)
+    val fontFamilyOpenSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.bold)
+    val fontFamilyOpenSansSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.semiBold)
+    val fontFamilyOpenSansMedium: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.medium)
+    val fontFamilyOpenSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.regular)
+    val fontFamilyOpenSansLight: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.light)
+    val fontFamilyPTSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.PTSansCaption.bold)
+    val fontFamilyPTSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.PTSansCaption.regular)
+    val fontFamilyPTSansRubikBold: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.bold)
+    val fontFamilyPTSansRubikSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.semiBold)
+    val fontFamilyPTSansRubikMedium: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.medium)
+    val fontFamilyPTSansRubikRegular: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.regular)
+    val fontFamilyPTSansRubikLight: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.light)
 
     val MyTypography = Typography(
-        displayMedium = TextStyle(
-            fontFamily = fontFamilySofia,
-            fontSize = 18.sp
-        ),
         displayLarge = TextStyle(
-            fontFamily = fontFamilySofia,
+            fontFamily = fontFamilyAtypDisplayMedium,
             fontWeight = FontWeight.Bold,
-            fontSize = 26.sp
+            fontSize = 57.sp,
+        ),
+        displayMedium = TextStyle(
+            fontFamily = fontFamilyUbuntuMedium,
+            fontSize = 45.sp,
         ),
         displaySmall = TextStyle(
-            fontFamily = fontFamilySofia,
-            fontSize = 12.sp
+            fontFamily = fontFamilyNunitoSansBold,
+            fontSize = 36.sp
         ),
         headlineLarge = TextStyle(
-            fontFamily = fontFamilyAtypDisplay,
-            fontWeight = FontWeight.Bold,
-            fontSize = 24.sp
+            fontFamily = fontFamilyPTSansRubikBold,
+            fontSize = 32.sp
         ),
         headlineMedium = TextStyle(
-            fontFamily = fontFamilyAtypDisplay,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
+            fontFamily = fontFamilyPTSansRubikMedium,
+            fontSize = 24.sp
         ),
         headlineSmall = TextStyle(
-            fontFamily = fontFamilyAtypDisplay,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            fontFamily = fontFamilyPTSansRubikLight,
+            fontSize = 20.sp,
         ),
         titleLarge = TextStyle(
-            fontFamily = fontFamilyJost,
-            fontWeight = FontWeight.Bold,
+            fontFamily = fontFamilyOpenSansMedium,
             fontSize = 22.sp
         ),
         titleMedium = TextStyle(
-            fontFamily = fontFamilyJost,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            fontFamily = fontFamilyPTSansRegular,
+            fontSize = 16.sp
         ),
         titleSmall = TextStyle(
-            fontFamily = fontFamilyJost,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
+            fontFamily = fontFamilyPTSansRubikRegular,
+            fontSize = 14.sp
         ),
         bodyLarge = TextStyle(
-            fontFamily = fontFamilyJura,
-            fontSize = 18.sp
+            fontFamily = fontFamilyPTSansRubikLight,
+            fontSize = 16.sp
         ),
         bodyMedium = TextStyle(
-            fontFamily = fontFamilyJura,
-            fontSize = 16.sp
+            fontFamily = fontFamilyUbuntuRegular,
+            fontSize = 14.sp
         ),
         bodySmall = TextStyle(
-            fontFamily = fontFamilyJura,
-            fontSize = 14.sp
+            fontFamily = fontFamilyNunitoSansRegular,
+            fontSize = 12.sp
         ),
         labelLarge = TextStyle(
-            fontFamily = fontFamilyPangolin,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
-        ),
-        labelMedium = TextStyle(
-            fontFamily = fontFamilyPangolin,
-            fontWeight = FontWeight.Bold,
+            fontFamily = fontFamilyPTSansRubikLight,
             fontSize = 14.sp
         ),
+        labelMedium = TextStyle(
+            fontFamily = fontFamilyNunitoSansSemiMedium,
+            fontSize = 12.sp,
+        ),
         labelSmall = TextStyle(
-            fontFamily = fontFamilyUbuntu,
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp
+            fontFamily = fontFamilyPTSansRubikLight,
+            fontSize = 11.sp,
         )
     )
 

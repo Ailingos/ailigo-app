@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.feature_chat.data.Message
+import org.ailingo.app.feature_chat.data.model.Message
 
 data class ChatScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
 

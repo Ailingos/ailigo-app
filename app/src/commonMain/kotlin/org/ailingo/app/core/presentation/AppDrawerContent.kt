@@ -16,9 +16,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.ailingo.app.core.presentation.utils.DrawerItems
 import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.dictionary_feature.presentation.DictionaryScreen
 import org.ailingo.app.feature_chat.presentation.ChatScreen
-import org.ailingo.app.get_started_feature.presentation.GetStartedScreen
+import org.ailingo.app.feature_dictionary.presentation.DictionaryScreen
+import org.ailingo.app.feature_get_started.presentation.GetStartedScreen
+import org.ailingo.app.feature_topics.presentation.TopicsScreen
 
 
 @Composable
@@ -63,6 +64,7 @@ fun AppDrawerContent(
 
                         DrawerItems.Topics -> {
                             scope.launch {
+                                navigator.push(TopicsScreen())
                                 drawerState.close()
                             }
                         }

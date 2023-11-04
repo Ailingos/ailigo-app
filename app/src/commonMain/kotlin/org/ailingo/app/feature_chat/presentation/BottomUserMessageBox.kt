@@ -23,7 +23,7 @@ import compose.icons.feathericons.Send
 import kotlinx.coroutines.launch
 import org.ailingo.app.core.util.VoiceStates
 import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.feature_chat.data.Message
+import org.ailingo.app.feature_chat.data.model.Message
 
 
 @Composable

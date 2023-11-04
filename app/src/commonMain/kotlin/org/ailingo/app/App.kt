@@ -17,10 +17,10 @@ import org.ailingo.app.core.presentation.AppDrawerContent
 import org.ailingo.app.core.presentation.TopAppBarForStart
 import org.ailingo.app.core.presentation.TopAppBarMain
 import org.ailingo.app.core.util.VoiceToTextParser
+import org.ailingo.app.feature_get_started.presentation.GetStartedScreen
+import org.ailingo.app.feature_login.presentation.LoginScreen
 import org.ailingo.app.feature_register.presentation.RegistrationScreen
-import org.ailingo.app.get_started_feature.presentation.GetStartedScreen
-import org.ailingo.app.login_feature.presentation.LoginScreen
-import org.ailingo.app.reset_password_feature.presentation.ResetPasswordScreen
+import org.ailingo.app.feature_reset_password.presentation.ResetPasswordScreen
 import org.ailingo.app.theme.AppTheme
 
 @Composable

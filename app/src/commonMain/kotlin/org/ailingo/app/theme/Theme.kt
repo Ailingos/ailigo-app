@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.icerock.moko.resources.compose.fontFamilyResource
+import org.ailingo.app.SharedRes
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
@@ -92,9 +94,10 @@ private val AppTypography = Typography(
     bodyMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
-        fontSize = 16.sp
+        fontSize = 40.sp
     )
 )
+
 
 internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 
@@ -102,16 +105,96 @@ internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 internal fun AppTheme(
     content: @Composable() () -> Unit
 ) {
+    val fontFamilySofia: FontFamily = fontFamilyResource(SharedRes.fonts.SofiaSans.medium)
+    val fontFamilyAtypDisplay: FontFamily = fontFamilyResource(SharedRes.fonts.AtypDisplay.medium)
+    val fontFamilyJost: FontFamily = fontFamilyResource(SharedRes.fonts.Jost.regular)
+    val fontFamilyJura: FontFamily = fontFamilyResource(SharedRes.fonts.Jura.medium)
+    val fontFamilyPangolin: FontFamily = fontFamilyResource(SharedRes.fonts.Pangolin.regular)
+    val fontFamilyUbuntu: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.medium)
+
+    val MyTypography = Typography(
+        displayMedium = TextStyle(
+            fontFamily = fontFamilySofia,
+            fontSize = 18.sp
+        ),
+        displayLarge = TextStyle(
+            fontFamily = fontFamilySofia,
+            fontWeight = FontWeight.Bold,
+            fontSize = 26.sp
+        ),
+        displaySmall = TextStyle(
+            fontFamily = fontFamilySofia,
+            fontSize = 12.sp
+        ),
+        headlineLarge = TextStyle(
+            fontFamily = fontFamilyAtypDisplay,
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp
+        ),
+        headlineMedium = TextStyle(
+            fontFamily = fontFamilyAtypDisplay,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp
+        ),
+        headlineSmall = TextStyle(
+            fontFamily = fontFamilyAtypDisplay,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        ),
+        titleLarge = TextStyle(
+            fontFamily = fontFamilyJost,
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp
+        ),
+        titleMedium = TextStyle(
+            fontFamily = fontFamilyJost,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        ),
+        titleSmall = TextStyle(
+            fontFamily = fontFamilyJost,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = fontFamilyJura,
+            fontSize = 18.sp
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = fontFamilyJura,
+            fontSize = 16.sp
+        ),
+        bodySmall = TextStyle(
+            fontFamily = fontFamilyJura,
+            fontSize = 14.sp
+        ),
+        labelLarge = TextStyle(
+            fontFamily = fontFamilyPangolin,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        ),
+        labelMedium = TextStyle(
+            fontFamily = fontFamilyPangolin,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp
+        ),
+        labelSmall = TextStyle(
+            fontFamily = fontFamilyUbuntu,
+            fontWeight = FontWeight.Bold,
+            fontSize = 12.sp
+        )
+    )
+
     MaterialTheme(
         colorScheme = DarkColorScheme,
-        typography = AppTypography,
+        typography = MyTypography,
         shapes = AppShapes,
         content = {
             Surface(content = content)
         }
     )
 
-    //WARING IF USE DOWN LINE KEYBOARD WILL BE HIDES TEXTFIELD
+    //WARNING IF USE DOWN LINE KEYBOARD WILL BE HIDES TEXTFIELD
 
 //    val systemIsDark = isSystemInDarkTheme()
 //    val isDarkState = remember { mutableStateOf(systemIsDark) }

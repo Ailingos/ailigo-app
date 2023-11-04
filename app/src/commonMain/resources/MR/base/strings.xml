@@ -20,4 +20,19 @@
     <string name="topics">Topics</string>
     <string name="dictionary">Dictionary</string>
     <string name="exit">Exit</string>
+    <string name="trips">TRIPS</string>
+    <string name="food_and_drinks">FOOD AND DRINKS</string>
+    <string name="culture_and_art">CULTURE AND ART</string>
+    <string name="movies">MOVIES</string>
+    <string name="cartoons">CARTOONS</string>
+    <string name="literature">LITERATURE</string>
+    <string name="fashion_and_style">FASHION AND STYLE</string>
+    <string name="sport">SPORT</string>
+    <string name="science_and_education">SCIENCE AND EDUCATION</string>
+    <string name="news">NEWS</string>
+    <string name="health_and_medicine">HEALTH AND MEDICINE</string>
+    <string name="technologies">TECHNOLOGIES</string>
+    <string name="nature_and_ecology">NATURE AND ECOLOGY</string>
+    <string name="history">HISTORY</string>
+    <string name="business">BUSINESS</string>
 </resources>

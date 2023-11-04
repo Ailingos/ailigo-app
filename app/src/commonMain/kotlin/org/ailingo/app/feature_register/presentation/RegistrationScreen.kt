@@ -40,7 +40,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.SharedRes
 import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.login_feature.presentation.LoginScreen
+import org.ailingo.app.feature_login.presentation.LoginScreen
 
 
 @OptIn(ExperimentalComposeUiApi::class)

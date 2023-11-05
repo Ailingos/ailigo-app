@@ -65,14 +65,9 @@ internal fun App(voiceToTextParser: VoiceToTextParser) {
                         }
                     },
                 ) { padding ->
-                    if (navigator.lastItem.key !in authScreens) {
-                        Box(modifier = Modifier.padding(padding)) {
-                            CurrentScreen()
-                        }
-                    } else {
+                    Box(modifier = Modifier.padding(padding)) {
                         CurrentScreen()
                     }
-
                 }
             }
         }

@@ -1,134 +1,35 @@
 package org.ailingo.app.feature_register.presentation
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.collectAsState
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.icerock.moko.resources.compose.stringResource
-import org.ailingo.app.SharedRes
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.feature_login.presentation.LoginScreen
+import org.ailingo.app.feature_chat.presentation.ChatScreen
 
 
-@OptIn(ExperimentalComposeUiApi::class)
 data class RegistrationScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().padding(16.dp)
-        ) {
-            var email by remember {
-                mutableStateOf("")
+        val registerViewModel = getViewModel(Unit, viewModelFactory { RegistrationViewModel() })
+        val registerState = registerViewModel.registerState.collectAsState()
+        when (registerState.value) {
+            RegisterUiState.Empty -> {
+                RegisterStart(registerViewModel, navigator, voiceToTextParser)
             }
-            var password by remember {
-                mutableStateOf("")
+
+            is RegisterUiState.Error -> {
+                RegisterError((registerState.value as RegisterUiState.Error).message, registerViewModel)
             }
-            val passwordFieldFocusRequester = rememberUpdatedState(FocusRequester())
-            val focusManager = LocalFocusManager.current
-            val keyboardController = LocalSoftwareKeyboardController.current
-            Text(
-                stringResource(SharedRes.strings.create_your_account),
-                style = MaterialTheme.typography.headlineLarge
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = {
-                    email = it
-                },
-                label = { Text(text = stringResource(SharedRes.strings.email)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        // Focus on password field when 'Next' is clicked
-                        passwordFieldFocusRequester.value.requestFocus()
-                    }
-                ),
-            )
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = {
-                    password = it
-                },
-                label = { Text(text = stringResource(SharedRes.strings.password)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        focusManager.clearFocus()
-                        keyboardController?.hide()
-                    }
-                ),
-                modifier = Modifier.focusRequester(passwordFieldFocusRequester.value)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                modifier = Modifier
-                    .width(OutlinedTextFieldDefaults.MinWidth)
-                    .height(OutlinedTextFieldDefaults.MinHeight),
-                shape = MaterialTheme.shapes.small,
-                onClick = {
-
-                }
-            ) {
-                Text(stringResource(SharedRes.strings.continue_app))
+            RegisterUiState.Loading -> {
+                RegisterLoading()
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row {
-                Text(
-                    stringResource(SharedRes.strings.already_have_an_account)
-                )
-                Text(" ")
-                Text(
-                    color = MaterialTheme.colorScheme.primary,
-                    text = stringResource(SharedRes.strings.log_in),
-                    modifier = Modifier.clickable {
-                        navigator.push(LoginScreen(voiceToTextParser))
-                    }
-                )
+            is RegisterUiState.Success -> {
+                navigator.push(ChatScreen(voiceToTextParser))
             }
         }
     }

@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
@@ -31,8 +30,10 @@ fun BottomUserMessageBox(
     textField: MutableState<String>,
     voiceToTextParser: VoiceToTextParser,
     voiceState: State<VoiceStates>,
-    messages: SnapshotStateList<Message>,
-    listState: LazyListState
+    messages: List<Message>,
+    listState: LazyListState,
+    chatViewModel: ChatViewModel,
+    isActiveJob: Boolean
 ) {
     val scope = rememberCoroutineScope()
     Row(
@@ -61,18 +62,20 @@ fun BottomUserMessageBox(
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(onClick = {
-                        if (textField.value.isNotBlank()) {
-                            messages.add(Message(textField.value, isSentByUser = true))
-                            textField.value = ""
-                            scope.launch {
-                                listState.scrollToItem(messages.size - 1)
+                    if (!isActiveJob) {
+                        IconButton(onClick = {
+                            if (textField.value.isNotBlank()) {
+                                chatViewModel.sendMessage(textField.value)
+                                textField.value = ""
+                                scope.launch {
+                                    listState.scrollToItem(messages.size - 1)
+                                }
                             }
+                        }) {
+                            Icon(imageVector = FeatherIcons.Send, contentDescription = null)
                         }
-                    }) {
-                        Icon(imageVector = FeatherIcons.Send, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
                 }
 
             }

@@ -23,9 +23,7 @@ import org.ailingo.app.theme.GradientBlack
 @Composable
 fun MessageItem(message: Message) {
     val isSentByUser = message.isSentByUser
-    val backgroundColor =
-        if (isSentByUser) MaterialTheme.colorScheme.primary else GradientBlack
-
+    val backgroundColor = if (isSentByUser) MaterialTheme.colorScheme.primary else GradientBlack
 
     Row(
         modifier = Modifier.fillMaxWidth(),

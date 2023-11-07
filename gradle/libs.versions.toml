@@ -1,9 +1,11 @@
 [versions]
 
 googleAuthLibraryCredentials = "1.19.0"
-kotlin = "1.9.10"
+
+kotlin = "1.9.20"
+
 agp = "7.4.0"
-compose = "1.5.1"
+compose = "1.5.10"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.7.2"
 compose-uitooling = "1.5.4"
@@ -55,4 +57,3 @@ compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

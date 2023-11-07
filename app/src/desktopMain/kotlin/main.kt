@@ -3,7 +3,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import org.ailingo.app.App
-import org.ailingo.app.VoiceToTextParser
+import org.ailingo.app.core.util.VoiceToTextParser
 import java.awt.Dimension
 
 fun main() = application {

@@ -1,4 +1,4 @@
-package org.ailingo.app
+package org.ailingo.app.core.util
 
 import kotlinx.coroutines.flow.StateFlow
 

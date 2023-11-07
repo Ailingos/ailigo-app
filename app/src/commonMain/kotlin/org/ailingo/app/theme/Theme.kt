@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.icerock.moko.resources.compose.fontFamilyResource
+import org.ailingo.app.SharedRes
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
@@ -92,9 +94,10 @@ private val AppTypography = Typography(
     bodyMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
-        fontSize = 16.sp
+        fontSize = 40.sp
     )
 )
+
 
 internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 
@@ -102,16 +105,102 @@ internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 internal fun AppTheme(
     content: @Composable() () -> Unit
 ) {
+    val fontFamilyAtypDisplayMedium: FontFamily = fontFamilyResource(SharedRes.fonts.AtypDisplay.medium)
+    val fontFamilyUbuntuLight: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.light)
+    val fontFamilyUbuntuRegular: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.regular)
+    val fontFamilyUbuntuMedium: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.medium)
+    val fontFamilyUbuntuBold: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.bold)
+    val fontFamilyNunitoSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.bold)
+    val fontFamilyNunitoSansSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.semiBold)
+    val fontFamilyNunitoSansSemiMedium: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.medium)
+    val fontFamilyNunitoSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.regular)
+    val fontFamilyNunitoSansLight: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.light)
+    val fontFamilyOpenSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.bold)
+    val fontFamilyOpenSansSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.semiBold)
+    val fontFamilyOpenSansMedium: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.medium)
+    val fontFamilyOpenSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.regular)
+    val fontFamilyOpenSansLight: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.light)
+    val fontFamilyPTSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.PTSansCaption.bold)
+    val fontFamilyPTSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.PTSansCaption.regular)
+    val fontFamilyPTSansRubikBold: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.bold)
+    val fontFamilyPTSansRubikSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.semiBold)
+    val fontFamilyPTSansRubikMedium: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.medium)
+    val fontFamilyPTSansRubikRegular: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.regular)
+    val fontFamilyPTSansRubikLight: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.light)
+
+    val MyTypography = Typography(
+        displayLarge = TextStyle(
+            fontFamily = fontFamilyAtypDisplayMedium,
+            fontWeight = FontWeight.Bold,
+            fontSize = 57.sp,
+        ),
+        displayMedium = TextStyle(
+            fontFamily = fontFamilyUbuntuMedium,
+            fontSize = 45.sp,
+        ),
+        displaySmall = TextStyle(
+            fontFamily = fontFamilyNunitoSansBold,
+            fontSize = 36.sp
+        ),
+        headlineLarge = TextStyle(
+            fontFamily = fontFamilyPTSansRubikBold,
+            fontSize = 32.sp
+        ),
+        headlineMedium = TextStyle(
+            fontFamily = fontFamilyPTSansRubikMedium,
+            fontSize = 24.sp
+        ),
+        headlineSmall = TextStyle(
+            fontFamily = fontFamilyPTSansRubikLight,
+            fontSize = 20.sp,
+        ),
+        titleLarge = TextStyle(
+            fontFamily = fontFamilyOpenSansMedium,
+            fontSize = 22.sp
+        ),
+        titleMedium = TextStyle(
+            fontFamily = fontFamilyPTSansRegular,
+            fontSize = 16.sp
+        ),
+        titleSmall = TextStyle(
+            fontFamily = fontFamilyPTSansRubikRegular,
+            fontSize = 14.sp
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = fontFamilyPTSansRubikLight,
+            fontSize = 16.sp
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = fontFamilyUbuntuRegular,
+            fontSize = 14.sp
+        ),
+        bodySmall = TextStyle(
+            fontFamily = fontFamilyNunitoSansRegular,
+            fontSize = 12.sp
+        ),
+        labelLarge = TextStyle(
+            fontFamily = fontFamilyPTSansRubikLight,
+            fontSize = 14.sp
+        ),
+        labelMedium = TextStyle(
+            fontFamily = fontFamilyNunitoSansSemiMedium,
+            fontSize = 12.sp,
+        ),
+        labelSmall = TextStyle(
+            fontFamily = fontFamilyPTSansRubikLight,
+            fontSize = 11.sp,
+        )
+    )
+
     MaterialTheme(
         colorScheme = DarkColorScheme,
-        typography = AppTypography,
+        typography = MyTypography,
+
         shapes = AppShapes,
         content = {
             Surface(content = content)
         }
     )
-
-    //WARING IF USE DOWN LINE KEYBOARD WILL BE HIDES TEXTFIELD
 
 //    val systemIsDark = isSystemInDarkTheme()
 //    val isDarkState = remember { mutableStateOf(systemIsDark) }

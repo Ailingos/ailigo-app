@@ -1,4 +1,4 @@
-package org.ailingo.app
+package org.ailingo.app.core.util
 
 import android.app.Application
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.speech.SpeechRecognizer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-
+import org.ailingo.app.AndroidApp
 
 actual class VoiceToTextParser : RecognitionListener {
     private val application: Application
@@ -33,7 +33,10 @@ actual class VoiceToTextParser : RecognitionListener {
             return
         }
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ru")
         }
         recognizer.setRecognitionListener(this)

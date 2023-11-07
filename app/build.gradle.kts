@@ -6,7 +6,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.libres)
     alias(libs.plugins.buildConfig)
-    alias(libs.plugins.kotlinx.serialization)
+    kotlin("plugin.serialization") version "1.9.20"
+
     id("dev.icerock.mobile.multiplatform-resources")
 }
 
@@ -54,8 +55,14 @@ kotlin {
                 implementation(libs.moko.mvvm)
                 implementation(libs.ktor.core)
                 implementation(libs.composeIcons.featherIcons)
-                implementation(libs.kotlinx.serialization.json)
                 implementation(libs.koin.core)
+                
+                //api call
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.5")
+                implementation("io.ktor:ktor-client-core:2.3.5")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.5")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+                //stings, images, fonts res
                 api("dev.icerock.moko:resources:0.23.0")
                 api("dev.icerock.moko:resources-compose:0.23.0") // for compose multiplatform
             }
@@ -83,11 +90,12 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.ktor.client.okhttp)
-                implementation(libs.google.auth.library.credentials)
+
+                //Speech client
                 implementation(libs.google.cloud.library)
-                implementation (libs.protobuf)
+                //GoogleCredentials
                 implementation ("com.google.auth:google-auth-library-oauth2-http:1.7.0")
-                implementation("org.slf4j:slf4j-api:1.7.32")
+                //Logs for speech request
                 implementation("ch.qos.logback:logback-classic:1.2.6")
             }
         }

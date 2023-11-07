@@ -195,13 +195,12 @@ internal fun AppTheme(
     MaterialTheme(
         colorScheme = DarkColorScheme,
         typography = MyTypography,
+
         shapes = AppShapes,
         content = {
             Surface(content = content)
         }
     )
-
-    //WARNING IF USE DOWN LINE KEYBOARD WILL BE HIDES TEXTFIELD
 
 //    val systemIsDark = isSystemInDarkTheme()
 //    val isDarkState = remember { mutableStateOf(systemIsDark) }

@@ -8,6 +8,7 @@ internal val GradientBlack = Color(0xFF8E8FFA)
 internal val ColorForMainTextDictionary = Color(0xFF7752FE)
 internal val ColorForSynonymsDictionary = Color(0xFF8E8FFA)
 
+
 val md_theme_light_primary = Color(0xFF7752FE)
 val md_theme_light_onPrimary = Color(0xFFA05C5C)
 val md_theme_light_primaryContainer = Color(0xFFDCE1FF)

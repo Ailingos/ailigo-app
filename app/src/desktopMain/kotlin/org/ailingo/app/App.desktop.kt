@@ -1,10 +1,24 @@
 package org.ailingo.app
 
+import com.google.api.gax.core.FixedCredentialsProvider
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.cloud.speech.v1p1beta1.RecognitionAudio
+import com.google.cloud.speech.v1p1beta1.RecognitionConfig
+import com.google.cloud.speech.v1p1beta1.RecognizeRequest
+import com.google.cloud.speech.v1p1beta1.SpeechClient
+import com.google.cloud.speech.v1p1beta1.SpeechSettings
+import com.google.protobuf.ByteString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+
 import kotlinx.coroutines.flow.update
 import org.ailingo.app.core.util.VoiceStates
 import java.awt.Desktop
 import java.io.ByteArrayOutputStream
+
 import java.net.URI
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.AudioSystem
@@ -83,5 +97,6 @@ fun calculateVolume(audioBuffer: ByteArray, bytesRead: Int): Double {
             (audioBuffer[2 * i].toInt() or (audioBuffer[2 * i + 1].toInt() shl 8)) / 32768.0
         sum += sample * sample
     }
+
     return sqrt(sum / (bytesRead / 2))
 }

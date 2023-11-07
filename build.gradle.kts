@@ -18,3 +18,13 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
+
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath ("dev.icerock.moko:resources-generator:0.23.0")
+    }
+}

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.libres)
     alias(libs.plugins.buildConfig)
     kotlin("plugin.serialization") version "1.9.20"
+
     id("dev.icerock.mobile.multiplatform-resources")
 }
 
@@ -55,6 +56,7 @@ kotlin {
                 implementation(libs.ktor.core)
                 implementation(libs.composeIcons.featherIcons)
                 implementation(libs.koin.core)
+                
                 //api call
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.5")
                 implementation("io.ktor:ktor-client-core:2.3.5")
@@ -88,6 +90,7 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.ktor.client.okhttp)
+
                 //Speech client
                 implementation(libs.google.cloud.library)
                 //GoogleCredentials
@@ -156,7 +159,6 @@ libres {
 tasks.getByPath("desktopProcessResources").dependsOn("libresGenerateResources")
 tasks.getByPath("desktopSourcesJar").dependsOn("libresGenerateResources")
 tasks.getByPath("jsProcessResources").dependsOn("libresGenerateResources")
-
 
 buildConfig {
     // BuildConfig configuration here.

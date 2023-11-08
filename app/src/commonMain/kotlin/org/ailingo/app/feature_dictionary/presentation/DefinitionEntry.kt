@@ -53,7 +53,7 @@ fun DefinitionEntry(index: Int, tr: Tr) {
     Row {
         Spacer(modifier = Modifier.width(42.dp))
         if (meanText?.isNotBlank() == true) {
-            Text(meanText, color = Color.LightGray, fontSize = 14.sp)
+            Text(meanText, color = Color.DarkGray, fontSize = 14.sp)
         }
     }
     Spacer(modifier = Modifier.height(16.dp))

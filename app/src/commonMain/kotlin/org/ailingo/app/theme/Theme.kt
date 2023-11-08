@@ -193,7 +193,7 @@ internal fun AppTheme(
     )
 
     MaterialTheme(
-        colorScheme = DarkColorScheme,
+        colorScheme = LightColorScheme,
         typography = MyTypography,
 
         shapes = AppShapes,

@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.libres)
     alias(libs.plugins.buildConfig)
     kotlin("plugin.serialization") version "1.9.20"
-
     id("dev.icerock.mobile.multiplatform-resources")
 }
 

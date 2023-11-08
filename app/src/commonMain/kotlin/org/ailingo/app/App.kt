@@ -31,14 +31,11 @@ internal fun App(voiceToTextParser: VoiceToTextParser) {
     AppTheme {
         Navigator(GetStartedScreen(voiceToTextParser)) { navigator ->
             val authScreens = listOf(
-
                 LoginScreen(voiceToTextParser).key,
                 RegistrationScreen(voiceToTextParser).key,
                 GetStartedScreen(voiceToTextParser).key,
                 ResetPasswordScreen(voiceToTextParser).key
             )
-
-
             val drawerState = rememberDrawerState(DrawerValue.Closed)
             val scope = rememberCoroutineScope()
             ModalNavigationDrawer(
@@ -73,16 +70,9 @@ internal fun App(voiceToTextParser: VoiceToTextParser) {
                     Box(modifier = Modifier.padding(padding)) {
                         CurrentScreen()
                     }
-                },
-                content = {
-                    CurrentScreen()
                 }
             }
         }
-        //Navigator(ChatScreen(voiceToTextParser))
-        //RegistrationScreen()
-        //LoginScreen()
-        //ResetPasswordScreen()
     }
 }
 

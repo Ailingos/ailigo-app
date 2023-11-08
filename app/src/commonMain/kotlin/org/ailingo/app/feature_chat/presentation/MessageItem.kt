@@ -17,13 +17,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.ailingo.app.feature_chat.data.model.Message
-import org.ailingo.app.theme.GradientBlack
+import org.ailingo.app.theme.WhiteBlueForBot
+import org.ailingo.app.theme.WhiteBlueForUser
 
 
 @Composable
 fun MessageItem(message: Message) {
     val isSentByUser = message.isSentByUser
-    val backgroundColor = if (isSentByUser) MaterialTheme.colorScheme.primary else GradientBlack
+    val backgroundColor = if (isSentByUser) WhiteBlueForUser else WhiteBlueForBot
 
     Row(
         modifier = Modifier.fillMaxWidth(),

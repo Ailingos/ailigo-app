@@ -42,4 +42,6 @@
     <string name="history">HISTORY</string>
     <string name="business">BUSINESS</string>
     <string name="back">Back</string>
+
+    <string name="message">Message</string>
 </resources>

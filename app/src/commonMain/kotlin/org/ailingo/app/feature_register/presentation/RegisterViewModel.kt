@@ -16,8 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import org.ailingo.app.core.util.auth.basicAuthHeader
 import org.ailingo.app.feature_register.data.model.SuccessRegister
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 
@@ -27,34 +25,31 @@ class RegistrationViewModel : ViewModel() {
 
     private val BASE_URL = "https://app.artux.net/ailingo"
     private val API_ENDPOINT = "/api/v1/user/register"
-    private val USERNAME = "admin"
-    private val PASSWORD = "pass"
 
     fun registerUser(user: UserRegistrationData) {
         viewModelScope.launch {
             _registerState.value = RegisterUiState.Loading
             val httpClient = HttpClient {
                 install(ContentNegotiation) {
-                    json(Json {
-                        ignoreUnknownKeys = true
-                    })
+                    json()
                 }
             }
             try {
                 val response = httpClient.post("$BASE_URL$API_ENDPOINT") {
-                    header(HttpHeaders.Authorization, basicAuthHeader(USERNAME, PASSWORD))
                     header(HttpHeaders.ContentType, ContentType.Application.Json)
                     setBody(user)
                 }
                 _registerState.value = when {
                     response.status.isSuccess() -> {
                         val body = response.body<SuccessRegister>()
-                        RegisterUiState.Success(
-                            body.success,
-                            body.code,
-                            body.description,
-                            body.failure
-                        )
+                        if (body.success) {
+                            RegisterUiState.Success(
+                                body.success,
+                                body.code,
+                                body.description,
+                                body.failure
+                            )
+                        } else RegisterUiState.Error(body.description)
                     }
 
                     else -> RegisterUiState.Error("Request failed with ${response.status}")

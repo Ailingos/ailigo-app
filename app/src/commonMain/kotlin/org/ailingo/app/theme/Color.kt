@@ -8,6 +8,8 @@ internal val WhiteBlueForBot = Color(0xFFABE6FF)
 internal val WhiteBlueForUser = Color(0xFFDDF2FD)
 internal val ColorForMainTextDictionary = Color(0xFF39A7FF)
 internal val ColorForSynonymsDictionary = Color(0xFF87C4FF)
+//internal val ColorForDrawerLayout = Color.White
+internal val ColorForAppBar = Color(0xFFF1EAFF)
 
 val md_theme_light_primary = Color(0xFF006494)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)

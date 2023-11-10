@@ -12,3 +12,7 @@ internal actual fun openUrl(url: String?) {
     }
     AndroidApp.INSTANCE.startActivity(intent)
 }
+
+internal actual fun getPlatformName(): String {
+    return "Android"
+}

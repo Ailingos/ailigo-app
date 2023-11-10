@@ -15,3 +15,6 @@ external object VoiceToText {
     fun setListeningCallback(callback: (Boolean) -> Unit)
 }
 
+internal actual fun getPlatformName(): String{
+    return "Web"
+}

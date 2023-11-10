@@ -83,7 +83,6 @@ data class LoginScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                 ),
                 keyboardActions = KeyboardActions(
                     onNext = {
-                        // Focus on password field when 'Next' is clicked
                         passwordFieldFocusRequester.value.requestFocus()
                     }
                 ),

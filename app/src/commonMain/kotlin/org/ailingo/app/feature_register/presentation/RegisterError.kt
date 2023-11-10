@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_register.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +21,11 @@ fun RegisterError(
     registerViewModel: RegistrationViewModel
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(errorMessage)
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = {

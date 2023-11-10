@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import org.ailingo.app.core.util.auth.basicAuthHeader
+import org.ailingo.app.core.helper_auth.auth.basicAuthHeader
 import org.ailingo.app.feature_chat.data.model.Message
 
 class ChatViewModel : ViewModel() {
@@ -69,6 +69,7 @@ class ChatViewModel : ViewModel() {
                         _isActiveJob.emit(false)
                     }
                     else -> {
+                        _chatState.removeAt(_chatState.size - 1)
                         _chatState.add(
                             Message(
                                 "Request failed with ${response.status}",

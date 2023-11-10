@@ -1,4 +1,4 @@
-package org.ailingo.app.core.util.auth
+package org.ailingo.app.core.helper_auth.auth
 
 import io.ktor.util.encodeBase64
 import io.ktor.utils.io.charsets.Charsets

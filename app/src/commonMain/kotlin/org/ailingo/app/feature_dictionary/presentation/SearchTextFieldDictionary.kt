@@ -14,7 +14,7 @@ import compose.icons.feathericons.Search
 
 
 @Composable
-fun SearchTextField(
+fun SearchTextFieldDictionary(
     textFieldValue: String,
     onTextFieldValueChange: (String) -> Unit,
     onSearchClick: () -> Unit

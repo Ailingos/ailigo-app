@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun DefinitionText(text: String?, gen: String?) {
+fun DefinitionAndSynonymText(text: String?, gen: String?) {
     Row(
         modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 4.dp)
     ) {

@@ -27,9 +27,8 @@ import org.ailingo.app.theme.ColorForSynonymsDictionary
 @Composable
 fun DefinitionEntry(index: Int, tr: Tr) {
     Row(
-        horizontalArrangement = Arrangement.Center,
-
-        ) {
+        horizontalArrangement = Arrangement.Center
+    ) {
         Text(
             text = (index + 1).toString(),
             modifier = Modifier.widthIn(min = 22.dp)
@@ -43,7 +42,7 @@ fun DefinitionEntry(index: Int, tr: Tr) {
                     .clip(RoundedCornerShape(16.dp))
                     .background(color = ColorForMainTextDictionary)
             ) {
-                DefinitionText(tr.text, tr.gen)
+                DefinitionAndSynonymText(tr.text, tr.gen)
             }
             tr.syn?.forEach { syn ->
                 Box(
@@ -51,7 +50,7 @@ fun DefinitionEntry(index: Int, tr: Tr) {
                         .clip(RoundedCornerShape(16.dp))
                         .background(color = ColorForSynonymsDictionary)
                 ) {
-                    DefinitionText(syn.text, syn.gen)
+                    DefinitionAndSynonymText(syn.text, syn.gen)
                 }
             }
         }

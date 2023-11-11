@@ -15,41 +15,43 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import org.ailingo.app.feature_dictionary.presentation.utils.ErrorState
-import org.ailingo.app.feature_dictionary.presentation.utils.LoadingState
+import dev.icerock.moko.resources.compose.stringResource
+import org.ailingo.app.SharedRes
+import org.ailingo.app.feature_dictionary.presentation.utils.ErrorDictionaryScreen
+import org.ailingo.app.feature_dictionary.presentation.utils.LoadingDictionaryScreen
 
 class DictionaryScreen : Screen {
     @Composable
     override fun Content() {
         val dictionaryViewModel = getViewModel(Unit, viewModelFactory { DictionaryViewModel() })
         val uiState = dictionaryViewModel.uiState.collectAsState()
-
         var textFieldValue by rememberSaveable { mutableStateOf("") }
 
         Column(
             modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp)
         ) {
-            SearchTextField(textFieldValue, onTextFieldValueChange = { textFieldValue = it }) {
+            SearchTextFieldDictionary(textFieldValue, onTextFieldValueChange = { textFieldValue = it }) {
                 dictionaryViewModel.searchWordDefinition(textFieldValue)
             }
 
             when (val currentState = uiState.value) {
                 is DictionaryUiState.Loading -> {
-                    LoadingState()
+                    LoadingDictionaryScreen()
                 }
 
                 is DictionaryUiState.Success -> {
                     val response = currentState.response
+                    val responseForExamples = currentState.responseExample
                     if (response.def?.isNotEmpty() == true) {
-                        DefinitionList(definitions = response.def)
+                        DefinitionList(definitions = response.def, responseForExamples, textFieldValue)
                     } else {
-                        Text("No definitions found for the word.")
+                        Text(stringResource(SharedRes.strings.no_definitions))
                     }
                 }
 
                 is DictionaryUiState.Error -> {
                     val errorMessage = currentState.message
-                    ErrorState(errorMessage)
+                    ErrorDictionaryScreen(errorMessage)
                 }
 
                 DictionaryUiState.Empty -> {

@@ -96,6 +96,9 @@ kotlin {
                 implementation ("com.google.auth:google-auth-library-oauth2-http:1.7.0")
                 //Logs for speech request
                 implementation("ch.qos.logback:logback-classic:1.2.6")
+                //Playing audio
+                implementation("javazoom:jlayer:1.0.1")
+
             }
         }
 

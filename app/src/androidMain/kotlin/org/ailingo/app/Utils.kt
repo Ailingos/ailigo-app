@@ -1,7 +1,10 @@
 package org.ailingo.app
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.net.Uri
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
 
 internal actual fun openUrl(url: String?) {
     val uri = url?.let { Uri.parse(it) } ?: return
@@ -15,4 +18,18 @@ internal actual fun openUrl(url: String?) {
 
 internal actual fun getPlatformName(): String {
     return "Android"
+}
+
+actual fun playSound(sound: String) {
+    val mediaPlayer = MediaPlayer()
+    mediaPlayer.setDataSource(sound)
+    mediaPlayer.prepare()
+    mediaPlayer.start()
+}
+
+
+@Composable
+internal actual fun getConfiguration(): Pair<Int, Int> {
+    val configuration = LocalConfiguration.current
+    return Pair(configuration.screenWidthDp, configuration.screenHeightDp)
 }

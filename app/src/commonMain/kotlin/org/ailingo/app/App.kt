@@ -110,3 +110,7 @@ internal fun App(voiceToTextParser: VoiceToTextParser) {
 
 internal expect fun openUrl(url: String?)
 internal expect fun getPlatformName(): String
+internal expect fun playSound(sound: String)
+
+@Composable
+internal expect fun getConfiguration(): Pair<Int, Int>

@@ -1,11 +1,24 @@
 package org.ailingo.app
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalWindowInfo
+import javazoom.jl.player.advanced.AdvancedPlayer
+import javazoom.jl.player.advanced.PlaybackEvent
+import javazoom.jl.player.advanced.PlaybackListener
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.ailingo.app.core.util.VoiceStates
 import java.awt.Desktop
+import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.net.URI
+import java.net.URL
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.DataLine
@@ -89,4 +102,32 @@ fun calculateVolume(audioBuffer: ByteArray, bytesRead: Int): Double {
 
 internal actual fun getPlatformName(): String {
     return "Desktop"
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+internal actual fun playSound(sound: String) {
+    var player: AdvancedPlayer?
+    GlobalScope.launch(Dispatchers.IO) {
+        try {
+            val url = URL(sound)
+            val inputStream: InputStream = BufferedInputStream(url.openStream())
+            player = AdvancedPlayer(inputStream)
+            player?.playBackListener = object : PlaybackListener() {
+                override fun playbackFinished(evt: PlaybackEvent?) {
+                    super.playbackFinished(evt)
+                    player?.close()
+                }
+            }
+            player?.play()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+internal actual fun getConfiguration(): Pair<Int, Int> {
+    val containerSize = LocalWindowInfo.current.containerSize
+    return Pair(containerSize.width, containerSize.height)
 }

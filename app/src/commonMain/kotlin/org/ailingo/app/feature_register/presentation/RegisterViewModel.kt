@@ -51,8 +51,7 @@ class RegistrationViewModel : ViewModel() {
                             )
                         } else RegisterUiState.Error(body.description)
                     }
-
-                    else -> RegisterUiState.Error("Request failed with ${response.status}")
+                    else -> RegisterUiState.Error("Request failed with $response")
                 }
             } catch (e: Exception) {
                 _registerState.update {

@@ -9,11 +9,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Menu
@@ -29,8 +25,6 @@ fun TopAppBarMain(
     modifier: Modifier = Modifier
 ) {
     val screenInfo = rememberWindowInfo()
-    //val gradientColors = listOf(Color.Cyan, Color.Blue, Color.Magenta)
-    val gradientColors = listOf(Color.Black, Color.Black)
 
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
@@ -52,17 +46,8 @@ fun TopAppBarMain(
             Icon(
                 painter = painterResource(SharedRes.images.ailingologowithoutbackground),
                 contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier.graphicsLayer(alpha = 0.99f).height(30.dp)
-                    .drawWithCache {
-                        onDrawWithContent {
-                            drawContent()
-                            drawRect(
-                                Brush.linearGradient(gradientColors),
-                                blendMode = BlendMode.SrcAtop
-                            )
-                        }
-                    }
+                tint = Color.Black,
+                modifier = Modifier.height(30.dp)
             )
         }
     )

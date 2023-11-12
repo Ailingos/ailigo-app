@@ -44,6 +44,8 @@ class ChatViewModel : ViewModel() {
         if (job?.isActive == true) {
             job?.cancel()
         }
+        _chatState.add(Message(message, isSentByUser = true))
+        _chatState.add(Message("Waiting for response...", isSentByUser = false))
         job = viewModelScope.launch {
             _isActiveJob.emit(true)
             val localHttpClient = HttpClient {
@@ -53,8 +55,6 @@ class ChatViewModel : ViewModel() {
                     })
                 }
             }
-            _chatState.add(Message(message, isSentByUser = true))
-            _chatState.add(Message("Waiting for response...", isSentByUser = false))
             try {
                 val response = localHttpClient.post("$BASE_URL$API_ENDPOINT") {
                     header(HttpHeaders.Authorization, basicAuthHeader(USERNAME, PASSWORD))

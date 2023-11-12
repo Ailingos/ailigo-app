@@ -40,12 +40,12 @@ fun BottomUserMessageBoxMobile(
 ) {
     val scope = rememberCoroutineScope()
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(8.dp),
+        modifier = Modifier.padding(8.dp),
     ) {
         OutlinedTextField(
             shape = RoundedCornerShape(18.dp),
             modifier = Modifier.fillMaxWidth(),
+            maxLines = 3,
             value = textField.value,
             onValueChange = {
                 textField.value = it

@@ -19,13 +19,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -39,33 +35,22 @@ import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_login.presentation.LoginScreen
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RegisterStart(
     registerViewModel: RegistrationViewModel,
     navigator: Navigator,
-    voiceToTextParser: VoiceToTextParser
+    voiceToTextParser: VoiceToTextParser,
+    login: MutableState<String>,
+    password: MutableState<String>,
+    email: MutableState<String>,
+    name: MutableState<String>,
+    avatar: MutableState<String>
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp)
     ) {
-        var login by remember {
-            mutableStateOf("")
-        }
-        var password by remember {
-            mutableStateOf("")
-        }
-        var email by remember {
-            mutableStateOf("")
-        }
-        var name by remember {
-            mutableStateOf("")
-        }
-        var avatar by remember {
-            mutableStateOf("")
-        }
         val passwordFieldFocusRequester = rememberUpdatedState(FocusRequester())
         val emailFieldFocusRequester = rememberUpdatedState(FocusRequester())
         val nameFieldFocusRequester = rememberUpdatedState(FocusRequester())
@@ -77,9 +62,9 @@ fun RegisterStart(
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
-            value = login,
+            value = login.value,
             onValueChange = {
-                login = it
+                login.value = it
             },
             label = { Text(text = stringResource(SharedRes.strings.login)) },
             singleLine = true,
@@ -95,9 +80,9 @@ fun RegisterStart(
         )
 
         OutlinedTextField(
-            value = password,
+            value = password.value,
             onValueChange = {
-                password = it
+                password.value = it
             },
             label = { Text(text = stringResource(SharedRes.strings.password)) },
             singleLine = true,
@@ -114,9 +99,9 @@ fun RegisterStart(
         )
 
         OutlinedTextField(
-            value = email,
+            value = email.value,
             onValueChange = {
-                email = it
+                email.value = it
             },
             label = { Text(text = stringResource(SharedRes.strings.email)) },
             singleLine = true,
@@ -133,9 +118,9 @@ fun RegisterStart(
         )
 
         OutlinedTextField(
-            value = name,
+            value = name.value,
             onValueChange = {
-                name = it
+                name.value = it
             },
             label = { Text(text = stringResource(SharedRes.strings.name)) },
             singleLine = true,
@@ -153,9 +138,9 @@ fun RegisterStart(
 
 
         OutlinedTextField(
-            value = avatar,
+            value = avatar.value,
             onValueChange = {
-                avatar = it
+                avatar.value = it
             },
             label = { Text(text = stringResource(SharedRes.strings.avatar)) },
             singleLine = true,
@@ -167,7 +152,7 @@ fun RegisterStart(
                 onDone = {
                     registerViewModel.registerUser(
                         UserRegistrationData(
-                            login, password, email, name, avatar
+                            login.value, password.value, email.value, name.value, avatar.value
                         )
                     )
                 }
@@ -184,7 +169,7 @@ fun RegisterStart(
             onClick = {
                 registerViewModel.registerUser(
                     UserRegistrationData(
-                        login, password, email, name, avatar
+                        login.value, password.value, email.value, name.value, avatar.value
                     )
                 )
             }

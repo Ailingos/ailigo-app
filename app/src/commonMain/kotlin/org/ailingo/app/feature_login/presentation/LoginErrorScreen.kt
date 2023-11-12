@@ -1,4 +1,4 @@
-package org.ailingo.app.feature_register.presentation
+package org.ailingo.app.feature_login.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,21 +17,23 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.SharedRes
 
 @Composable
-fun RegisterError(
-    errorMessage: String,
-    registerViewModel: RegistrationViewModel
+fun LoginErrorScreen(
+    loginViewModel: LoginViewModel,
+    errorMessage: String
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
-            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
         ) {
             Text(errorMessage, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = {
-                registerViewModel.backToEmptyState()
-            }) {
+            Button(
+                onClick = {
+                    loginViewModel.backToEmptyLoginState()
+                }
+            ) {
                 Text(stringResource(SharedRes.strings.back))
             }
         }

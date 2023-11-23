@@ -2,6 +2,7 @@ package org.ailingo.app.feature_chat.presentation
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
@@ -40,15 +41,14 @@ fun BottomUserMessageBox(
 ) {
     val scope = rememberCoroutineScope()
     Row(
-        modifier = Modifier
+        modifier = Modifier.fillMaxWidth(0.8f)
             .padding(8.dp),
     ) {
         Spacer(modifier = Modifier.weight(1f))
         OutlinedTextField(
-            shape = RoundedCornerShape(4.dp),
+            shape = RoundedCornerShape(18.dp),
             modifier = Modifier.weight(4f),
             value = textField.value,
-            maxLines = 5,
             onValueChange = {
                 textField.value = it
             },

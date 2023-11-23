@@ -3,10 +3,13 @@ package org.ailingo.app.feature_topics.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -47,34 +50,36 @@ fun TopicCard(topic: Topic) {
 
     Card(
         shape = RoundedCornerShape(24.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.size(350.dp)
     ) {
         Box(
             contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                painter = painterResource(topic.image),
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize().onGloballyPositioned {
-                    heightOfImage = with(density) {
-                        it.size.height.toDp()
+            ) {
+                Image(
+                    painter = painterResource(topic.image),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize().onGloballyPositioned {
+                        heightOfImage = with(density) {
+                            it.size.height.toDp()
+                        }
+                        widthOfImage = with(density) {
+                            it.size.width.toDp()
+                        }
                     }
-                    widthOfImage = with(density) {
-                        it.size.width.toDp()
-                    }
-                }
-            )
-            Box(
-                modifier = Modifier.height(heightOfImage).width(widthOfImage).background(gradient)
-            )
-            Text(
-                text = stringResource(topic.title),
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(16.dp)
-            )
+                )
+                Box(
+                    modifier = Modifier.height(heightOfImage).width(widthOfImage).background(gradient)
+                )
+                Text(
+                    text = stringResource(topic.title),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
     }
-}
+
+

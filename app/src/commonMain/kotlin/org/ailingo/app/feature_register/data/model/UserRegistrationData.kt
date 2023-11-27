@@ -8,5 +8,5 @@ data class UserRegistrationData(
     val password: String,
     val email: String,
     val name: String,
-    val avatar: String
+    val avatar: String? = null
 )

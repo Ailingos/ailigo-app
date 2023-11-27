@@ -47,4 +47,12 @@
     <string name="no_definitions">No definitions found for the word</string>
     <string name="usage_examples">Usage examples</string>
     <string name="definitions">Definitions</string>
+
+    <string name="next">Next</string>
+    <string name="login_cannot_be_empty">Login cannot be empty</string>
+    <string name="password_cannot_be_empty">Password cannot be empty</string>
+    <string name="lets_add_your_avatar">Welcome! Lets add your avatar</string>
+    <string name="lets_other_get_to_know_you">Lets other get to know you better!</string>
+    <string name="choose_image">Choose image</string>
+    <string name="continue_with_default_image">Or continue with default image</string>
 </resources>

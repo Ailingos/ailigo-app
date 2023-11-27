@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import org.ailingo.app.core.helper_auth.auth.basicAuthHeader
 
 class LoginViewModel : ViewModel() {
@@ -31,7 +32,9 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             val httpClient = HttpClient {
                 install(ContentNegotiation) {
-                    json()
+                    json(Json {
+                        ignoreUnknownKeys = true
+                    })
                 }
             }
             _loginState.value = LoginUiState.Loading
@@ -43,11 +46,14 @@ class LoginViewModel : ViewModel() {
                 _loginState.value = when {
                     response.status.isSuccess() -> {
                         val body = response.body<LoginUiState.Success>()
+                        println(body)
                         LoginUiState.Success(
                             body.id,
                             body.login,
                             body.avatar,
                             body.xp,
+                            body.coins,
+                            body.streak,
                             body.registration,
                             body.lastLoginAt
                         )
@@ -71,9 +77,5 @@ class LoginViewModel : ViewModel() {
 
     fun backToEmptyLoginState() {
         _loginState.value = LoginUiState.Empty
-    }
-
-    override fun onCleared() {
-        super.onCleared()
     }
 }

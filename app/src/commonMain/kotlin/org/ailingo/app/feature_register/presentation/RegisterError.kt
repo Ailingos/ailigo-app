@@ -19,7 +19,7 @@ import org.ailingo.app.SharedRes
 @Composable
 fun RegisterError(
     errorMessage: String,
-    registerViewModel: RegistrationViewModel
+    onBackToEmptyState: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
@@ -29,9 +29,7 @@ fun RegisterError(
         ) {
             Text(errorMessage, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = {
-                registerViewModel.backToEmptyState()
-            }) {
+            Button(onClick = onBackToEmptyState) {
                 Text(stringResource(SharedRes.strings.back))
             }
         }

@@ -18,8 +18,8 @@ fun rememberWindowInfo(): WindowInfo {
             height.dp < 900.dp || getPlatformName() == "Android" -> WindowInfo.WindowType.MobileWindowInfo
             else -> WindowInfo.WindowType.DesktopWindowInfo
         },
-        screenHeight = height.dp,
-        screenWidth = width.dp
+        screenWidth = width.dp,
+        screenHeight = height.dp
     )
 }
 

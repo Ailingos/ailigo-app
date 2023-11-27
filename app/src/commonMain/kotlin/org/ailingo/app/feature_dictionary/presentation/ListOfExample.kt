@@ -10,17 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.ailingo.app.feature_dictionary.presentation.utils.HighlightedText
-import org.ailingo.app.feature_dictionary_examples.data.model.WordInfoItem
 
 @Composable
-fun ListOfExample(responseForExamples: List<WordInfoItem>?, textFieldValue: String) {
-    val listOfExamples = responseForExamples?.flatMap {
-        it.meanings.flatMap { meaning ->
-            meaning.definitions.mapNotNull { def ->
-                def.example
-            }
-        }
-    }
+fun ListOfExample(listOfExamples: List<String>?, textFieldValue: String) {
     listOfExamples?.forEachIndexed { index, example ->
         val newIndex = index + 1
         Column {

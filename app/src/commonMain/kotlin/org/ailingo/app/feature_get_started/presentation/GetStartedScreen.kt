@@ -22,7 +22,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.SharedRes
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_login.presentation.LoginScreen
-import org.ailingo.app.feature_register.presentation.RegistrationScreen
+import org.ailingo.app.feature_register.presentation.RegisterScreen
 
 
 data class GetStartedScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
@@ -47,7 +47,7 @@ data class GetStartedScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(shape = MaterialTheme.shapes.small, onClick = {
-                    navigator.push(RegistrationScreen(voiceToTextParser))
+                    navigator.push(RegisterScreen(voiceToTextParser))
                 }) {
                     Text(stringResource(SharedRes.strings.sign_up))
                 }

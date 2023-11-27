@@ -9,17 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.ailingo.app.feature_dictionary_examples.data.model.WordInfoItem
 
 @Composable
-fun ListOfDefinitions(responseForExamples: List<WordInfoItem>?) {
-    val listOfDefinitions = responseForExamples?.flatMap {
-        it.meanings.flatMap { meaning ->
-            meaning.definitions.map { def ->
-                def.definition
-            }
-        }
-    }
+fun ListOfDefinitions(listOfDefinitions: List<String>?) {
     listOfDefinitions?.forEachIndexed { index, def ->
         val newIndex = index + 1
         Column {

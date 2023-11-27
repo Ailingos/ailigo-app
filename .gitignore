@@ -15,3 +15,4 @@ Pods/
 *yarn.lock
 /app/karma.config.d/moko-resources-generated.js
 /app/webpack.config.d/moko-resources-generated.js
+/app/dictionary_database.db

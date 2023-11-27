@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS HistoryDictionaryEntity(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    text TEXT NOT NULL
+);
+
+getDictionaryHistory:
+SELECT *
+FROM HistoryDictionaryEntity;
+
+insertDictionaryHistory:
+INSERT OR REPLACE
+INTO HistoryDictionaryEntity(
+    id,text
+) VALUES (?,?);
+
+deleteFromDictionaryHistory:
+DELETE FROM HistoryDictionaryEntity
+WHERE id = :id;
+
+getDictionaryHistoryById:
+SELECT *
+FROM HistoryDictionaryEntity
+WHERE id = :id;

@@ -18,18 +18,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -48,7 +46,7 @@ data class ResetPasswordScreen(val voiceToTextParser: VoiceToTextParser): Screen
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
-            var email by remember {
+            var email by rememberSaveable {
                 mutableStateOf("")
             }
             val focusManager = LocalFocusManager.current
@@ -56,8 +54,7 @@ data class ResetPasswordScreen(val voiceToTextParser: VoiceToTextParser): Screen
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 stringResource(SharedRes.strings.reset_your_password),
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.headlineLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
 

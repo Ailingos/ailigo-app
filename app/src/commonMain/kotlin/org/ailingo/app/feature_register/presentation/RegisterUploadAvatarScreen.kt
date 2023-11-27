@@ -1,9 +1,8 @@
 package org.ailingo.app.feature_register.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -12,47 +11,40 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.presentation.ChatScreen
 
-
-data class RegistrationScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
+data class RegisterUploadAvatarScreen(
+    val login: MutableState<String>,
+    val password: MutableState<String>,
+    val email: MutableState<String>,
+    val name: MutableState<String>,
+    val voiceToTextParser: VoiceToTextParser,
+    val savedPhoto: MutableState<String>
+) : Screen {
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
         val registerViewModel = getViewModel(Unit, viewModelFactory { RegistrationViewModel() })
         val registerState = registerViewModel.registerState.collectAsState()
-        val login = rememberSaveable() {
-            mutableStateOf("")
-        }
-        val password = rememberSaveable {
-            mutableStateOf("")
-        }
-        val email = rememberSaveable {
-            mutableStateOf("")
-        }
-        val name = rememberSaveable {
-            mutableStateOf("")
-        }
-        val avatar = rememberSaveable {
-            mutableStateOf("")
-        }
+        val navigator = LocalNavigator.currentOrThrow
         when (registerState.value) {
             RegisterUiState.Empty -> {
-                RegisterStart(
-                    registerViewModel,
+                RegisterUploadAvatarEmpty(
                     navigator,
                     voiceToTextParser,
+                    registerViewModel,
                     login,
                     password,
                     email,
                     name,
-                    avatar
+                    savedPhoto
                 )
             }
 
             is RegisterUiState.Error -> {
                 RegisterError(
-                    (registerState.value as RegisterUiState.Error).message,
-                    registerViewModel
-                )
+                    errorMessage = (registerState.value as RegisterUiState.Error).message,
+                    onBackToEmptyState = {
+                        registerViewModel.backToEmptyState()
+                        navigator.push(RegisterScreen(voiceToTextParser))
+                    })
             }
 
             RegisterUiState.Loading -> {

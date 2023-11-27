@@ -41,11 +41,11 @@ fun BottomUserMessageBox(
     val scope = rememberCoroutineScope()
     Row(
         modifier = Modifier
-            .padding(8.dp),
+            .padding(8.dp)
     ) {
         Spacer(modifier = Modifier.weight(1f))
         OutlinedTextField(
-            shape = RoundedCornerShape(4.dp),
+            shape = RoundedCornerShape(18.dp),
             modifier = Modifier.weight(4f),
             value = textField.value,
             maxLines = 5,
@@ -86,7 +86,6 @@ fun BottomUserMessageBox(
                         Spacer(modifier = Modifier.width(8.dp))
                     }
                 }
-
             }
         )
         Spacer(modifier = Modifier.weight(1f))

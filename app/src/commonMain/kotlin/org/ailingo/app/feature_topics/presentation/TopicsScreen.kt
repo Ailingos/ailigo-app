@@ -3,11 +3,9 @@ package org.ailingo.app.feature_topics.presentation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -39,9 +37,9 @@ class TopicsScreen : Screen {
         val screenInfo = rememberWindowInfo()
 
         if (screenInfo.screenWidthInfo is WindowInfo.WindowType.DesktopWindowInfo) {
-            LazyHorizontalStaggeredGrid(
-                rows = StaggeredGridCells.Fixed(2),
-                horizontalItemSpacing = 8.dp,
+            LazyHorizontalGrid(
+                rows = GridCells.Fixed(2),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(8.dp),
                 content = {

@@ -49,6 +49,6 @@ actual class DriverFactory(private val context: Context) {
     }
 }
 
-actual fun selectImage(): String? {
+actual suspend fun selectImage(): String? {
     TODO("Not yet implemented")
 }

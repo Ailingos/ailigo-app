@@ -3,5 +3,6 @@
 config.resolve.fallback = {
         fs: false,
         path: false,
-        crypto: false
+        crypto: false,
+        os: require.resolve("os-browserify/browser")
 }

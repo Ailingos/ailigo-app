@@ -131,7 +131,7 @@ kotlin {
                 implementation(compose.html.core)
                 //local database
                 implementation("app.cash.sqldelight:web-worker-driver:2.0.0")
-                implementation(devNpm("copy-webpack-plugin", "11.0.0"))
+                implementation(npm("copy-webpack-plugin", "11.0.0"))
                 implementation(npm("@sqlite.org/sqlite-wasm", "3.43.2-build1"))
             }
         }

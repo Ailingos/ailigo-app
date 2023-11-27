@@ -2,11 +2,10 @@ importScripts("sqlite3.js");
 
  let db = null;
 
- async function createDatabase() {
-   const sqlite3 = await sqlite3InitModule();
+     async function createDatabase() {
+       const sqlite3 = await sqlite3InitModule();
 
-   // TODO: Parameterize storage location, and storage type
-   db = new sqlite3.oo1.DB("file:database.db?vfs=opfs", "c");
+   db = new sqlite3.oo1.DB("file:mydb.sqlite3?vfs=opfs", "c");
  }
 
  function handleMessage() {

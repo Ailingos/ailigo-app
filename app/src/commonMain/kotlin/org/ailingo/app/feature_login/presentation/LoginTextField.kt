@@ -6,26 +6,27 @@ import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.compose.stringResource
+import org.ailingo.app.CustomTextFieldImpl
 import org.ailingo.app.SharedRes
 
 
 @Composable
 fun LoginTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    textValue: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     onNext: (KeyboardActionScope.() -> Unit),
     showErrorText: Boolean
 ) {
     Column {
-        OutlinedTextField(
-            value = value,
+        CustomTextFieldImpl(
+            textValue = textValue,
             onValueChange = {
                 onValueChange(it)
             },
@@ -37,8 +38,9 @@ fun LoginTextField(
             keyboardActions = KeyboardActions(
                 onNext = onNext
             ),
-            isError = showErrorText
+            isError = showErrorText,
         )
+
         if (showErrorText) {
             Text(
                 text = stringResource(SharedRes.strings.login_cannot_be_empty),
@@ -49,3 +51,6 @@ fun LoginTextField(
         }
     }
 }
+
+
+

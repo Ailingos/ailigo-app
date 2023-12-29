@@ -3,6 +3,7 @@ package org.ailingo.app.feature_register.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.text.input.TextFieldValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -12,10 +13,10 @@ import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.presentation.ChatScreen
 
 data class RegisterUploadAvatarScreen(
-    val login: MutableState<String>,
-    val password: MutableState<String>,
-    val email: MutableState<String>,
-    val name: MutableState<String>,
+    val login: MutableState<TextFieldValue>,
+    val password: MutableState<TextFieldValue>,
+    val email: MutableState<TextFieldValue>,
+    val name: MutableState<TextFieldValue>,
     val voiceToTextParser: VoiceToTextParser,
     val savedPhoto: MutableState<String>
 ) : Screen {

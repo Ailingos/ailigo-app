@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -17,17 +16,19 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.compose.stringResource
+import org.ailingo.app.CustomTextFieldImpl
 import org.ailingo.app.SharedRes
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginPasswordTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     passwordVisible: Boolean,
     onPasswordVisibleChange: () -> Unit,
     focusRequester: FocusRequester,
@@ -37,8 +38,8 @@ fun LoginPasswordTextField(
     showErrorText: Boolean
 ) {
     Column {
-        OutlinedTextField(
-            value = value,
+        CustomTextFieldImpl(
+            textValue = value,
             onValueChange = {
                 onValueChange(it)
             },

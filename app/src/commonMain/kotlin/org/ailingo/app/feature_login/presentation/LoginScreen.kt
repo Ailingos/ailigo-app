@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.TextFieldValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -24,11 +25,11 @@ data class LoginScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val loginViewModel = getViewModel(Unit, viewModelFactory { LoginViewModel() })
         val loginState = loginViewModel.loginState.collectAsState()
-        var login by rememberSaveable {
-            mutableStateOf("admin")
+        var login by remember {
+            mutableStateOf(TextFieldValue("admin"))
         }
         var password by rememberSaveable {
-            mutableStateOf("pass")
+            mutableStateOf(TextFieldValue("pass"))
         }
         var passwordVisible by rememberSaveable {
             mutableStateOf(false)
@@ -48,7 +49,7 @@ data class LoginScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                 LoginMainScreen(
                     navigator,
                     onLoginUser = {
-                        loginViewModel.loginUser(login, password)
+                        loginViewModel.loginUser(login.text, password.text)
                     },
                     voiceToTextParser,
                     login = login,

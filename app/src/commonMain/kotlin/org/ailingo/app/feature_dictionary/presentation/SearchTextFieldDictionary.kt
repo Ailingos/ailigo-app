@@ -48,17 +48,21 @@ fun SearchTextFieldDictionary(
         mutableStateOf<PredictorResponse?>(null)
     }
     LaunchedEffect(textFieldValue.value) {
-        if (textFieldValue.value.isNotBlank()) {
+        val trimmedText = textFieldValue.value.trim()
+        if (trimmedText.isNotBlank()) {
             delay(250)
-            items = dictionaryViewModel.predictNextWords(
-                PredictorRequest(
-                    false,
-                    listOf("en"),
-                    5,
-                    textFieldValue.value,
-                    "string"
+            println(trimmedText)
+            if (active.value) {
+                items = dictionaryViewModel.predictNextWords(
+                    PredictorRequest(
+                        false,
+                        listOf("en"),
+                        5,
+                        trimmedText,
+                        "string"
+                    )
                 )
-            )
+            }
         }
     }
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {

@@ -1,8 +1,18 @@
 package org.ailingo.app
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import javazoom.jl.player.advanced.AdvancedPlayer
@@ -176,4 +186,57 @@ actual suspend fun selectImage(): String? {
 fun encodeFileToBase64(file: java.io.File): String {
     val fileContent = Files.readAllBytes(file.toPath())
     return Base64.getEncoder().encodeToString(fileContent)
+}
+
+@Composable
+actual fun CustomTextFieldImpl(
+    textValue: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier,
+    enabled: Boolean,
+    readOnly: Boolean,
+    textStyle: TextStyle,
+    label: @Composable (() -> Unit)?,
+    placeholder: @Composable (() -> Unit)?,
+    leadingIcon: @Composable (() -> Unit)?,
+    trailingIcon: @Composable (() -> Unit)?,
+    prefix: @Composable (() -> Unit)?,
+    suffix: @Composable (() -> Unit)?,
+    supportingText: @Composable (() -> Unit)?,
+    isError: Boolean,
+    visualTransformation: VisualTransformation,
+    keyboardOptions: KeyboardOptions,
+    keyboardActions: KeyboardActions,
+    singleLine: Boolean,
+    maxLines: Int,
+    minLines: Int,
+    interactionSource: MutableInteractionSource,
+    shape: Shape,
+    colors: TextFieldColors
+) {
+    OutlinedTextField(
+        value = textValue,
+        onValueChange = onValueChange,
+        label = label,
+        placeholder = placeholder,
+        textStyle = textStyle,
+        isError = false,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        trailingIcon = trailingIcon,
+        leadingIcon = leadingIcon,
+        modifier = modifier,
+        enabled = enabled,
+        readOnly = readOnly,
+        prefix = prefix,
+        suffix = suffix,
+        supportingText = supportingText,
+        visualTransformation = visualTransformation,
+        minLines = minLines,
+        interactionSource = interactionSource,
+        shape = shape,
+        colors = colors
+    )
 }

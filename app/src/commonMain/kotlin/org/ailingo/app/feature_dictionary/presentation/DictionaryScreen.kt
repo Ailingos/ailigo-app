@@ -52,7 +52,7 @@ data class DictionaryScreen(
         val active = remember {
             mutableStateOf(false)
         }
-        var searchBarHeight = remember { mutableStateOf(0) }
+        val searchBarHeight = remember { mutableStateOf(0) }
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(top = 16.dp, start = 16.dp, end = 16.dp)

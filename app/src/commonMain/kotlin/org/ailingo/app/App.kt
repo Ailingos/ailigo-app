@@ -1,19 +1,31 @@
 package org.ailingo.app
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import app.cash.sqldelight.db.SqlDriver
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
@@ -48,10 +60,10 @@ internal fun App(
                 ResetPasswordScreen(voiceToTextParser).key,
                 LandingScreen(voiceToTextParser).key,
                 RegisterUploadAvatarScreen(
-                    login = mutableStateOf(""),
-                    password = mutableStateOf(""),
-                    email = mutableStateOf(""),
-                    name = mutableStateOf(""),
+                    login = mutableStateOf(TextFieldValue("")),
+                    password = mutableStateOf(TextFieldValue("")),
+                    email = mutableStateOf(TextFieldValue("")),
+                    name = mutableStateOf(TextFieldValue("")),
                     voiceToTextParser = voiceToTextParser,
                     savedPhoto = mutableStateOf("")
                 ).key
@@ -143,5 +155,29 @@ expect class DriverFactory {
 
 expect suspend fun selectImage(): String?
 
-
-
+@Composable
+expect fun CustomTextFieldImpl(
+    textValue: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    label: (@Composable () -> Unit)? = null,
+    placeholder: (@Composable () -> Unit)? = null,
+    leadingIcon: (@Composable () -> Unit)? = null,
+    trailingIcon: (@Composable () -> Unit)? = null,
+    prefix: (@Composable () -> Unit)? = null,
+    suffix: (@Composable () -> Unit)? = null,
+    supportingText: (@Composable () -> Unit)? = null,
+    isError: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = false,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape = TextFieldDefaults.shape,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+)

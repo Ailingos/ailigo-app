@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
 import org.ailingo.app.core.util.VoiceToTextParser
@@ -31,10 +32,10 @@ fun LoginMainScreen(
     navigator: Navigator,
     onLoginUser: () -> Unit,
     voiceToTextParser: VoiceToTextParser,
-    login: String,
-    onLoginChange: (String) -> Unit,
-    password: String,
-    onPasswordChange: (String) -> Unit,
+    login: TextFieldValue,
+    onLoginChange: (TextFieldValue) -> Unit,
+    password: TextFieldValue,
+    onPasswordChange: (TextFieldValue) -> Unit,
     passwordVisible: Boolean,
     onPasswordVisibleChange: () -> Unit,
     isLoading: MutableState<Boolean>
@@ -58,8 +59,9 @@ fun LoginMainScreen(
         } else {
             LoginWelcomeMessage()
             Spacer(modifier = Modifier.height(8.dp))
+
             LoginTextField(
-                value = login,
+                textValue = login,
                 onValueChange = {
                     onLoginChange(it)
                 },
@@ -87,8 +89,8 @@ fun LoginMainScreen(
             Spacer(modifier = Modifier.height(16.dp))
             LoginButton(
                 onClick = onLoginUser,
-                login,
-                password,
+                login.text,
+                password.text,
                 showLoginIsEmpty,
                 showPasswordIsEmpty,
                 isLoading

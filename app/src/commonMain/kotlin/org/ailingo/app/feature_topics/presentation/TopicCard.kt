@@ -3,10 +3,9 @@ package org.ailingo.app.feature_topics.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -31,7 +30,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.feature_topics.data.Topic
 
 @Composable
-fun TopicCard(topic: Topic) {
+fun TopicCard(topic: Topic, modifier: Modifier = Modifier) {
     val gradient = Brush.verticalGradient(
         colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.4f), Color.Transparent)
     )
@@ -48,7 +47,7 @@ fun TopicCard(topic: Topic) {
 
     Card(
         shape = RoundedCornerShape(24.dp),
-        modifier = Modifier.size(350.dp)
+        modifier = modifier
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -57,7 +56,8 @@ fun TopicCard(topic: Topic) {
                 painter = painterResource(topic.image),
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize().onGloballyPositioned {
+                modifier = Modifier.aspectRatio(1f)
+                    .onGloballyPositioned {
                     heightOfImage = with(density) {
                         it.size.height.toDp()
                     }

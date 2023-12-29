@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,11 +26,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.compose.stringResource
+import org.ailingo.app.CustomTextFieldImpl
 import org.ailingo.app.SharedRes
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_get_started.presentation.GetStartedScreen
@@ -47,7 +48,7 @@ data class ResetPasswordScreen(val voiceToTextParser: VoiceToTextParser): Screen
             modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
             var email by rememberSaveable {
-                mutableStateOf("")
+                mutableStateOf(TextFieldValue(""))
             }
             val focusManager = LocalFocusManager.current
             val keyboardController = LocalSoftwareKeyboardController.current
@@ -58,8 +59,8 @@ data class ResetPasswordScreen(val voiceToTextParser: VoiceToTextParser): Screen
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = email,
+            CustomTextFieldImpl(
+                textValue = email,
                 onValueChange = {
                     email = it
                 },

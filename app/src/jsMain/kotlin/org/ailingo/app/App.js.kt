@@ -1,8 +1,32 @@
 package org.ailingo.app
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.worker.WebWorkerDriver
 import kotlinx.browser.document
@@ -102,3 +126,157 @@ private fun readAsBase64(file: File, callback: (String?) -> Unit) {
     // Read the file as a data URL (base64)
     reader.readAsDataURL(file)
 }
+
+
+@Composable
+actual fun CustomTextFieldImpl(
+    textValue: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier,
+    enabled: Boolean,
+    readOnly: Boolean,
+    textStyle: TextStyle,
+    label: @Composable() (() -> Unit)?,
+    placeholder: @Composable() (() -> Unit)?,
+    leadingIcon: @Composable() (() -> Unit)?,
+    trailingIcon: @Composable() (() -> Unit)?,
+    prefix: @Composable() (() -> Unit)?,
+    suffix: @Composable() (() -> Unit)?,
+    supportingText: @Composable() (() -> Unit)?,
+    isError: Boolean,
+    visualTransformation: VisualTransformation,
+    keyboardOptions: KeyboardOptions,
+    keyboardActions: KeyboardActions,
+    singleLine: Boolean,
+    maxLines: Int,
+    minLines: Int,
+    interactionSource: MutableInteractionSource,
+    shape: Shape,
+    colors: TextFieldColors
+) {
+    var shortcutEvent: ShortcutEvent? by remember { mutableStateOf(null) }
+    var isCtrlPressed by remember { mutableStateOf(false) }
+    val textHistory = remember {
+        mutableListOf<TextFieldValue>()
+    }
+
+    LaunchedEffect(shortcutEvent) {
+        ShortcutEventHandler(
+            shortcutEvent = shortcutEvent,
+            textValue = textValue,
+            onValueChange = onValueChange,
+            textHistory
+        )
+        shortcutEvent = null
+    }
+    Column(
+        modifier = Modifier
+            .onPreviewKeyEvent {
+                isCtrlPressed = it.isCtrlPressed
+                shortcutEvent = it.filterKeyDown()?.toShortcutEvent()
+                false
+            }
+    ) {
+        OutlinedTextField(
+            value = textValue,
+            onValueChange = {
+                if (!isCtrlPressed) {
+                    textHistory.add(textValue)
+                    onValueChange(it)
+                }
+            },
+            label = label,
+            placeholder = placeholder,
+            textStyle = textStyle,
+            isError = false,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            singleLine = singleLine,
+            maxLines = maxLines,
+            trailingIcon = trailingIcon,
+            leadingIcon = leadingIcon,
+            modifier = modifier,
+            enabled = enabled,
+            readOnly = readOnly,
+            prefix = prefix,
+            suffix = suffix,
+            supportingText = supportingText,
+            visualTransformation = visualTransformation,
+            minLines = minLines,
+            interactionSource = interactionSource,
+            shape = shape,
+            colors = colors
+        )
+    }
+}
+
+private fun undoLastChange(
+    textHistory: MutableList<TextFieldValue>,
+    onValueChange: (TextFieldValue) -> Unit
+) {
+    if (textHistory.isNotEmpty()) {
+        onValueChange(textHistory.removeAt(textHistory.size - 1))
+    }
+}
+
+enum class ShortcutEvent {
+    CUT, COPY, PASTE, HIGHLIGHT_ALL, UNDO
+}
+
+private suspend fun ShortcutEventHandler(
+    shortcutEvent: ShortcutEvent?,
+    textValue: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    textHistory: MutableList<TextFieldValue>
+) {
+    shortcutEvent ?: return
+    when (shortcutEvent) {
+        ShortcutEvent.CUT -> {
+            onValueChange(textValue.replaceSelected(""))
+        }
+
+        ShortcutEvent.COPY -> {
+            // Unused - seems to work out of the box
+        }
+
+        ShortcutEvent.PASTE -> {
+            val clipboardText = window.navigator.clipboard.readText().await()
+            val newText = textValue.text.replaceRange(
+                textValue.selection.min,
+                textValue.selection.max,
+                clipboardText
+            )
+            onValueChange(
+                textValue.copy(
+                    text = newText,
+                    selection = TextRange(
+                        textValue.selection.min + clipboardText.length,
+                        textValue.selection.min + clipboardText.length
+                    )
+                )
+            )
+        }
+
+        ShortcutEvent.HIGHLIGHT_ALL -> {
+            onValueChange(textValue.copy(selection = TextRange(0, textValue.text.length)))
+        }
+
+        ShortcutEvent.UNDO -> {
+            undoLastChange(textHistory, onValueChange = onValueChange)
+        }
+    }
+}
+
+private fun KeyEvent.filterKeyDown() =
+    if (type == KeyEventType.KeyDown) this else null
+
+private fun KeyEvent.toShortcutEvent() = when {
+    isCtrlPressed && key == Key.X -> ShortcutEvent.CUT
+    isCtrlPressed && key == Key.V -> ShortcutEvent.PASTE
+    isCtrlPressed && key == Key.A -> ShortcutEvent.HIGHLIGHT_ALL
+    isCtrlPressed && key == Key.Z -> ShortcutEvent.UNDO
+    else -> null
+}
+
+private fun TextFieldValue.replaceSelected(replacement: String) =
+    copy(text = text.replaceRange(selection.min, selection.max, replacement), TextRange(0, 0))

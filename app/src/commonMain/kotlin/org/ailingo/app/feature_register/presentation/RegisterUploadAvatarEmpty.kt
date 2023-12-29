@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
@@ -53,10 +54,10 @@ fun RegisterUploadAvatarEmpty(
     navigator: Navigator,
     voiceToTextParser: VoiceToTextParser,
     registerViewModel: RegistrationViewModel,
-    login: MutableState<String>,
-    password: MutableState<String>,
-    email: MutableState<String>,
-    name: MutableState<String>,
+    login: MutableState<TextFieldValue>,
+    password: MutableState<TextFieldValue>,
+    email: MutableState<TextFieldValue>,
+    name: MutableState<TextFieldValue>,
     savedPhoto: MutableState<String>
 ) {
     val imageState = registerViewModel.imageState.collectAsState()
@@ -221,20 +222,20 @@ fun RegisterUploadAvatarEmpty(
                                 if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
                                     registerViewModel.registerUser(
                                         UserRegistrationData(
-                                            login = login.value,
-                                            password = password.value,
-                                            email = email.value,
-                                            name = name.value,
+                                            login = login.value.text,
+                                            password = password.value.text,
+                                            email = email.value.text,
+                                            name = name.value.text,
                                             avatar = (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.url
                                         )
                                     )
                                 } else {
                                     registerViewModel.registerUser(
                                         UserRegistrationData(
-                                            login = login.value,
-                                            password = password.value,
-                                            email = email.value,
-                                            name = name.value,
+                                            login = login.value.text,
+                                            password = password.value.text,
+                                            email = email.value.text,
+                                            name = name.value.text,
                                             avatar = ""
                                         )
                                     )

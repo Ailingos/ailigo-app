@@ -21,11 +21,13 @@ import compose.icons.feathericons.Mic
 import compose.icons.feathericons.MicOff
 import compose.icons.feathericons.Send
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.ailingo.app.SharedRes
 import org.ailingo.app.core.util.VoiceStates
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.data.model.Message
+import org.ailingo.app.getPlatformName
 
 
 @Composable
@@ -44,50 +46,69 @@ fun BottomUserMessageBox(
             .padding(8.dp)
     ) {
         Spacer(modifier = Modifier.weight(1f))
-        OutlinedTextField(
-            shape = RoundedCornerShape(18.dp),
-            modifier = Modifier.weight(4f),
-            value = textField.value,
-            maxLines = 5,
-            onValueChange = {
-                textField.value = it
-            },
-            label = {
+        if (getPlatformName() == "Web") {
+            CustomTextFieldForBottomChat(
+                modifier = Modifier.weight(4f),
+                voiceToTextParser, voiceState, messages, listState, chatViewModel, isActiveJob, scope
+            )
+        } else {
+            OutlinedTextField(
+                shape = RoundedCornerShape(18.dp),
+                modifier = Modifier.weight(4f),
+                value = textField.value,
+                maxLines = 5,
+                onValueChange = {
+                    textField.value = it
+                },
+                label = {
                     Text(stringResource(SharedRes.strings.message))
-            },
-            trailingIcon = {
-                Row {
-                    IconButton(onClick = {
-                        if (voiceState.value.isSpeaking) {
-                            voiceToTextParser.stopListening()
-                        } else {
-                            voiceToTextParser.startListening()
-                        }
-                    }) {
-                        Icon(
-                            imageVector = if (voiceState.value.isSpeaking) FeatherIcons.Mic else FeatherIcons.MicOff,
-                            contentDescription = null
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(8.dp))
-                    if (!isActiveJob) {
+                },
+                trailingIcon = {
+                    Row {
                         IconButton(onClick = {
-                            if (textField.value.isNotBlank()) {
-                                chatViewModel.sendMessage(textField.value)
-                                textField.value = ""
-                                scope.launch {
-                                    listState.scrollToItem(messages.size - 1)
-                                }
+                            if (voiceState.value.isSpeaking) {
+                                voiceToTextParser.stopListening()
+                            } else {
+                                voiceToTextParser.startListening()
                             }
                         }) {
-                            Icon(imageVector = FeatherIcons.Send, contentDescription = null)
+                            Icon(
+                                imageVector = if (voiceState.value.isSpeaking) FeatherIcons.Mic else FeatherIcons.MicOff,
+                                contentDescription = null
+                            )
                         }
+
                         Spacer(modifier = Modifier.width(8.dp))
+                        if (!isActiveJob) {
+                            IconButton(onClick = {
+                                if (textField.value.isNotBlank()) {
+                                    chatViewModel.sendMessage(textField.value)
+                                    textField.value = ""
+                                    scope.launch {
+                                        listState.scrollToItem(messages.size - 1)
+                                    }
+                                }
+                            }) {
+                                Icon(imageVector = FeatherIcons.Send, contentDescription = null)
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
         Spacer(modifier = Modifier.weight(1f))
     }
 }
+
+@Composable
+expect fun CustomTextFieldForBottomChat(
+    modifier: Modifier = Modifier,
+    voiceToTextParser: VoiceToTextParser,
+    voiceState: State<VoiceStates>,
+    messages: List<Message>,
+    listState: LazyListState,
+    chatViewModel: ChatViewModel,
+    isActiveJob: Boolean,
+    scope: CoroutineScope
+)

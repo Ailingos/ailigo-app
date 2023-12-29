@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,17 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,14 +35,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import compose.icons.FeatherIcons
+import compose.icons.feathericons.BookOpen
+import compose.icons.feathericons.Clock
+import compose.icons.feathericons.Edit3
+import compose.icons.feathericons.Gift
+import compose.icons.feathericons.Globe
+import compose.icons.feathericons.Headphones
+import compose.icons.feathericons.MessageSquare
+import compose.icons.feathericons.Mic
 import compose.icons.feathericons.Phone
+import compose.icons.feathericons.Volume2
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.SharedRes
@@ -63,183 +70,175 @@ data class LandingScreen(
 
         val infoItems = listOf(
             Info(
-                FeatherIcons.Phone,
-                "GitHub Pages Jekyll Theme",
-                "Designed for GitHub Pages. Fork. Edit _config.yml. Upload screenshot/video. Push to gh-pages branch. Voilá!"
+                FeatherIcons.MessageSquare,
+                "Распознавание Речи",
+                "Приложение позволяет распознавать и переводить речь на различные иностранные языки."
             ),
             Info(
-                FeatherIcons.Phone,
-                "iPhone Device Preview",
-                "Preview your app in the context of an iPhone device. Five different device colors included."
+                FeatherIcons.BookOpen,
+                "Обучение Словарному Запасу",
+                "Используйте приложение для изучения новых слов и фраз на иностранных языках с помощью карточек."
             ),
             Info(
-                FeatherIcons.Phone,
-                "Video Support",
-                "Preview app video on the iPhone device simply by placing your video files in the videos folder."
+                FeatherIcons.Volume2,
+                "Аудирование и Понимание",
+                "Улучшайте навыки аудирования, слушая записи на иностранных языках и проверяйте свое понимание."
             ),
             Info(
-                FeatherIcons.Phone,
-                "Automatic Icon and Metadata",
-                "Enter iOS app ID in the _config.yml file to automatically fetch app icon, price and App Store Link."
+                FeatherIcons.Edit3,
+                "Практика Письма",
+                "Пишите и получайте обратную связь, чтобы совершенствовать свои навыки."
             ),
             Info(
-                FeatherIcons.Phone,
-                "Easy to Tweak",
-                "Tweak accent color, images, icons and transparency via the _config.yml file. No HTML/CSS needed."
+                FeatherIcons.Mic,
+                "Интерактивные Упражнения",
+                "Проходите интерактивные упражнения, используя микрофон для проверки произношения."
             ),
             Info(
-                FeatherIcons.Phone,
-                "Feature List",
-                "Add features (like this one) to your site via the _config.yml file. No HTML/CSS needed."
+                FeatherIcons.Headphones,
+                "Изучение Акцента",
+                "Слушайте различные акценты и обучайтесь правильному произношению с помощью звуковых файлов."
             ),
             Info(
-                FeatherIcons.Phone,
-                "Smart App Banner",
-                "Display a smart app banner on iOS devices."
+                FeatherIcons.Globe,
+                "Путешествия и Языковая Практика",
+                "Получайте языковую практику, встречаясь с носителями языка во время путешествий."
             ),
             Info(
-                FeatherIcons.Phone,
-                "Social Links",
-                "Easily add social media accounts and contact info in the footer via the _config.yml file. No HTML/CSS needed."
+                FeatherIcons.Clock,
+                "Ежедневные Упражнения",
+                "Выполняйте ежедневные языковые упражнения для стабильного прогресса в изучении языка."
             ),
             Info(
-                FeatherIcons.Phone,
-                "FontAwesome Support",
-                "Pick custom Font Awesome icons for the feature list via the _config.yml file. No HTML/CSS needed."
+                FeatherIcons.Gift,
+                "Бонусы и Награды",
+                "Зарабатывайте бонусы и награды за достижения в изучении иностранного языка."
             ),
         )
 
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            Column(
+                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
             ) {
-                header {
-                    Box(
+                Box(
+                    modifier = Modifier.height(screenHeight + 100.dp).width(screenWidth)
+                ) {
+                    Image(
+                        painter = painterResource(SharedRes.images.backHeader),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier.height(screenHeight).width(screenWidth)
-                            .padding(bottom = 100.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(SharedRes.images.backHeader),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                                .padding(bottom = 100.dp)
-                                .clip(
-                                    RoundedCornerShape(
-                                        bottomEndPercent = 5,
-                                        bottomStartPercent = 5
-                                    )
+                            .clip(
+                                RoundedCornerShape(
+                                    bottomEndPercent = 5,
+                                    bottomStartPercent = 5
                                 )
-                        )
-                        Column {
-                            HeaderLanding(voiceToTextParser = voiceToTextParser)
-                            Spacer(modifier = Modifier.height(64.dp))
-                            DisplayPhoneAndGooglePlay(screenHeight, screenWidth)
+                            )
+                    )
+                    Column {
+                        HeaderLanding(voiceToTextParser)
+                        Spacer(modifier = Modifier.height(32.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth().padding(start = 64.dp, end = 64.dp)
+                        ) {
+                            DisplayPhone()
+                            Spacer(modifier = Modifier.width(32.dp))
+                            DisplayGooglePlay()
                         }
                     }
                 }
-                itemsIndexed(infoItems) { index, infoAbout ->
-                    InfoAbout(index, infoAbout)
-                }
-                item {
-                    Spacer(modifier = Modifier.height(32.dp))
-                }
-                header {
-                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text("Made by Emil Baehr in Copenhagen")
-                    }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(32.dp))
-                }
-                header {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(
-                            16.dp,
-                            Alignment.CenterHorizontally
-                        )
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
-                                .aspectRatio(1f),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = FeatherIcons.Phone,
-                                contentDescription = null,
-                                tint = Color.DarkGray
-                            )
-                        }
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
-                                .aspectRatio(1f),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = FeatherIcons.Phone,
-                                contentDescription = null,
-                                tint = Color.DarkGray
-                            )
-                        }
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
-                                .aspectRatio(1f),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = FeatherIcons.Phone,
-                                contentDescription = null,
-                                tint = Color.DarkGray
-                            )
-                        }
-                    }
+                Spacer(modifier = Modifier.height(64.dp))
+                Row(
+                    modifier = Modifier.padding(start = 64.dp, end = 64.dp),
+                    horizontalArrangement = Arrangement.spacedBy(32.dp)
+                ) {
+                    InfoRow(infoItems[0])
+                    InfoRow(infoItems[1])
+                    InfoRow(infoItems[2])
                 }
 
-                item {
-                    Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
+                Row(
+                    modifier = Modifier.padding(start = 64.dp, end = 64.dp),
+                    horizontalArrangement = Arrangement.spacedBy(32.dp)
+                ) {
+                    InfoRow(infoItems[3])
+                    InfoRow(infoItems[4])
+                    InfoRow(infoItems[5])
                 }
-                header {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(
-                            32.dp,
-                            Alignment.CenterHorizontally
-                        )
-                    ) {
-                        Text(
-                            "Whats new",
-                            color = Color.Blue,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            "Private Policy",
-                            color = Color.Blue,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            "Press kit",
-                            color = Color.Blue,
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                Spacer(modifier = Modifier.height(32.dp))
+                Row(
+                    modifier = Modifier.padding(start = 64.dp, end = 64.dp),
+                    horizontalArrangement = Arrangement.spacedBy(32.dp)
+                ) {
+                    InfoRow(infoItems[6])
+                    InfoRow(infoItems[7])
+                    InfoRow(infoItems[8])
+                }
+                Spacer(modifier = Modifier.height(64.dp))
+                Text(text = stringResource(SharedRes.strings.made_for), modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.height(64.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    repeat(3) {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
+                                .aspectRatio(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = FeatherIcons.Phone,
+                                contentDescription = null,
+                            )
+                        }
+
                     }
                 }
-                item {
-                    Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(64.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally), modifier = Modifier.fillMaxWidth()) {
+                    Text(text = stringResource(SharedRes.strings.whats_new), style = MaterialTheme.typography.titleMedium, color = Color.Blue)
+                    Text(text = stringResource(SharedRes.strings.private_police),style = MaterialTheme.typography.titleMedium, color = Color.Blue)
+                    Text(text = stringResource(SharedRes.strings.press_kit),style = MaterialTheme.typography.titleMedium, color = Color.Blue)
                 }
+                Spacer(modifier = Modifier.height(64.dp))
             }
         }
     }
+}
 
+@Composable
+fun RowScope.InfoRow(info: Info) {
+    Row(modifier = Modifier.weight(1f)) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
+                .aspectRatio(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = info.icon,
+                contentDescription = info.description,
+                tint = Color.Blue
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        Column {
+            Text(
+                info.title,
+                style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(info.description, color = Color.DarkGray)
+        }
+    }
 }
 
 @Composable
@@ -281,117 +280,54 @@ fun HeaderLanding(
     }
 }
 
+@Composable
+fun RowScope.DisplayPhone() {
+    Image(
+        painterResource(SharedRes.images.LandgingPhone),
+        contentDescription = null,
+    )
+}
 
 @Composable
-fun DisplayPhoneAndGooglePlay(
-    heightOfImage: Dp,
-    widthOfImage: Dp
-) {
-    Box(
-        modifier = Modifier.fillMaxWidth()
+fun RowScope.DisplayGooglePlay() {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(start = 64.dp, end = 64.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
+            Card(
+                shape = RoundedCornerShape(25),
+                modifier = Modifier.size(100.dp)
+            ) {
                 Image(
-                    painterResource(SharedRes.images.LandgingPhone),
+                    painter = painterResource(SharedRes.images.logo),
                     contentDescription = null,
-                    modifier = Modifier
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(32.dp))
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(32.dp),
-                modifier = Modifier.weight(3f)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Card(
-                        shape = RoundedCornerShape(25),
-                        colors = CardDefaults.cardColors(
-
-                        ),
-                        modifier = Modifier.size(100.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(SharedRes.images.logo),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize().padding(16.dp)
-                        )
-                    }
-                    Column {
-                        Text(
-                            "Google play Connect",
-                            color = Color.White,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Text("Free", color = Color.White)
-                    }
-                }
+            Column {
                 Text(
-                    "Write a short tagline for your app.",
+                    "Google play Connect",
                     color = Color.White,
                     style = MaterialTheme.typography.titleLarge
                 )
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.White
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(SharedRes.images.googlePlay),
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Column {
-                            Text("Download on the")
-                            Text("Google Play")
-                        }
-                    }
-                }
+                Text("Free", color = Color.White)
             }
-
         }
-    }
-}
+        Text(
+            "Best app for learning languages",
+            color = Color.White,
+            style = MaterialTheme.typography.titleLarge
+        )
 
-
-@Composable
-fun InfoAbout(
-    index: Int,
-    infoAbout: Info
-) {
-    Row(
-        modifier = Modifier.fillMaxSize()
-            .padding(start = 64.dp, end = if (index % 3 == 2) 64.dp else 0.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape).aspectRatio(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(imageVector = infoAbout.icon, contentDescription = null, tint = Color.Blue)
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Column {
-            Text(
-                infoAbout.title,
-                style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(infoAbout.description, color = Color.DarkGray)
-        }
+        Image(
+            painter = painterResource(SharedRes.images.googlePlay),
+            modifier = Modifier.width(200.dp).height(60.dp),
+            contentScale = ContentScale.FillBounds,
+            contentDescription = null
+        )
     }
 }
 

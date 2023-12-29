@@ -16,11 +16,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,14 +37,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
+import org.ailingo.app.CustomTextFieldImpl
 import org.ailingo.app.SharedRes
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_login.presentation.LoginScreen
@@ -53,16 +60,16 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val login = rememberSaveable {
-            mutableStateOf("")
+            mutableStateOf(TextFieldValue(""))
         }
         val password = rememberSaveable {
-            mutableStateOf("")
+            mutableStateOf(TextFieldValue(""))
         }
         val email = rememberSaveable {
-            mutableStateOf("")
+            mutableStateOf(TextFieldValue(""))
         }
         val name = rememberSaveable {
-            mutableStateOf("")
+            mutableStateOf(TextFieldValue(""))
         }
         val savedPhoto = rememberSaveable {
             mutableStateOf("")
@@ -75,6 +82,9 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                 delay(500L) //just for cute ui
                 isLoading = false
             }
+        }
+        var passwordVisible by rememberSaveable {
+            mutableStateOf(false)
         }
         val passwordFieldFocusRequester = rememberUpdatedState(FocusRequester())
         val emailFieldFocusRequester = rememberUpdatedState(FocusRequester())
@@ -109,8 +119,8 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Column {
-                    OutlinedTextField(
-                        value = login.value,
+                    CustomTextFieldImpl(
+                        textValue = login.value,
                         onValueChange = {
                             login.value = it
                         },
@@ -141,8 +151,8 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                     }
                 }
                 Column {
-                    OutlinedTextField(
-                        value = password.value,
+                    CustomTextFieldImpl(
+                        textValue = password.value,
                         onValueChange = {
                             password.value = it
                         },
@@ -158,9 +168,13 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                             }
                         ),
                         isError = isPasswordNotValid,
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            if (isPasswordNotValid) {
-                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colorScheme.error)
+                            val icon = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                            IconButton(onClick = {
+                                passwordVisible = !passwordVisible
+                            }) {
+                                Icon(icon, contentDescription = null, tint = Color.Black)
                             }
                         },
                         modifier = Modifier.focusRequester(passwordFieldFocusRequester.value),
@@ -174,8 +188,8 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                     }
                 }
                 Column {
-                    OutlinedTextField(
-                        value = email.value,
+                    CustomTextFieldImpl(
+                        textValue = email.value,
                         onValueChange = {
                             email.value = it
                         },
@@ -207,8 +221,8 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                     }
                 }
                 Column {
-                    OutlinedTextField(
-                        value = name.value,
+                    CustomTextFieldImpl(
+                        textValue = name.value,
                         onValueChange = {
                             name.value = it
                         },
@@ -248,10 +262,10 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                     shape = MaterialTheme.shapes.small,
                     onClick = {
                         isLoading = true
-                        isLoginNotValid = login.value.length !in 4..16 || login.value.isBlank()
-                        isPasswordNotValid = password.value.length !in 8..24 || password.value.isBlank()
-                        isEmailNotValid = !isValidEmail(email.value) || email.value.isBlank()
-                        isNameNotValid = name.value.isBlank()
+                        isLoginNotValid = login.value.text.length !in 4..16 || login.value.text.isBlank()
+                        isPasswordNotValid = password.value.text.length !in 8..24 || password.value.text.isBlank()
+                        isEmailNotValid = !isValidEmail(email.value.text) || email.value.text.isBlank()
+                        isNameNotValid = name.value.text.isBlank()
                         if (!isLoginNotValid && !isPasswordNotValid && !isEmailNotValid && !isNameNotValid) {
                             navigator.push(
                                 RegisterUploadAvatarScreen(

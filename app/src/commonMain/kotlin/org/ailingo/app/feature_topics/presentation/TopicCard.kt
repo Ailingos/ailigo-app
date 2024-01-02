@@ -47,10 +47,11 @@ fun TopicCard(topic: Topic, modifier: Modifier = Modifier) {
 
     Card(
         shape = RoundedCornerShape(24.dp),
-        modifier = modifier
+        modifier = modifier.aspectRatio(1f)
     ) {
         Box(
             contentAlignment = Alignment.Center,
+            modifier = Modifier.aspectRatio(1f)
         ) {
             Image(
                 painter = painterResource(topic.image),

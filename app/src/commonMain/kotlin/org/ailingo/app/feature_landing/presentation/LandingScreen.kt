@@ -67,7 +67,6 @@ data class LandingScreen(
         val screenInfo = rememberWindowInfo()
         val screenHeight = screenInfo.screenHeight
         val screenWidth = screenInfo.screenWidth
-
         val infoItems = listOf(
             Info(
                 FeatherIcons.MessageSquare,

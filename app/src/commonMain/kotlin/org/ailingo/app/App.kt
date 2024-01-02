@@ -127,7 +127,9 @@ internal fun App(
                                     }
                                 )
                             } else {
-                                TopAppBarForStart()
+                                if (navigator.lastItem.key != LandingScreen(voiceToTextParser).key) {
+                                    TopAppBarForStart()
+                                }
                             }
                         },
                     ) { padding ->

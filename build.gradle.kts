@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath("dev.icerock.moko:resources-generator:0.22.0")
-        classpath("app.cash.sqldelight:gradle-plugin:2.0.0")
+        classpath("app.cash.sqldelight:gradle-plugin:2.0.1")
     }
 }
 

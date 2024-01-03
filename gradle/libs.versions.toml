@@ -2,10 +2,10 @@
 
 googleAuthLibraryCredentials = "1.19.0"
 
-kotlin = "1.9.20"
+kotlin = "1.9.21"
 
 agp = "7.4.0"
-compose = "1.5.10"
+compose = "1.5.11"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.7.2"
 compose-uitooling = "1.5.4"

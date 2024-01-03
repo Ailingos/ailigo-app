@@ -79,8 +79,8 @@ kotlin {
                 //more icons
                 implementation(compose.materialIconsExtended)
                 //local database
-                implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
-                implementation("app.cash.sqldelight:runtime:2.0.0")
+                implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
+                implementation("app.cash.sqldelight:runtime:2.0.1")
             }
         }
 
@@ -99,7 +99,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.android)
                 implementation(libs.ktor.client.okhttp)
                 //local database
-                implementation("app.cash.sqldelight:android-driver:2.0.0")
+                implementation("app.cash.sqldelight:android-driver:2.0.1")
             }
         }
 
@@ -119,7 +119,7 @@ kotlin {
                 //Playing audio
                 implementation("javazoom:jlayer:1.0.1")
                 //local database
-                implementation("app.cash.sqldelight:sqlite-driver:2.0.0")
+                implementation("app.cash.sqldelight:sqlite-driver:2.0.1")
 
             }
         }
@@ -129,10 +129,15 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.html.core)
-                //local database
-                implementation("app.cash.sqldelight:web-worker-driver:2.0.0")
+//                local database
+//                implementation (npm("sql.js", "1.6.2"))
+              //  implementation (devNpm("copy-webpack-plugin", "9.1.0"))
+                implementation("app.cash.sqldelight:web-worker-driver:2.0.1")
+                implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.1"))
+                implementation(npm("sql.js", "1.8.0"))
+
                 implementation(npm("copy-webpack-plugin", "11.0.0"))
-                implementation(npm("@sqlite.org/sqlite-wasm", "3.43.2-build1"))
+                  implementation(npm("@sqlite.org/sqlite-wasm", "3.43.2-build1"))
             }
         }
 

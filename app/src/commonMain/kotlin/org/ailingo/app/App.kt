@@ -44,6 +44,7 @@ import org.ailingo.app.feature_login.presentation.LoginScreen
 import org.ailingo.app.feature_register.presentation.RegisterScreen
 import org.ailingo.app.feature_register.presentation.RegisterUploadAvatarScreen
 import org.ailingo.app.feature_reset_password.presentation.ResetPasswordScreen
+import org.ailingo.app.feature_topics.data.Topic
 import org.ailingo.app.theme.AppTheme
 
 @Composable
@@ -183,3 +184,7 @@ expect fun CustomTextFieldImpl(
     shape: Shape = TextFieldDefaults.shape,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 )
+
+
+@Composable
+expect fun TopicsForDesktopAndWeb(topics: List<Topic>)

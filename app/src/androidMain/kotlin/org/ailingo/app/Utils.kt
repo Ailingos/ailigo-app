@@ -20,6 +20,7 @@ import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import org.ailingo.app.database.HistoryDictionaryDatabase
+import org.ailingo.app.feature_topics.data.Topic
 
 internal actual fun openUrl(url: String?) {
     val uri = url?.let { Uri.parse(it) } ?: return
@@ -114,4 +115,10 @@ actual fun CustomTextFieldImpl(
         shape = shape,
         colors = colors
     )
+}
+
+
+@Composable
+actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
+
 }

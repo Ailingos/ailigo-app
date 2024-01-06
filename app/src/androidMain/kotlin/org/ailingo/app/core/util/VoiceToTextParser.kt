@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import androidx.compose.ui.text.input.TextFieldValue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -84,7 +85,7 @@ actual class VoiceToTextParser : RecognitionListener {
     override fun onResults(results: Bundle?) {
         results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.getOrNull(0)?.let { result ->
             _voiceState.update {
-                it.copy(spokenText = result)
+                it.copy(spokenText = TextFieldValue(result))
             }
         }
     }

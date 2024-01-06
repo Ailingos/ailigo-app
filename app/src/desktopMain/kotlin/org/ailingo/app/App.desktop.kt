@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import cafe.adriel.voyager.navigator.Navigator
 import javazoom.jl.player.advanced.AdvancedPlayer
 import javazoom.jl.player.advanced.PlaybackEvent
 import javazoom.jl.player.advanced.PlaybackListener
@@ -44,7 +46,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.ailingo.app.core.util.VoiceStates
+import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.database.HistoryDictionaryDatabase
+import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.feature_topics.data.Topic
 import org.ailingo.app.feature_topics.presentation.TopicCard
 import java.awt.Desktop
@@ -116,7 +120,7 @@ fun recordAudio(
     }
 
     voiceState.update {
-        VoiceStates(spokenText = "Wait for transcripts...")
+        VoiceStates(spokenText = TextFieldValue("Wait for transcripts..."))
     }
 
     byteArrayOutputStream.close()
@@ -183,7 +187,7 @@ actual class DriverFactory {
 }
 
 @Suppress("NewApi")
-actual suspend fun selectImage(): String? {
+actual suspend fun selectImageWebAndDesktop(): String? {
     val fileChooser = JFileChooser()
 
     // Создание фильтра для файлов PNG и JPG
@@ -196,10 +200,10 @@ actual suspend fun selectImage(): String? {
     val selectedFile = fileChooser.selectedFile
 
     // Проверка, что файл был действительно выбран
-    if (selectedFile != null) {
-        return encodeFileToBase64(selectedFile)
+    return if (selectedFile == null) {
+        null
     } else {
-        return null
+        encodeFileToBase64(selectedFile)
     }
 }
 
@@ -306,3 +310,15 @@ actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
         )
     }
 }
+
+@Composable
+actual fun UploadAvatarForPhone(
+    navigator: Navigator,
+    voiceToTextParser: VoiceToTextParser,
+    registerViewModel: RegistrationViewModel,
+    login: MutableState<TextFieldValue>,
+    password: MutableState<TextFieldValue>,
+    email: MutableState<TextFieldValue>,
+    name: MutableState<TextFieldValue>,
+    savedPhoto: MutableState<String>
+) {}

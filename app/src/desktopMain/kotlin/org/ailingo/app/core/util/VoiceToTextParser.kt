@@ -1,6 +1,8 @@
 package org.ailingo.app.core.util
 
+import androidx.compose.ui.text.input.TextFieldValue
 import com.google.api.gax.core.FixedCredentialsProvider
+import com.google.api.gax.rpc.PermissionDeniedException
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.speech.v1p1beta1.RecognitionAudio
 import com.google.cloud.speech.v1p1beta1.RecognitionConfig
@@ -37,8 +39,7 @@ actual class VoiceToTextParser {
     private var job: Job? = null
     actual fun startListening() {
         job?.cancel()
-        job = CoroutineScope(Dispatchers.IO).launch {
-
+        job = CoroutineScope(Dispatchers.Default).launch {
             _voiceState.update {
                 VoiceStates(isSpeaking = true)
             }
@@ -56,41 +57,72 @@ actual class VoiceToTextParser {
                 .setConfig(recognitionConfig)
                 .setAudio(audio)
                 .build()
-
-            val response = speechClient.recognize(request)
-
-            val transcripts = response.resultsList.joinToString(" ") { result ->
-                result.alternativesList.joinToString(" ") { alternative ->
-                    alternative.transcript
+            try {
+                val response = speechClient.recognize(request)
+                val transcripts = response.resultsList.joinToString(" ") { result ->
+                    result.alternativesList.joinToString(" ") { alternative ->
+                        alternative.transcript
+                    }
                 }
-            }
-
-            if (transcripts.isNotBlank()) {
+                if (transcripts.isNotBlank()) {
+                    _voiceState.update {
+                        VoiceStates(
+                            spokenText = TextFieldValue(transcripts),
+                            isSpeaking = false,
+                            error = null
+                        )
+                    }
+                } else {
+                    _voiceState.update {
+                        VoiceStates(
+                            spokenText = TextFieldValue("Empty message, please check your microphone"),
+                            isSpeaking = false,
+                            error = null
+                        )
+                    }
+                    delay(2000L)
+                    _voiceState.update {
+                        VoiceStates(
+                            spokenText = TextFieldValue(" "),
+                            isSpeaking = false,
+                            error = null
+                        )
+                    }
+                }
+            } catch (e: PermissionDeniedException) {
+                //need to find new google account to work with desktop
                 _voiceState.update {
                     VoiceStates(
-                        spokenText = transcripts,
+                        spokenText = TextFieldValue("Status payment error"),
                         isSpeaking = false,
-                        error = null
-                    )
-                }
-            } else {
-                _voiceState.update {
-                    VoiceStates(
-                        spokenText = "Empty message, please check your microphone",
-                        isSpeaking = false,
-                        error = null
+                        error = "Status payment error"
                     )
                 }
                 delay(2000L)
                 _voiceState.update {
                     VoiceStates(
-                        spokenText = " ",
+                        spokenText = TextFieldValue(" "),
+                        isSpeaking = false,
+                        error = null
+                    )
+                }
+            } catch (e: Exception) {
+                _voiceState.update {
+                    VoiceStates(
+                        spokenText = TextFieldValue("Something goes wrong ${e.message.toString()}"),
+                        isSpeaking = false,
+                        error = e.message.toString()
+                    )
+                }
+                delay(2000L)
+                _voiceState.update {
+                    VoiceStates(
+                        spokenText = TextFieldValue(" "),
                         isSpeaking = false,
                         error = null
                     )
                 }
             }
-
         }
     }
 

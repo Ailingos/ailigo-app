@@ -18,6 +18,7 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,6 +44,7 @@ import org.ailingo.app.feature_landing.presentation.LandingScreen
 import org.ailingo.app.feature_login.presentation.LoginScreen
 import org.ailingo.app.feature_register.presentation.RegisterScreen
 import org.ailingo.app.feature_register.presentation.RegisterUploadAvatarScreen
+import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.feature_reset_password.presentation.ResetPasswordScreen
 import org.ailingo.app.feature_topics.data.Topic
 import org.ailingo.app.theme.AppTheme
@@ -53,60 +55,45 @@ internal fun App(
     historyDictionaryRepository: Deferred<DictionaryRepository>
 ) {
     AppTheme {
-        Navigator(LandingScreen(voiceToTextParser)) { navigator ->
-            val authScreens = listOf(
-                LoginScreen(voiceToTextParser).key,
-                RegisterScreen(voiceToTextParser).key,
-                GetStartedScreen(voiceToTextParser).key,
-                ResetPasswordScreen(voiceToTextParser).key,
-                LandingScreen(voiceToTextParser).key,
-                RegisterUploadAvatarScreen(
-                    login = mutableStateOf(TextFieldValue("")),
-                    password = mutableStateOf(TextFieldValue("")),
-                    email = mutableStateOf(TextFieldValue("")),
-                    name = mutableStateOf(TextFieldValue("")),
-                    voiceToTextParser = voiceToTextParser,
-                    savedPhoto = mutableStateOf("")
-                ).key
-            )
-            val drawerState = rememberDrawerState(DrawerValue.Closed)
-            val scope = rememberCoroutineScope()
-            val windowInfo = rememberWindowInfo()
-            if (windowInfo.screenWidthInfo is WindowInfo.WindowType.DesktopWindowInfo) {
-                Column {
-                    if (navigator.lastItem.key !in authScreens) {
-                        TopAppBarMain(
-                            onOpenNavigation = {
-                                scope.launch {
-                                    drawerState.open()
+        if (getPlatformName() == "Android" || getPlatformName() == "Desktop") {
+            Navigator(GetStartedScreen(voiceToTextParser)) { navigator ->
+                val authScreens = listOf(
+                    LoginScreen(voiceToTextParser).key,
+                    RegisterScreen(voiceToTextParser).key,
+                    GetStartedScreen(voiceToTextParser).key,
+                    ResetPasswordScreen(voiceToTextParser).key,
+                    LandingScreen(voiceToTextParser).key,
+                    RegisterUploadAvatarScreen(
+                        login = mutableStateOf(TextFieldValue("")),
+                        password = mutableStateOf(TextFieldValue("")),
+                        email = mutableStateOf(TextFieldValue("")),
+                        name = mutableStateOf(TextFieldValue("")),
+                        voiceToTextParser = voiceToTextParser,
+                        savedPhoto = mutableStateOf("")
+                    ).key
+                )
+                val drawerState = rememberDrawerState(DrawerValue.Closed)
+                val scope = rememberCoroutineScope()
+                val windowInfo = rememberWindowInfo()
+                if (windowInfo.screenWidthInfo is WindowInfo.WindowType.DesktopWindowInfo) {
+                    Column {
+                        if (navigator.lastItem.key !in authScreens) {
+                            TopAppBarMain(
+                                onOpenNavigation = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
                                 }
-                            }
-                        )
-                    } else {
-                        if (navigator.lastItem.key != LandingScreen(voiceToTextParser).key) {
-                            TopAppBarForStart()
-                        }
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        if (navigator.lastItem.key !in authScreens) {
-                            AppDrawerContent(
-                                historyDictionaryRepository,
-                                voiceToTextParser,
-                                drawerState,
-                                scope
                             )
+                        } else {
+                            if (navigator.lastItem.key != LandingScreen(voiceToTextParser).key) {
+                                TopAppBarForStart()
+                            }
                         }
-                        CurrentScreen()
-                    }
-                }
-            } else {
-                ModalNavigationDrawer(
-                    drawerState = drawerState,
-                    drawerContent = {
-                        if (navigator.lastItem.key !in authScreens) {
-                            ModalDrawerSheet {
+                        Row(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            if (navigator.lastItem.key !in authScreens) {
                                 AppDrawerContent(
                                     historyDictionaryRepository,
                                     voiceToTextParser,
@@ -114,28 +101,134 @@ internal fun App(
                                     scope
                                 )
                             }
+                            CurrentScreen()
                         }
                     }
-                ) {
-                    Scaffold(
-                        topBar = {
+                } else {
+                    ModalNavigationDrawer(
+                        drawerState = drawerState,
+                        drawerContent = {
                             if (navigator.lastItem.key !in authScreens) {
-                                TopAppBarMain(
-                                    onOpenNavigation = {
-                                        scope.launch {
-                                            drawerState.open()
-                                        }
-                                    }
-                                )
-                            } else {
-                                if (navigator.lastItem.key != LandingScreen(voiceToTextParser).key) {
-                                    TopAppBarForStart()
+                                ModalDrawerSheet {
+                                    AppDrawerContent(
+                                        historyDictionaryRepository,
+                                        voiceToTextParser,
+                                        drawerState,
+                                        scope
+                                    )
                                 }
                             }
-                        },
-                    ) { padding ->
-                        Box(modifier = Modifier.padding(padding)) {
+                        }
+                    ) {
+                        Scaffold(
+                            topBar = {
+                                if (navigator.lastItem.key !in authScreens) {
+                                    TopAppBarMain(
+                                        onOpenNavigation = {
+                                            scope.launch {
+                                                drawerState.open()
+                                            }
+                                        }
+                                    )
+                                } else {
+                                    if (navigator.lastItem.key != LandingScreen(voiceToTextParser).key) {
+                                        TopAppBarForStart()
+                                    }
+                                }
+                            },
+                        ) { padding ->
+                            Box(modifier = Modifier.padding(padding)) {
+                                CurrentScreen()
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            Navigator(LandingScreen(voiceToTextParser)) { navigator ->
+                val authScreens = listOf(
+                    LoginScreen(voiceToTextParser).key,
+                    RegisterScreen(voiceToTextParser).key,
+                    GetStartedScreen(voiceToTextParser).key,
+                    ResetPasswordScreen(voiceToTextParser).key,
+                    LandingScreen(voiceToTextParser).key,
+                    RegisterUploadAvatarScreen(
+                        login = mutableStateOf(TextFieldValue("")),
+                        password = mutableStateOf(TextFieldValue("")),
+                        email = mutableStateOf(TextFieldValue("")),
+                        name = mutableStateOf(TextFieldValue("")),
+                        voiceToTextParser = voiceToTextParser,
+                        savedPhoto = mutableStateOf("")
+                    ).key
+                )
+                val drawerState = rememberDrawerState(DrawerValue.Closed)
+                val scope = rememberCoroutineScope()
+                val windowInfo = rememberWindowInfo()
+                if (windowInfo.screenWidthInfo is WindowInfo.WindowType.DesktopWindowInfo) {
+                    Column {
+                        if (navigator.lastItem.key !in authScreens) {
+                            TopAppBarMain(
+                                onOpenNavigation = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
+                                }
+                            )
+                        } else {
+                            if (navigator.lastItem.key != LandingScreen(voiceToTextParser).key) {
+                                TopAppBarForStart()
+                            }
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            if (navigator.lastItem.key !in authScreens) {
+                                AppDrawerContent(
+                                    historyDictionaryRepository,
+                                    voiceToTextParser,
+                                    drawerState,
+                                    scope
+                                )
+                            }
                             CurrentScreen()
+                        }
+                    }
+                } else {
+                    ModalNavigationDrawer(
+                        drawerState = drawerState,
+                        drawerContent = {
+                            if (navigator.lastItem.key !in authScreens) {
+                                ModalDrawerSheet {
+                                    AppDrawerContent(
+                                        historyDictionaryRepository,
+                                        voiceToTextParser,
+                                        drawerState,
+                                        scope
+                                    )
+                                }
+                            }
+                        }
+                    ) {
+                        Scaffold(
+                            topBar = {
+                                if (navigator.lastItem.key !in authScreens) {
+                                    TopAppBarMain(
+                                        onOpenNavigation = {
+                                            scope.launch {
+                                                drawerState.open()
+                                            }
+                                        }
+                                    )
+                                } else {
+                                    if (navigator.lastItem.key != LandingScreen(voiceToTextParser).key) {
+                                        TopAppBarForStart()
+                                    }
+                                }
+                            },
+                        ) { padding ->
+                            Box(modifier = Modifier.padding(padding)) {
+                                CurrentScreen()
+                            }
                         }
                     }
                 }
@@ -156,7 +249,19 @@ expect class DriverFactory {
     suspend fun createDriver(): SqlDriver
 }
 
-expect suspend fun selectImage(): String?
+expect suspend fun selectImageWebAndDesktop(): String?
+
+@Composable
+expect fun UploadAvatarForPhone(
+    navigator: Navigator,
+    voiceToTextParser: VoiceToTextParser,
+    registerViewModel: RegistrationViewModel,
+    login: MutableState<TextFieldValue>,
+    password: MutableState<TextFieldValue>,
+    email: MutableState<TextFieldValue>,
+    name: MutableState<TextFieldValue>,
+    savedPhoto: MutableState<String>
+)
 
 @Composable
 expect fun CustomTextFieldImpl(

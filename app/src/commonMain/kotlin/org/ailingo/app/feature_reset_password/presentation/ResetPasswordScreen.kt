@@ -47,7 +47,7 @@ data class ResetPasswordScreen(val voiceToTextParser: VoiceToTextParser): Screen
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
-            var email by rememberSaveable {
+            var email by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(""))
             }
             val focusManager = LocalFocusManager.current

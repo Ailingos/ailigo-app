@@ -12,7 +12,8 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -38,15 +39,11 @@ class ChatViewModel : ViewModel() {
     private val USERNAME = "admin"
     private val PASSWORD = "pass"
 
-    private var job: Job? = null
-
+    @OptIn(DelicateCoroutinesApi::class)
     fun sendMessage(message: String) {
-        if (job?.isActive == true) {
-            job?.cancel()
-        }
         _chatState.add(Message(message, isSentByUser = true))
         _chatState.add(Message("Waiting for response...", isSentByUser = false))
-        job = viewModelScope.launch {
+        GlobalScope.launch {
             _isActiveJob.emit(true)
             val localHttpClient = HttpClient {
                 install(ContentNegotiation) {
@@ -67,8 +64,7 @@ class ChatViewModel : ViewModel() {
                         _chatState.removeAt(_chatState.size - 1)
                         _chatState.add(Message(responseBody, isSentByUser = false))
                         _isActiveJob.emit(false)
-                    }
-                    else -> {
+                    } else -> {
                         _chatState.removeAt(_chatState.size - 1)
                         _chatState.add(
                             Message(

@@ -7,9 +7,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import org.ailingo.app.core.util.VoiceStates
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.data.model.Message
@@ -17,24 +17,25 @@ import org.ailingo.app.feature_chat.data.model.Message
 @Composable
 fun ChatScreenMobile(
     voiceToTextParser: VoiceToTextParser,
-    textField: MutableState<String>,
+    chatTextField: TextFieldValue,
     chatState: List<Message>,
     listState: LazyListState,
     voiceState: State<VoiceStates>,
     chatViewModel: ChatViewModel,
-    isActiveJob: State<Boolean>
+    isActiveJob: State<Boolean>,
+    onChatTextField:(TextFieldValue) -> Unit
 ) {
-
     Scaffold(
         bottomBar = {
             BottomUserMessageBoxMobile(
-                textField,
+                chatTextField,
                 voiceToTextParser,
                 voiceState,
                 chatState,
                 listState,
                 chatViewModel,
-                isActiveJob.value
+                isActiveJob.value,
+                onChatTextField = onChatTextField
             )
         }
     ) { padding ->

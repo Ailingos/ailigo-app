@@ -59,16 +59,16 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val login = rememberSaveable {
+        val login = rememberSaveable(stateSaver = TextFieldValue.Saver) {
             mutableStateOf(TextFieldValue(""))
         }
-        val password = rememberSaveable {
+        val password = rememberSaveable(stateSaver = TextFieldValue.Saver) {
             mutableStateOf(TextFieldValue(""))
         }
-        val email = rememberSaveable {
+        val email = rememberSaveable(stateSaver = TextFieldValue.Saver) {
             mutableStateOf(TextFieldValue(""))
         }
-        val name = rememberSaveable {
+        val name = rememberSaveable(stateSaver = TextFieldValue.Saver) {
             mutableStateOf(TextFieldValue(""))
         }
         val savedPhoto = rememberSaveable {
@@ -89,8 +89,6 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
         val passwordFieldFocusRequester = rememberUpdatedState(FocusRequester())
         val emailFieldFocusRequester = rememberUpdatedState(FocusRequester())
         val nameFieldFocusRequester = rememberUpdatedState(FocusRequester())
-        val avatarFieldFocusRequester = rememberUpdatedState(FocusRequester())
-
         var isLoginNotValid by remember {
             mutableStateOf(false)
         }
@@ -234,7 +232,18 @@ data class RegisterScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                         ),
                         keyboardActions = KeyboardActions(
                             onNext = {
-                                avatarFieldFocusRequester.value.requestFocus()
+                                isLoading = true
+                                isLoginNotValid = login.value.text.length !in 4..16 || login.value.text.isBlank()
+                                isPasswordNotValid = password.value.text.length !in 8..24 || password.value.text.isBlank()
+                                isEmailNotValid = !isValidEmail(email.value.text) || email.value.text.isBlank()
+                                isNameNotValid = name.value.text.isBlank()
+                                if (!isLoginNotValid && !isPasswordNotValid && !isEmailNotValid && !isNameNotValid) {
+                                    navigator.push(
+                                        RegisterUploadAvatarScreen(
+                                            login, password, email, name, voiceToTextParser, savedPhoto
+                                        )
+                                    )
+                                }
                             }
                         ),
                         modifier = Modifier.focusRequester(nameFieldFocusRequester.value),

@@ -6,8 +6,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.TextFieldValue
 import cafe.adriel.voyager.core.screen.Screen
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -20,18 +21,21 @@ data class ChatScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
     @Composable
     override fun Content() {
         val voiceState = voiceToTextParser.voiceState.collectAsState()
-        val textField = remember {
-            mutableStateOf("")
+
+        var chatTextField by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+            mutableStateOf(TextFieldValue(""))
         }
         val chatViewModel = getViewModel(Unit, viewModelFactory { ChatViewModel() })
         val chatState = chatViewModel.chatState
         val isActiveJob = chatViewModel.isActiveJob.collectAsState(false)
 
         val listState = rememberLazyListState()
-        var lastSpokenText by remember { mutableStateOf("") }
+        var lastSpokenText by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+            mutableStateOf(TextFieldValue(""))
+        }
 
-        LaunchedEffect(!voiceState.value.isSpeaking && voiceState.value.spokenText.isNotEmpty() && voiceState.value.spokenText != lastSpokenText) {
-            textField.value = voiceState.value.spokenText
+        LaunchedEffect(!voiceState.value.isSpeaking && voiceState.value.spokenText.text.isNotEmpty() && voiceState.value.spokenText != lastSpokenText) {
+            chatTextField = voiceState.value.spokenText
             lastSpokenText = voiceState.value.spokenText
         }
 
@@ -39,23 +43,29 @@ data class ChatScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
 
         if (screenInfo.screenWidthInfo is WindowInfo.WindowType.DesktopWindowInfo) {
             ChatScreenDesktop(
-                voiceToTextParser,
-                textField,
-                chatState,
-                listState,
-                voiceState,
-                chatViewModel,
-                isActiveJob
+                voiceToTextParser = voiceToTextParser,
+                chatTextField = chatTextField,
+                chatState = chatState,
+                listState = listState,
+                voiceState = voiceState,
+                chatViewModel = chatViewModel,
+                isActiveJob = isActiveJob,
+                onChatTextField = {
+                    chatTextField = it
+                }
             )
         } else {
             ChatScreenMobile(
                 voiceToTextParser,
-                textField,
+                chatTextField,
                 chatState,
                 listState,
                 voiceState,
                 chatViewModel,
-                isActiveJob
+                isActiveJob,
+                onChatTextField = {
+                    chatTextField = it
+                }
             )
         }
     }

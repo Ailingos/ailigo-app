@@ -43,10 +43,12 @@ import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.ailingo.app.SharedRes
+import org.ailingo.app.UploadAvatarForPhone
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 import org.ailingo.app.feature_register.data.model_upload_image.UploadImageUiState
-import org.ailingo.app.selectImage
+import org.ailingo.app.getPlatformName
+import org.ailingo.app.selectImageWebAndDesktop
 
 
 @Composable
@@ -60,188 +62,204 @@ fun RegisterUploadAvatarEmpty(
     name: MutableState<TextFieldValue>,
     savedPhoto: MutableState<String>
 ) {
-    val imageState = registerViewModel.imageState.collectAsState()
-    var base64Image by remember {
-        mutableStateOf<String?>(null)
-    }
-    val scope = rememberCoroutineScope()
-    LaunchedEffect(base64Image) {
-        if (base64Image?.isNotEmpty() == true) {
-            print(base64Image)
-            registerViewModel.uploadImage(base64Image!!)
+    if (getPlatformName() == "Android") {
+        UploadAvatarForPhone(
+            navigator,
+            voiceToTextParser,
+            registerViewModel,
+            login,
+            password,
+            email,
+            name,
+            savedPhoto
+        )
+    } else {
+        val imageState = registerViewModel.imageState.collectAsState()
+        var base64Image by remember {
+            mutableStateOf<String?>(null)
         }
-    }
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Column {
-                Text(
-                    stringResource(SharedRes.strings.lets_add_your_avatar),
-                    style = MaterialTheme.typography.displaySmall
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    stringResource(SharedRes.strings.lets_other_get_to_know_you),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.DarkGray,
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(32.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+        val scope = rememberCoroutineScope()
+        LaunchedEffect(base64Image) {
+            if (base64Image?.isNotEmpty() == true) {
+                print(base64Image)
+                registerViewModel.uploadImage(base64Image!!)
+            }
+        }
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Column {
+                    Text(
+                        stringResource(SharedRes.strings.lets_add_your_avatar),
+                        style = MaterialTheme.typography.displaySmall
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        stringResource(SharedRes.strings.lets_other_get_to_know_you),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.DarkGray,
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(32.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(
-                            modifier = Modifier.size(300.dp)
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Card(
-                                shape = CircleShape,
-                                modifier = Modifier.fillMaxSize()
+                            Box(
+                                modifier = Modifier.size(300.dp)
                             ) {
-                                when (imageState.value) {
-                                    UploadImageUiState.EmptyImage -> {
-                                        if (savedPhoto.value.isNotEmpty()) {
+                                Card(
+                                    shape = CircleShape,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    when (imageState.value) {
+                                        UploadImageUiState.EmptyImage -> {
+                                            if (savedPhoto.value.isNotEmpty()) {
+                                                Image(
+                                                    painter = rememberImagePainter(savedPhoto.value),
+                                                    contentDescription = null,
+                                                    modifier = Modifier.fillMaxSize(),
+                                                    contentScale = ContentScale.Crop
+                                                )
+                                            } else {
+                                                Image(
+                                                    painter = painterResource(SharedRes.images.defaultProfilePhoto),
+                                                    contentDescription = null,
+                                                    modifier = Modifier.fillMaxSize(),
+                                                    contentScale = ContentScale.Crop
+                                                )
+                                            }
+                                        }
+
+                                        is UploadImageUiState.Error -> {
+                                            SelectionContainer {
+                                                Box(
+                                                    modifier = Modifier.fillMaxSize()
+                                                        .padding(start = 16.dp, end = 16.dp),
+                                                    contentAlignment = Alignment.Center
+                                                ) {
+                                                    Text(
+                                                        (imageState.value as UploadImageUiState.Error).message,
+                                                        textAlign = TextAlign.Center
+                                                    )
+                                                }
+                                            }
+                                        }
+
+                                        UploadImageUiState.LoadingImage -> {
+                                            Box(
+                                                modifier = Modifier.fillMaxSize(),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                CircularProgressIndicator()
+                                            }
+                                        }
+
+                                        is UploadImageUiState.Success -> {
+                                            savedPhoto.value =
+                                                (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.image.url
                                             Image(
                                                 painter = rememberImagePainter(savedPhoto.value),
                                                 contentDescription = null,
                                                 modifier = Modifier.fillMaxSize(),
                                                 contentScale = ContentScale.Crop
                                             )
-                                        } else {
-                                            Image(
-                                                painter = painterResource(SharedRes.images.defaultProfilePhoto),
-                                                contentDescription = null,
-                                                modifier = Modifier.fillMaxSize(),
-                                                contentScale = ContentScale.Crop
-                                            )
                                         }
-                                    }
-
-                                    is UploadImageUiState.Error -> {
-                                        SelectionContainer {
-                                            Box(
-                                                modifier = Modifier.fillMaxSize()
-                                                    .padding(start = 16.dp, end = 16.dp),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Text(
-                                                    (imageState.value as UploadImageUiState.Error).message,
-                                                    textAlign = TextAlign.Center
-                                                )
-                                            }
-                                        }
-                                    }
-
-                                    UploadImageUiState.LoadingImage -> {
-                                        Box(
-                                            modifier = Modifier.fillMaxSize(),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            CircularProgressIndicator()
-                                        }
-                                    }
-
-                                    is UploadImageUiState.Success -> {
-                                        savedPhoto.value = (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.image.url
-                                        Image(
-                                            painter = rememberImagePainter(savedPhoto.value),
-                                            contentDescription = null,
-                                            modifier = Modifier.fillMaxSize(),
-                                            contentScale = ContentScale.Crop
-                                        )
                                     }
                                 }
                             }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            ElevatedButton(onClick = {
+                                navigator.push(RegisterScreen(voiceToTextParser = voiceToTextParser))
+                            }, shape = MaterialTheme.shapes.small) {
+                                Text("Back to the input fields")
+                            }
                         }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        ElevatedButton(onClick = {
-                            navigator.push(RegisterScreen(voiceToTextParser = voiceToTextParser))
-                        }, shape = MaterialTheme.shapes.small) {
-                            Text("Back to the input fields")
-                        }
-                    }
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier.padding(bottom = ButtonDefaults.MinHeight + 16.dp)
-                    ) {
-                        OutlinedButton(
-                            onClick = {
-                                scope.launch {
-                                    base64Image = selectImage()
-                                }
-                            },
-                            shape = MaterialTheme.shapes.small
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier.padding(bottom = ButtonDefaults.MinHeight + 16.dp)
                         ) {
-                            Text(
-                                stringResource(SharedRes.strings.choose_image),
-                                color = Color.Black
-                            )
-                        }
-                        if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
+
                             OutlinedButton(
                                 onClick = {
-                                    savedPhoto.value = ""
-                                    base64Image = null
-                                    registerViewModel.backToEmptyUploadAvatar()
+                                    scope.launch {
+                                        base64Image = selectImageWebAndDesktop()
+                                    }
                                 },
                                 shape = MaterialTheme.shapes.small
                             ) {
                                 Text(
-                                    "Delete avatar",
+                                    stringResource(SharedRes.strings.choose_image),
                                     color = Color.Black
                                 )
                             }
-                        }
 
-                        if (imageState.value is UploadImageUiState.EmptyImage && savedPhoto.value.isEmpty()) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    painter = painterResource(SharedRes.images.ArrowForwardIOS),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(16.dp),
-                                    tint = Color.DarkGray
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    stringResource(SharedRes.strings.continue_with_default_image),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = Color.DarkGray
-                                )
-                            }
-                        }
-                        if (imageState.value !is UploadImageUiState.LoadingImage) {
-                            OutlinedButton(onClick = {
-                                if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
-                                    registerViewModel.registerUser(
-                                        UserRegistrationData(
-                                            login = login.value.text,
-                                            password = password.value.text,
-                                            email = email.value.text,
-                                            name = name.value.text,
-                                            avatar = (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.url
-                                        )
-                                    )
-                                } else {
-                                    registerViewModel.registerUser(
-                                        UserRegistrationData(
-                                            login = login.value.text,
-                                            password = password.value.text,
-                                            email = email.value.text,
-                                            name = name.value.text,
-                                            avatar = ""
-                                        )
+                            if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
+                                OutlinedButton(
+                                    onClick = {
+                                        savedPhoto.value = ""
+                                        base64Image = null
+                                        registerViewModel.backToEmptyUploadAvatar()
+                                    },
+                                    shape = MaterialTheme.shapes.small
+                                ) {
+                                    Text(
+                                        "Delete avatar",
+                                        color = Color.Black
                                     )
                                 }
-                            }, shape = MaterialTheme.shapes.small) {
-                                Text(stringResource(SharedRes.strings.continue_app))
+                            }
+
+                            if (imageState.value is UploadImageUiState.EmptyImage && savedPhoto.value.isEmpty()) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        painter = painterResource(SharedRes.images.ArrowForwardIOS),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp),
+                                        tint = Color.DarkGray
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        stringResource(SharedRes.strings.continue_with_default_image),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = Color.DarkGray
+                                    )
+                                }
+                            }
+                            if (imageState.value !is UploadImageUiState.LoadingImage) {
+                                OutlinedButton(onClick = {
+                                    if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
+                                        registerViewModel.registerUser(
+                                            UserRegistrationData(
+                                                login = login.value.text,
+                                                password = password.value.text,
+                                                email = email.value.text,
+                                                name = name.value.text,
+                                                avatar = (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.url
+                                            )
+                                        )
+                                    } else {
+                                        registerViewModel.registerUser(
+                                            UserRegistrationData(
+                                                login = login.value.text,
+                                                password = password.value.text,
+                                                email = email.value.text,
+                                                name = name.value.text,
+                                                avatar = ""
+                                            )
+                                        )
+                                    }
+                                }, shape = MaterialTheme.shapes.small) {
+                                    Text(stringResource(SharedRes.strings.continue_app))
+                                }
                             }
                         }
                     }

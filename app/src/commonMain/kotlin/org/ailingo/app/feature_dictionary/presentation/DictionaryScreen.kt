@@ -23,29 +23,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.Deferred
 import org.ailingo.app.SharedRes
 import org.ailingo.app.feature_dictionary.presentation.utils.ErrorDictionaryScreen
 import org.ailingo.app.feature_dictionary.presentation.utils.LoadingDictionaryScreen
-import org.ailingo.app.feature_dictionary_history.domain.DictionaryRepository
-import org.ailingo.app.feature_dictionary_history.presentation.HistoryDictionaryViewModel
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DictionaryScreen(
-    historyDictionaryRepository: Deferred<DictionaryRepository>
+    component: DictionaryScreenComponent
 ) {
-    val dictionaryViewModel = getViewModel(Unit, viewModelFactory { DictionaryViewModel() })
-    val uiState = dictionaryViewModel.uiState.collectAsState()
+    val uiState = component.uiState.collectAsState()
 
-    val historyDictionaryViewModel = getViewModel(Unit, factory = viewModelFactory {
-        HistoryDictionaryViewModel(historyDictionaryRepository = historyDictionaryRepository)
-    })
-    val historyState = historyDictionaryViewModel.historyOfDictionaryState.collectAsState()
+    val historyState = component.historyOfDictionaryState.collectAsState()
     val textFieldValue = rememberSaveable { mutableStateOf("") }
     val active = remember {
         mutableStateOf(false)
@@ -57,25 +48,24 @@ fun DictionaryScreen(
         ) {
             stickyHeader {
                 SearchTextFieldDictionary(
-                    dictionaryViewModel = dictionaryViewModel,
+                    component = component,
                     textFieldValue = textFieldValue,
                     onTextFieldValueChange = { newTextFieldValue ->
                         textFieldValue.value = newTextFieldValue
                     },
-                    historyDictionaryViewModel = historyDictionaryViewModel,
                     active = active,
                     searchBarHeight
                 ) { searchWord ->
-                    dictionaryViewModel.searchWordDefinition(searchWord)
+                    component.searchWordDefinition(searchWord)
                 }
             }
             if (uiState.value is DictionaryUiState.Empty) {
-                items(historyState.value.history) {
+                items(historyState.value) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(14.dp).clickable {
                             textFieldValue.value = it.text
-                            dictionaryViewModel.searchWordDefinition(it.text)
+                            component.searchWordDefinition(it.text)
                             active.value = false
                         }) {
                         Icon(
@@ -144,7 +134,7 @@ fun DictionaryScreen(
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             when (uiState.value) {
                 DictionaryUiState.Empty -> {
-                    if (historyState.value.history.isEmpty()) {
+                    if (historyState.value.isEmpty()) {
                         Box(
                             modifier = Modifier.fillMaxSize()
                                 .padding(top = searchBarHeight.value.dp),

@@ -2,12 +2,9 @@ package org.ailingo.app.feature_upload_avatar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.ailingo.app.feature_register.presentation.RegisterError
 import org.ailingo.app.feature_register.presentation.RegisterLoading
 import org.ailingo.app.feature_register.presentation.RegisterUiState
-import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 
 @Composable
 fun UploadAvatarScreen(
@@ -18,12 +15,11 @@ fun UploadAvatarScreen(
     name: String,
     onNavigateToRegisterScreen: () -> Unit
 ) {
-    val registerViewModel = getViewModel(Unit, viewModelFactory { RegistrationViewModel() })
-    val registerState = registerViewModel.registerState.collectAsState()
+    val registerState = component.registerState.collectAsState()
     when (registerState.value) {
         RegisterUiState.Empty -> {
             RegisterUploadAvatarEmpty(
-                registerViewModel,
+                component,
                 login,
                 password,
                 email,
@@ -36,7 +32,7 @@ fun UploadAvatarScreen(
             RegisterError(
                 errorMessage = (registerState.value as RegisterUiState.Error).message,
                 onBackToEmptyState = {
-                    registerViewModel.backToEmptyState()
+                    component.backToEmptyState()
                     component.onEvent(
                         UploadAvatarEvent.OnNavigateToRegisterScreen
                     )

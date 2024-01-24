@@ -8,8 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.delay
 
 
@@ -17,8 +15,7 @@ import kotlinx.coroutines.delay
 fun LoginScreen(
     component: LoginScreenComponent
 ) {
-    val loginViewModel = getViewModel(Unit, viewModelFactory { LoginViewModel() })
-    val loginState = loginViewModel.loginState.collectAsState()
+    val loginState = component.loginState.collectAsState()
     var login by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue("admin"))
     }
@@ -43,7 +40,7 @@ fun LoginScreen(
         LoginUiState.Empty -> {
             LoginMainScreen(
                 onLoginUser = {
-                    loginViewModel.loginUser(login.text, password.text)
+                    component.loginUser(login.text, password.text)
                 },
                 login = login,
                 onLoginChange = {
@@ -63,7 +60,7 @@ fun LoginScreen(
         }
 
         is LoginUiState.Error -> {
-            LoginErrorScreen(loginViewModel, (loginState.value as LoginUiState.Error).message)
+            LoginErrorScreen(component, (loginState.value as LoginUiState.Error).message)
         }
 
         LoginUiState.Loading -> {

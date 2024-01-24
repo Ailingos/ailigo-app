@@ -66,8 +66,8 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.database.HistoryDictionaryDatabase
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 import org.ailingo.app.feature_register.data.model_upload_image.UploadImageUiState
-import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.feature_topics.data.Topic
+import org.ailingo.app.feature_upload_avatar.UploadAvatarComponent
 
 internal actual fun openUrl(url: String?) {
     val uri = url?.let { Uri.parse(it) } ?: return
@@ -109,7 +109,7 @@ actual class DriverFactory(private val context: Context) {
 
 @Composable
 actual fun UploadAvatarForPhone(
-    registerViewModel: RegistrationViewModel,
+    uploadAvatarComponent: UploadAvatarComponent,
     login: String,
     password: String,
     email: String,
@@ -134,10 +134,10 @@ actual fun UploadAvatarForPhone(
         }
     )
 
-    val imageState = registerViewModel.imageState.collectAsState()
+    val imageState = uploadAvatarComponent.imageState.collectAsState()
     LaunchedEffect(base64Image) {
         if (base64Image?.isNotEmpty() == true) {
-            registerViewModel.uploadImage(base64Image!!)
+            uploadAvatarComponent.uploadImage(base64Image!!)
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -259,7 +259,7 @@ actual fun UploadAvatarForPhone(
                             onClick = {
                                 savedPhoto = ""
                                 base64Image = null
-                                registerViewModel.backToEmptyUploadAvatar()
+                                uploadAvatarComponent.backToEmptyUploadAvatar()
                             },
                             shape = MaterialTheme.shapes.small
                         ) {
@@ -291,7 +291,7 @@ actual fun UploadAvatarForPhone(
                     if (imageState.value !is UploadImageUiState.LoadingImage) {
                         OutlinedButton(onClick = {
                             if (imageState.value is UploadImageUiState.Success && savedPhoto.isNotEmpty()) {
-                                registerViewModel.registerUser(
+                                uploadAvatarComponent.registerUser(
                                     UserRegistrationData(
                                         login = login,
                                         password = password,
@@ -301,7 +301,7 @@ actual fun UploadAvatarForPhone(
                                     )
                                 )
                             } else {
-                                registerViewModel.registerUser(
+                                uploadAvatarComponent.registerUser(
                                     UserRegistrationData(
                                         login = login,
                                         password = password,

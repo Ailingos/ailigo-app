@@ -14,7 +14,9 @@ import org.ailingo.app.core.helper_window_info.rememberWindowInfo
 import org.ailingo.app.feature_topics.data.Topic
 
 @Composable
-fun TopicsScreen() {
+fun TopicsScreen(
+    component: TopicsScreenComponent
+) {
     val topics = listOf(
         Topic(SharedRes.strings.trips, SharedRes.images.trips),
         Topic(SharedRes.strings.food_and_drinks, SharedRes.images.food),

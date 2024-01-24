@@ -1,4 +1,4 @@
-package org.ailingo.app.feature_chat.presentation
+package org.ailingo.app.feature_chat.presentation.desktop
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import org.ailingo.app.core.util.VoiceStates
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.data.model.Message
+import org.ailingo.app.feature_chat.presentation.ChatScreenComponent
 
 @Composable
 fun ChatScreenDesktop(
@@ -21,7 +22,7 @@ fun ChatScreenDesktop(
     chatState: List<Message>,
     listState: LazyListState,
     voiceState: State<VoiceStates>,
-    chatViewModel: ChatViewModel,
+    chatViewModel: ChatScreenComponent,
     isActiveJob: State<Boolean>,
     onChatTextField: (TextFieldValue) -> Unit
 ) {

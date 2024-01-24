@@ -24,5 +24,4 @@ fun TopAppBarForStart() {
             )
         }
     )
-
 }

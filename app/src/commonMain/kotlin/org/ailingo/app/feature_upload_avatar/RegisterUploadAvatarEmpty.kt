@@ -43,14 +43,13 @@ import org.ailingo.app.SharedRes
 import org.ailingo.app.UploadAvatarForPhone
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 import org.ailingo.app.feature_register.data.model_upload_image.UploadImageUiState
-import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.getPlatformName
 import org.ailingo.app.selectImageWebAndDesktop
 
 
 @Composable
 fun RegisterUploadAvatarEmpty(
-    registerViewModel: RegistrationViewModel,
+    registerComponent: UploadAvatarComponent,
     login: String,
     password: String,
     email: String,
@@ -62,7 +61,7 @@ fun RegisterUploadAvatarEmpty(
     }
     if (getPlatformName() == "Android") {
         UploadAvatarForPhone(
-            registerViewModel,
+            registerComponent,
             login,
             password,
             email,
@@ -70,14 +69,14 @@ fun RegisterUploadAvatarEmpty(
             onNavigateToRegisterScreen = onNavigateToRegisterScreen
         )
     } else {
-        val imageState = registerViewModel.imageState.collectAsState()
+        val imageState = registerComponent.imageState.collectAsState()
         var base64Image by remember {
             mutableStateOf<String?>(null)
         }
         val scope = rememberCoroutineScope()
         LaunchedEffect(base64Image) {
             if (base64Image?.isNotEmpty() == true) {
-                registerViewModel.uploadImage(base64Image!!)
+                registerComponent.uploadImage(base64Image!!)
             }
         }
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -157,7 +156,8 @@ fun RegisterUploadAvatarEmpty(
                                         }
 
                                         is UploadImageUiState.Success -> {
-                                            savedPhoto = ((imageState.value as UploadImageUiState.Success).uploadImageResponse.data.image.url)
+                                            savedPhoto =
+                                                ((imageState.value as UploadImageUiState.Success).uploadImageResponse.data.image.url)
                                             Image(
                                                 painter = rememberImagePainter(savedPhoto),
                                                 contentDescription = null,
@@ -199,7 +199,7 @@ fun RegisterUploadAvatarEmpty(
                                     onClick = {
                                         savedPhoto = ""
                                         base64Image = null
-                                        registerViewModel.backToEmptyUploadAvatar()
+                                        registerComponent.backToEmptyUploadAvatar()
                                     },
                                     shape = MaterialTheme.shapes.small
                                 ) {
@@ -231,7 +231,7 @@ fun RegisterUploadAvatarEmpty(
                             if (imageState.value !is UploadImageUiState.LoadingImage) {
                                 OutlinedButton(onClick = {
                                     if (imageState.value is UploadImageUiState.Success && savedPhoto.isNotEmpty()) {
-                                        registerViewModel.registerUser(
+                                        registerComponent.registerUser(
                                             UserRegistrationData(
                                                 login = login,
                                                 password = password,
@@ -241,7 +241,7 @@ fun RegisterUploadAvatarEmpty(
                                             )
                                         )
                                     } else {
-                                        registerViewModel.registerUser(
+                                        registerComponent.registerUser(
                                             UserRegistrationData(
                                                 login = login,
                                                 password = password,

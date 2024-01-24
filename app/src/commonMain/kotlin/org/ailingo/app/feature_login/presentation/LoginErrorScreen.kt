@@ -18,7 +18,7 @@ import org.ailingo.app.SharedRes
 
 @Composable
 fun LoginErrorScreen(
-    loginViewModel: LoginViewModel,
+    loginComponent: LoginScreenComponent,
     errorMessage: String
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -31,7 +31,7 @@ fun LoginErrorScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
-                    loginViewModel.backToEmptyLoginState()
+                    loginComponent.backToEmptyLoginState()
                 }
             ) {
                 Text(stringResource(SharedRes.strings.back))

@@ -22,11 +22,11 @@ fun main() {
             val root =
                 RootComponent(
                     componentContext = DefaultComponentContext(lifecycle = lifecycle),
+                    historyDictionaryRepository = appModule.dictionaryRepository,
             )
 
             App(
                 voiceToTextParser,
-                historyDictionaryRepository = appModule.dictionaryRepository,
                 root
             )
         }

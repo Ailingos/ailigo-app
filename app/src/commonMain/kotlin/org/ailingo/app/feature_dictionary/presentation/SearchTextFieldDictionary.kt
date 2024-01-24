@@ -30,16 +30,14 @@ import kotlinx.coroutines.delay
 import org.ailingo.app.feature_dicitionary_predictor.data.PredictorRequest
 import org.ailingo.app.feature_dicitionary_predictor.data.PredictorResponse
 import org.ailingo.app.feature_dictionary_history.domain.HistoryDictionary
-import org.ailingo.app.feature_dictionary_history.presentation.HistoryDictionaryViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTextFieldDictionary(
-    dictionaryViewModel: DictionaryViewModel,
+    component: DictionaryScreenComponent,
     textFieldValue: MutableState<String>,
     onTextFieldValueChange: (String) -> Unit,
-    historyDictionaryViewModel: HistoryDictionaryViewModel,
     active: MutableState<Boolean>,
     searchBarHeight: MutableState<Int>,
     onSearchClick: (String) -> Unit
@@ -53,7 +51,7 @@ fun SearchTextFieldDictionary(
             delay(250)
             println(trimmedText)
             if (active.value) {
-                items = dictionaryViewModel.predictNextWords(
+                items = component.predictNextWords(
                     PredictorRequest(
                         false,
                         listOf("en"),
@@ -74,7 +72,7 @@ fun SearchTextFieldDictionary(
             onQueryChange = onTextFieldValueChange,
             onSearch = {
                 onSearchClick(it)
-                historyDictionaryViewModel.saveSearchedWord(HistoryDictionary(null, it))
+                component.saveSearchedWord(HistoryDictionary(null, it))
                 active.value = false
             },
             active = active.value,
@@ -109,7 +107,7 @@ fun SearchTextFieldDictionary(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(14.dp).clickable {
                             textFieldValue.value = uniqueWord
-                            historyDictionaryViewModel.saveSearchedWord(HistoryDictionary(null, uniqueWord))
+                            component.saveSearchedWord(HistoryDictionary(null, uniqueWord))
                             onSearchClick(uniqueWord)
                             active.value = false
                         }) {

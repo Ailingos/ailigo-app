@@ -45,9 +45,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.ailingo.app.core.util.VoiceStates
 import org.ailingo.app.database.HistoryDictionaryDatabase
-import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.feature_topics.data.Topic
 import org.ailingo.app.feature_topics.presentation.TopicCard
+import org.ailingo.app.feature_upload_avatar.UploadAvatarComponent
 import java.awt.Desktop
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
@@ -311,7 +311,7 @@ actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
 
 @Composable
 actual fun UploadAvatarForPhone(
-    registerViewModel: RegistrationViewModel,
+    uploadAvatarComponent: UploadAvatarComponent,
     login: String,
     password: String,
     email: String,

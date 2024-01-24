@@ -9,11 +9,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.ailingo.app.core.helper_window_info.WindowInfo
 import org.ailingo.app.core.helper_window_info.rememberWindowInfo
 import org.ailingo.app.core.util.VoiceToTextParser
+import org.ailingo.app.feature_chat.presentation.desktop.ChatScreenDesktop
+import org.ailingo.app.feature_chat.presentation.mobile.ChatScreenMobile
 
 @Composable
 fun ChatScreen(
@@ -25,9 +25,8 @@ fun ChatScreen(
     var chatTextField by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
     }
-    val chatViewModel = getViewModel(Unit, viewModelFactory { ChatViewModel() })
-    val chatState = chatViewModel.chatState
-    val isActiveJob = chatViewModel.isActiveJob.collectAsState(false)
+    val chatState = component.chatState
+    val isActiveJob = component.isActiveJob.collectAsState(false)
 
     val listState = rememberLazyListState()
     var lastSpokenText by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -48,7 +47,7 @@ fun ChatScreen(
             chatState = chatState,
             listState = listState,
             voiceState = voiceState,
-            chatViewModel = chatViewModel,
+            chatViewModel = component,
             isActiveJob = isActiveJob,
             onChatTextField = {
                 chatTextField = it
@@ -61,7 +60,7 @@ fun ChatScreen(
             chatState,
             listState,
             voiceState,
-            chatViewModel,
+            component,
             isActiveJob,
             onChatTextField = {
                 chatTextField = it

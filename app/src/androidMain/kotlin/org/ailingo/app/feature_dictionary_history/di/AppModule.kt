@@ -13,7 +13,6 @@ import org.ailingo.app.feature_dictionary_history.domain.DictionaryRepository
 actual class AppModule(
     private val context: Context
 ) {
-
     actual val dictionaryRepository: Deferred<DictionaryRepository> = CoroutineScope(Dispatchers.Default).async {
         DictionaryRepositoryImpl(
             db = HistoryDictionaryDatabase(

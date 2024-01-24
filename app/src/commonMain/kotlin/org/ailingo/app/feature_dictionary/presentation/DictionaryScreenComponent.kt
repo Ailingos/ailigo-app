@@ -1,6 +1,6 @@
 package org.ailingo.app.feature_dictionary.presentation
 
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import com.arkivanov.decompose.ComponentContext
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -11,18 +11,30 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import org.ailingo.app.core.util.componentCoroutineScope
 import org.ailingo.app.feature_dicitionary_predictor.data.PredictorRequest
 import org.ailingo.app.feature_dicitionary_predictor.data.PredictorResponse
 import org.ailingo.app.feature_dictionary.data.model.DictionaryResponse
 import org.ailingo.app.feature_dictionary_examples.data.model.WordInfoItem
+import org.ailingo.app.feature_dictionary_history.domain.DictionaryRepository
+import org.ailingo.app.feature_dictionary_history.domain.HistoryDictionary
 
-class DictionaryViewModel : ViewModel() {
+class DictionaryScreenComponent(
+    componentContext: ComponentContext,
+    private val historyDictionaryRepository: Deferred<DictionaryRepository>
+): ComponentContext by componentContext {
     private val httpClient = HttpClient {
         install(ContentNegotiation) {
             json(Json {
@@ -38,8 +50,10 @@ class DictionaryViewModel : ViewModel() {
     private val _uiState = MutableStateFlow<DictionaryUiState>(DictionaryUiState.Empty)
     val uiState: StateFlow<DictionaryUiState> = _uiState.asStateFlow()
 
+    private val coroutineScope = componentCoroutineScope()
+
     fun searchWordDefinition(word: String) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             try {
                 _uiState.value = DictionaryUiState.Loading
 
@@ -80,9 +94,45 @@ class DictionaryViewModel : ViewModel() {
         return response.body()
     }
 
+    private val _historyOfDictionaryState = MutableStateFlow<List<HistoryDictionary>>(emptyList())
+    val historyOfDictionaryState = _historyOfDictionaryState.asStateFlow()
 
-    override fun onCleared() {
-        super.onCleared()
-        httpClient.close()
+    init {
+        CoroutineScope(Dispatchers.Main.immediate).launch {
+            try {
+                val dictionaryRepository = historyDictionaryRepository.await()
+                dictionaryRepository.getDictionaryHistory().collectLatest { history ->
+                    _historyOfDictionaryState.update {
+                        history
+                    }
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun saveSearchedWord(word: HistoryDictionary) {
+        CoroutineScope(Dispatchers.Main.immediate).launch {
+            try {
+                val dictionaryRepository = historyDictionaryRepository.await()
+                dictionaryRepository.insertWordToHistory(word)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun deleteFromHistory(id: Long) {
+        CoroutineScope(Dispatchers.Main.immediate).launch {
+            try {
+                val dictionaryRepository = historyDictionaryRepository.await()
+                dictionaryRepository.deleteWordFromHistory(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }
+

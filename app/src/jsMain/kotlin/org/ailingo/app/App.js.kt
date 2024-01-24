@@ -51,9 +51,9 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import org.ailingo.app.database.HistoryDictionaryDatabase
-import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.feature_topics.data.Topic
 import org.ailingo.app.feature_topics.presentation.TopicCard
+import org.ailingo.app.feature_upload_avatar.UploadAvatarComponent
 import org.w3c.dom.Audio
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.Worker
@@ -349,7 +349,7 @@ actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
 
 @Composable
 actual fun UploadAvatarForPhone(
-    registerViewModel: RegistrationViewModel,
+    uploadAvatarComponent: UploadAvatarComponent,
     login: String,
     password: String,
     email: String,

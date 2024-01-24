@@ -4,17 +4,22 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.navigate
+import kotlinx.coroutines.Deferred
 import kotlinx.serialization.Serializable
 import org.ailingo.app.feature_chat.presentation.ChatScreenComponent
+import org.ailingo.app.feature_dictionary.presentation.DictionaryScreenComponent
+import org.ailingo.app.feature_dictionary_history.domain.DictionaryRepository
 import org.ailingo.app.feature_get_started.presentation.GetStartedScreenComponent
 import org.ailingo.app.feature_landing.presentation.LandingScreenComponent
 import org.ailingo.app.feature_login.presentation.LoginScreenComponent
 import org.ailingo.app.feature_register.presentation.RegisterScreenComponent
 import org.ailingo.app.feature_reset_password.presentation.ResetPasswordScreenComponent
+import org.ailingo.app.feature_topics.presentation.TopicsScreenComponent
 import org.ailingo.app.feature_upload_avatar.UploadAvatarComponent
 
 class RootComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    private val historyDictionaryRepository: Deferred<DictionaryRepository>
 ) : ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
@@ -167,12 +172,20 @@ class RootComponent(
                 )
             }
 
-            Configuration.TopicsScreen -> {
-                Child.TopicsScreen
-            }
-
             Configuration.DictionaryScreen -> {
-                Child.DictionaryScreen
+                Child.DictionaryScreen(
+                    DictionaryScreenComponent(
+                        componentContext = context,
+                        historyDictionaryRepository = historyDictionaryRepository
+                    )
+                )
+            }
+            Configuration.TopicsScreen -> {
+                Child.TopicsScreen(
+                    TopicsScreenComponent(
+                        componentContext = context
+                    )
+                )
             }
         }
     }
@@ -185,8 +198,8 @@ class RootComponent(
         data class GetStartedScreen(val component: GetStartedScreenComponent) : Child()
         data class RegisterScreen(val component: RegisterScreenComponent) : Child()
         data class UploadAvatarScreen(val component: UploadAvatarComponent) : Child()
-        data object TopicsScreen : Child()
-        data object DictionaryScreen : Child()
+        data class TopicsScreen(val component: TopicsScreenComponent) : Child()
+        data class DictionaryScreen(val component: DictionaryScreenComponent) : Child()
     }
 
     @Serializable

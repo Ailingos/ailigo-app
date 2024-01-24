@@ -9,6 +9,6 @@ sealed class RegisterUiState {
     ) : RegisterUiState()
 
     data class Error(val message: String) : RegisterUiState()
-    object Loading : RegisterUiState()
-    object Empty : RegisterUiState()
+    data object Loading : RegisterUiState()
+    data object Empty : RegisterUiState()
 }

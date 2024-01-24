@@ -1,4 +1,4 @@
-package org.ailingo.app.feature_chat.presentation
+package org.ailingo.app.feature_chat.presentation.mobile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

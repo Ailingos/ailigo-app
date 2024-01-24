@@ -17,6 +17,6 @@ sealed class LoginUiState {
     ) : LoginUiState()
 
     data class Error(val message: String) : LoginUiState()
-    object Loading : LoginUiState()
-    object Empty : LoginUiState()
+    data object Loading : LoginUiState()
+    data object Empty : LoginUiState()
 }

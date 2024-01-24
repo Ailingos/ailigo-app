@@ -26,11 +26,11 @@ fun main() = application {
             runOnUiThread {
                 RootComponent(
                     componentContext = DefaultComponentContext(lifecycle = lifecycle),
+                    AppModule().dictionaryRepository
                 )
             }
 
-        val dictionaryRepository = AppModule().dictionaryRepository
-        App(voiceToTextParser = voiceToTextParser, historyDictionaryRepository = dictionaryRepository, root = root)
+        App(voiceToTextParser = voiceToTextParser, root = root)
     }
 }
 

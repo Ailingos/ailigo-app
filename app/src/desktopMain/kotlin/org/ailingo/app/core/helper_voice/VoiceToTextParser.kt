@@ -1,4 +1,4 @@
-package org.ailingo.app.core.util
+package org.ailingo.app.core.helper_voice
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.google.api.gax.core.FixedCredentialsProvider

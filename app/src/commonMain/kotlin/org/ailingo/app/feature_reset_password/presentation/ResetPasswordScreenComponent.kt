@@ -4,10 +4,10 @@ import com.arkivanov.decompose.ComponentContext
 
 class ResetPasswordScreenComponent(
     componentContext: ComponentContext,
-    private val onNavigateGetStartedScreen:() -> Unit
-): ComponentContext by componentContext {
+    private val onNavigateGetStartedScreen: () -> Unit
+) : ComponentContext by componentContext {
     fun onEvent(event: ResetPasswordEvent) {
-        when(event) {
+        when (event) {
             ResetPasswordEvent.OnNavigateGetStartedScreen -> onNavigateGetStartedScreen()
         }
     }

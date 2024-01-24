@@ -31,12 +31,12 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import kotlinx.coroutines.launch
+import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.core.helper_window_info.WindowInfo
 import org.ailingo.app.core.helper_window_info.rememberWindowInfo
 import org.ailingo.app.core.presentation.AppDrawerContent
 import org.ailingo.app.core.presentation.TopAppBarForStart
 import org.ailingo.app.core.presentation.TopAppBarMain
-import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.presentation.ChatScreen
 import org.ailingo.app.feature_dictionary.presentation.DictionaryScreen
 import org.ailingo.app.feature_get_started.presentation.GetStartedScreen
@@ -100,8 +100,7 @@ internal fun App(
                             is RootComponent.Child.RegisterScreen,
                             is RootComponent.Child.ResetPasswordScreen,
                             is RootComponent.Child.UploadAvatarScreen,
-                            is RootComponent.Child.LandingScreen -> {
-                            }
+                            is RootComponent.Child.LandingScreen -> {}
 
                             else -> {
                                 AppDrawerContent(
@@ -158,8 +157,7 @@ internal fun App(
                         is RootComponent.Child.LoginScreen,
                         is RootComponent.Child.RegisterScreen,
                         is RootComponent.Child.ResetPasswordScreen,
-                        is RootComponent.Child.UploadAvatarScreen -> {
-                        }
+                        is RootComponent.Child.UploadAvatarScreen -> {}
 
                         else -> {
                             ModalDrawerSheet {

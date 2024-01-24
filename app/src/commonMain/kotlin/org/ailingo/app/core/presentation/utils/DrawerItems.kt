@@ -11,8 +11,8 @@ import dev.icerock.moko.resources.StringResource
 import org.ailingo.app.SharedRes
 
 sealed class DrawerItems(val title: StringResource, val icon: ImageVector) {
-    object FreeMode: DrawerItems(SharedRes.strings.free_mode, FeatherIcons.ArrowRightCircle)
-    object Topics: DrawerItems(SharedRes.strings.topics, FeatherIcons.MessageCircle)
-    object Dictionary: DrawerItems(SharedRes.strings.dictionary, FeatherIcons.Book)
-    object Exit: DrawerItems(SharedRes.strings.exit, Icons.Filled.ExitToApp)
+    data object FreeMode: DrawerItems(SharedRes.strings.free_mode, FeatherIcons.ArrowRightCircle)
+    data object Topics: DrawerItems(SharedRes.strings.topics, FeatherIcons.MessageCircle)
+    data object Dictionary: DrawerItems(SharedRes.strings.dictionary, FeatherIcons.Book)
+    data object Exit: DrawerItems(SharedRes.strings.exit, Icons.Filled.ExitToApp)
 }

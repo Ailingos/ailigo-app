@@ -9,9 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
+import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.core.helper_window_info.WindowInfo
 import org.ailingo.app.core.helper_window_info.rememberWindowInfo
-import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.presentation.desktop.ChatScreenDesktop
 import org.ailingo.app.feature_chat.presentation.mobile.ChatScreenMobile
 
@@ -47,7 +47,7 @@ fun ChatScreen(
             chatState = chatState,
             listState = listState,
             voiceState = voiceState,
-            chatViewModel = component,
+            component = component,
             isActiveJob = isActiveJob,
             onChatTextField = {
                 chatTextField = it

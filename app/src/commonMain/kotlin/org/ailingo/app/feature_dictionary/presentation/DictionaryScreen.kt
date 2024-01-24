@@ -56,7 +56,7 @@ fun DictionaryScreen(
                     active = active,
                     searchBarHeight
                 ) { searchWord ->
-                    component.searchWordDefinition(searchWord)
+                    component.onEvent(DictionaryScreenEvents.SearchWordDefinition(searchWord))
                 }
             }
             if (uiState.value is DictionaryUiState.Empty) {
@@ -65,7 +65,7 @@ fun DictionaryScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(14.dp).clickable {
                             textFieldValue.value = it.text
-                            component.searchWordDefinition(it.text)
+                            component.onEvent(DictionaryScreenEvents.SearchWordDefinition(it.text))
                             active.value = false
                         }) {
                         Icon(

@@ -4,7 +4,7 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import org.ailingo.app.App
 import org.ailingo.app.RootComponent
-import org.ailingo.app.core.util.VoiceToTextParser
+import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.feature_dictionary_history.di.AppModule
 import org.jetbrains.skiko.wasm.onWasmReady
 

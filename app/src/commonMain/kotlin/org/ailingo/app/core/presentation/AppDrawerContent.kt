@@ -5,7 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -20,7 +20,6 @@ import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.ailingo.app.RootComponent
 import org.ailingo.app.core.presentation.utils.DrawerItems
-
 
 @Composable
 fun AppDrawerContent(
@@ -41,7 +40,7 @@ fun AppDrawerContent(
             .fillMaxHeight()
             .background(Color.White)
     ) {
-        itemsIndexed(items) { index, item ->
+        items(items) { item ->
             ListItem(
                 colors = ListItemDefaults.colors(
                     containerColor = Color.White

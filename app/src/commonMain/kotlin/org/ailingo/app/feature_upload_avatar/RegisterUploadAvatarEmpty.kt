@@ -76,7 +76,7 @@ fun RegisterUploadAvatarEmpty(
         val scope = rememberCoroutineScope()
         LaunchedEffect(base64Image) {
             if (base64Image?.isNotEmpty() == true) {
-                registerComponent.uploadImage(base64Image!!)
+                registerComponent.onEvent(UploadAvatarEvent.OnUploadImage(base64Image!!))
             }
         }
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -199,7 +199,7 @@ fun RegisterUploadAvatarEmpty(
                                     onClick = {
                                         savedPhoto = ""
                                         base64Image = null
-                                        registerComponent.backToEmptyUploadAvatar()
+                                        registerComponent.onEvent(UploadAvatarEvent.OnBackToEmptyUploadAvatar)
                                     },
                                     shape = MaterialTheme.shapes.small
                                 ) {
@@ -231,23 +231,27 @@ fun RegisterUploadAvatarEmpty(
                             if (imageState.value !is UploadImageUiState.LoadingImage) {
                                 OutlinedButton(onClick = {
                                     if (imageState.value is UploadImageUiState.Success && savedPhoto.isNotEmpty()) {
-                                        registerComponent.registerUser(
-                                            UserRegistrationData(
-                                                login = login,
-                                                password = password,
-                                                email = email,
-                                                name = name,
-                                                avatar = savedPhoto
+                                        registerComponent.onEvent(
+                                            UploadAvatarEvent.RegisterUser(
+                                                UserRegistrationData(
+                                                    login = login,
+                                                    password = password,
+                                                    email = email,
+                                                    name = name,
+                                                    avatar = savedPhoto
+                                                )
                                             )
                                         )
                                     } else {
-                                        registerComponent.registerUser(
-                                            UserRegistrationData(
-                                                login = login,
-                                                password = password,
-                                                email = email,
-                                                name = name,
-                                                avatar = ""
+                                        registerComponent.onEvent(
+                                            UploadAvatarEvent.RegisterUser(
+                                                UserRegistrationData(
+                                                    login = login,
+                                                    password = password,
+                                                    email = email,
+                                                    name = name,
+                                                    avatar = ""
+                                                )
                                             )
                                         )
                                     }

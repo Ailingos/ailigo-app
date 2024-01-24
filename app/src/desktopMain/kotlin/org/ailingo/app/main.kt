@@ -6,7 +6,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import org.ailingo.app.core.util.VoiceToTextParser
+import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.feature_dictionary_history.di.AppModule
 import javax.swing.SwingUtilities
 

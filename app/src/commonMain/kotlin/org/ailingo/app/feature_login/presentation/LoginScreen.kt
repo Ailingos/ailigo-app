@@ -40,7 +40,7 @@ fun LoginScreen(
         LoginUiState.Empty -> {
             LoginMainScreen(
                 onLoginUser = {
-                    component.loginUser(login.text, password.text)
+                    component.onEvent(LoginScreenEvent.OnLoginUser(login.text, password.text))
                 },
                 login = login,
                 onLoginChange = {

@@ -31,7 +31,7 @@ fun LoginErrorScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
-                    loginComponent.backToEmptyLoginState()
+                    loginComponent.onEvent(LoginScreenEvent.OnBackToEmptyState)
                 }
             ) {
                 Text(stringResource(SharedRes.strings.back))

@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.retainedComponent
-import org.ailingo.app.core.util.VoiceToTextParser
+import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.feature_dictionary_history.di.AppModule
 
 

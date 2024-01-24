@@ -54,7 +54,11 @@ class RootComponent(
     }
 
     fun navigateToLandingScreen() {
-        navigateTo(Configuration.LandingScreen)
+        navigation.navigate(
+            transformer = {
+                listOf(Configuration.LandingScreen)
+            }
+        )
     }
 
     fun navigateToChatScreen() {

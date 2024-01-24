@@ -25,13 +25,6 @@ class LoginScreenComponent(
     private val onNavigateToResetPasswordScreen: () -> Unit,
     private val onNavigateToRegisterScreen: () -> Unit
 ) : ComponentContext by componentContext {
-    fun onEvent(event: LoginScreenEvent) {
-        when (event) {
-            LoginScreenEvent.OnNavigateToChatScreen -> onNavigateToChatScreen()
-            LoginScreenEvent.OnNavigateToResetPasswordScreen -> onNavigateToResetPasswordScreen()
-            LoginScreenEvent.OnNavigateToRegisterScreen -> onNavigateToRegisterScreen()
-        }
-    }
 
     private val _loginState = MutableStateFlow<LoginUiState>(LoginUiState.Empty)
     val loginState: StateFlow<LoginUiState> = _loginState.asStateFlow()
@@ -39,10 +32,23 @@ class LoginScreenComponent(
     private val BASE_URL = "https://app.artux.net/ailingo"
     private val API_ENDPOINT = "/api/v1/user/info"
 
-
     private val coroutineScope = componentCoroutineScope()
 
-    fun loginUser(
+    fun onEvent(event: LoginScreenEvent) {
+        when (event) {
+            LoginScreenEvent.OnNavigateToChatScreen -> onNavigateToChatScreen()
+            LoginScreenEvent.OnNavigateToResetPasswordScreen -> onNavigateToResetPasswordScreen()
+            LoginScreenEvent.OnNavigateToRegisterScreen -> onNavigateToRegisterScreen()
+            LoginScreenEvent.OnBackToEmptyState -> {
+                _loginState.value = LoginUiState.Empty
+            }
+            is LoginScreenEvent.OnLoginUser -> {
+                loginUser(event.login, event.password)
+            }
+        }
+    }
+
+    private fun loginUser(
         login: String,
         password: String
     ) {
@@ -90,9 +96,5 @@ class LoginScreenComponent(
                 httpClient.close()
             }
         }
-    }
-
-    fun backToEmptyLoginState() {
-        _loginState.value = LoginUiState.Empty
     }
 }

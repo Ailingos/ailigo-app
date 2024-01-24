@@ -16,10 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -28,7 +25,6 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Search
 import kotlinx.coroutines.delay
 import org.ailingo.app.feature_dicitionary_predictor.data.PredictorRequest
-import org.ailingo.app.feature_dicitionary_predictor.data.PredictorResponse
 import org.ailingo.app.feature_dictionary_history.domain.HistoryDictionary
 
 
@@ -42,16 +38,14 @@ fun SearchTextFieldDictionary(
     searchBarHeight: MutableState<Int>,
     onSearchClick: (String) -> Unit
 ) {
-    var items by remember {
-        mutableStateOf<PredictorResponse?>(null)
-    }
+    val items = component.items.collectAsState()
     LaunchedEffect(textFieldValue.value) {
         val trimmedText = textFieldValue.value.trim()
         if (trimmedText.isNotBlank()) {
             delay(250)
             println(trimmedText)
             if (active.value) {
-                items = component.predictNextWords(
+                 component.onEvent(DictionaryScreenEvents.PredictNextWords(
                     PredictorRequest(
                         false,
                         listOf("en"),
@@ -59,7 +53,7 @@ fun SearchTextFieldDictionary(
                         trimmedText,
                         "string"
                     )
-                )
+                ))
             }
         }
     }
@@ -72,7 +66,7 @@ fun SearchTextFieldDictionary(
             onQueryChange = onTextFieldValueChange,
             onSearch = {
                 onSearchClick(it)
-                component.saveSearchedWord(HistoryDictionary(null, it))
+                component.onEvent(DictionaryScreenEvents.SaveSearchedWord(HistoryDictionary(null,it)))
                 active.value = false
             },
             active = active.value,
@@ -97,7 +91,7 @@ fun SearchTextFieldDictionary(
                 }
             }
         ) {
-            items?.predictions?.let { predictions ->
+            items.value?.predictions?.let { predictions ->
                 val uniqueWords = predictions
                     .map { it.text }
                     .distinct()
@@ -107,7 +101,9 @@ fun SearchTextFieldDictionary(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(14.dp).clickable {
                             textFieldValue.value = uniqueWord
-                            component.saveSearchedWord(HistoryDictionary(null, uniqueWord))
+                            component.onEvent(DictionaryScreenEvents.SaveSearchedWord(
+                                HistoryDictionary(null,uniqueWord)
+                            ))
                             onSearchClick(uniqueWord)
                             active.value = false
                         }) {

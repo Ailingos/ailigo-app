@@ -38,14 +38,31 @@ class UploadAvatarComponent(
     val name: String,
     private val onNavigateToChatScreen: () -> Unit,
     private val onNavigateToRegisterScreen: () -> Unit
-): ComponentContext by componentContext {
+) : ComponentContext by componentContext {
     fun onEvent(event: UploadAvatarEvent) {
         when (event) {
             UploadAvatarEvent.OnNavigateToChatScreen -> {
                 onNavigateToChatScreen()
             }
+
             UploadAvatarEvent.OnNavigateToRegisterScreen -> {
                 onNavigateToRegisterScreen()
+            }
+
+            UploadAvatarEvent.OnBackToEmptyRegisterState -> {
+                _registerState.update { RegisterUiState.Empty }
+            }
+
+            UploadAvatarEvent.OnBackToEmptyUploadAvatar -> {
+                _imageState.update { UploadImageUiState.EmptyImage }
+            }
+
+            is UploadAvatarEvent.OnUploadImage -> {
+                uploadImage(event.image)
+            }
+
+            is UploadAvatarEvent.RegisterUser -> {
+                registerUser(event.user)
             }
         }
     }
@@ -58,7 +75,7 @@ class UploadAvatarComponent(
 
     private val coroutineScope = componentCoroutineScope()
 
-    fun registerUser(user: UserRegistrationData) {
+    private fun registerUser(user: UserRegistrationData) {
         coroutineScope.launch {
             _registerState.value = RegisterUiState.Loading
             val httpClient = HttpClient {
@@ -83,6 +100,7 @@ class UploadAvatarComponent(
                             )
                         } else RegisterUiState.Error(body.description)
                     }
+
                     else -> RegisterUiState.Error("Request failed with $response")
                 }
             } catch (e: Exception) {
@@ -95,10 +113,6 @@ class UploadAvatarComponent(
         }
     }
 
-    fun backToEmptyState() {
-        _registerState.value = RegisterUiState.Empty
-    }
-
     private val _imageState = MutableStateFlow<UploadImageUiState>(UploadImageUiState.EmptyImage)
     val imageState = _imageState.asStateFlow()
 
@@ -106,7 +120,7 @@ class UploadAvatarComponent(
     private val uploadImageKey = "f90248ad8f4b1e262a5e8e7603645cc1"
 
     @OptIn(InternalAPI::class)
-    fun uploadImage(base64Image: String) {
+    private fun uploadImage(base64Image: String) {
         _imageState.value = UploadImageUiState.LoadingImage
         val httpClient = HttpClient {
             install(ContentNegotiation) {
@@ -138,12 +152,6 @@ class UploadAvatarComponent(
             } finally {
                 httpClient.close()
             }
-        }
-    }
-
-    fun backToEmptyUploadAvatar() {
-        coroutineScope.launch {
-            _imageState.value = UploadImageUiState.EmptyImage
         }
     }
 }

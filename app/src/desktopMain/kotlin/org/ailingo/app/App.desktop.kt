@@ -43,7 +43,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.ailingo.app.core.util.VoiceStates
+import org.ailingo.app.core.helper_voice.VoiceStates
 import org.ailingo.app.database.HistoryDictionaryDatabase
 import org.ailingo.app.feature_topics.data.Topic
 import org.ailingo.app.feature_topics.presentation.TopicCard

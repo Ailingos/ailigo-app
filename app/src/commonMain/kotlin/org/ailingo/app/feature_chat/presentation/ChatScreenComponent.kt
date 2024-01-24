@@ -42,47 +42,51 @@ class ChatScreenComponent(
 
     private val coroutineScope = componentCoroutineScope()
 
-    fun sendMessage(message: String) {
-        _chatState.add(Message(message, isSentByUser = true))
-        _chatState.add(Message("Waiting for response...", isSentByUser = false))
-        coroutineScope.launch {
-            _isActiveJob.emit(true)
-            val localHttpClient = HttpClient {
-                install(ContentNegotiation) {
-                    json(Json {
-                        ignoreUnknownKeys = true
-                    })
-                }
-            }
-            try {
-                val response = localHttpClient.post("$BASE_URL$API_ENDPOINT") {
-                    header(HttpHeaders.Authorization, basicAuthHeader(USERNAME, PASSWORD))
-                    header(HttpHeaders.ContentType, ContentType.Application.Json)
-                    setBody(message)
-                }
-                when {
-                    response.status.isSuccess() -> {
-                        val responseBody = response.body<String>()
+    fun onEvent(event: ChatScreenEvents) {
+        when (event) {
+            is ChatScreenEvents.MessageSent -> {
+                _chatState.add(Message(event.message, isSentByUser = true))
+                _chatState.add(Message("Waiting for response...", isSentByUser = false))
+                coroutineScope.launch {
+                    _isActiveJob.emit(true)
+                    val localHttpClient = HttpClient {
+                        install(ContentNegotiation) {
+                            json(Json {
+                                ignoreUnknownKeys = true
+                            })
+                        }
+                    }
+                    try {
+                        val response = localHttpClient.post("$BASE_URL$API_ENDPOINT") {
+                            header(HttpHeaders.Authorization, basicAuthHeader(USERNAME, PASSWORD))
+                            header(HttpHeaders.ContentType, ContentType.Application.Json)
+                            setBody(event.message)
+                        }
+                        when {
+                            response.status.isSuccess() -> {
+                                val responseBody = response.body<String>()
+                                _chatState.removeAt(_chatState.size - 1)
+                                _chatState.add(Message(responseBody, isSentByUser = false))
+                                _isActiveJob.emit(false)
+                            } else -> {
+                            _chatState.removeAt(_chatState.size - 1)
+                            _chatState.add(
+                                Message(
+                                    "Request failed with ${response.status}",
+                                    isSentByUser = false
+                                )
+                            )
+                            _isActiveJob.emit(false)
+                        }
+                        }
+                    } catch (e: Exception) {
                         _chatState.removeAt(_chatState.size - 1)
-                        _chatState.add(Message(responseBody, isSentByUser = false))
+                        _chatState.add(Message("Exception: ${e.message.toString()}", isSentByUser = false))
                         _isActiveJob.emit(false)
-                    } else -> {
-                    _chatState.removeAt(_chatState.size - 1)
-                    _chatState.add(
-                        Message(
-                            "Request failed with ${response.status}",
-                            isSentByUser = false
-                        )
-                    )
-                    _isActiveJob.emit(false)
+                    } finally {
+                        localHttpClient.close()
+                    }
                 }
-                }
-            } catch (e: Exception) {
-                _chatState.removeAt(_chatState.size - 1)
-                _chatState.add(Message("Exception: ${e.message.toString()}", isSentByUser = false))
-                _isActiveJob.emit(false)
-            } finally {
-                localHttpClient.close()
             }
         }
     }

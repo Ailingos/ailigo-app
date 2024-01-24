@@ -32,11 +32,10 @@ fun UploadAvatarScreen(
             RegisterError(
                 errorMessage = (registerState.value as RegisterUiState.Error).message,
                 onBackToEmptyState = {
-                    component.backToEmptyState()
-                    component.onEvent(
-                        UploadAvatarEvent.OnNavigateToRegisterScreen
-                    )
-                })
+                    component.onEvent(UploadAvatarEvent.OnBackToEmptyUploadAvatar)
+                    component.onEvent(UploadAvatarEvent.OnNavigateToRegisterScreen)
+                }
+            )
         }
 
         RegisterUiState.Loading -> {

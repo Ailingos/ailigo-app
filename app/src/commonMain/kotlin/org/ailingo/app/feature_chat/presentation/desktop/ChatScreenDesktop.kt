@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
-import org.ailingo.app.core.util.VoiceStates
-import org.ailingo.app.core.util.VoiceToTextParser
+import org.ailingo.app.core.helper_voice.VoiceStates
+import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.feature_chat.data.model.Message
 import org.ailingo.app.feature_chat.presentation.ChatScreenComponent
 
@@ -22,7 +22,7 @@ fun ChatScreenDesktop(
     chatState: List<Message>,
     listState: LazyListState,
     voiceState: State<VoiceStates>,
-    chatViewModel: ChatScreenComponent,
+    component: ChatScreenComponent,
     isActiveJob: State<Boolean>,
     onChatTextField: (TextFieldValue) -> Unit
 ) {
@@ -34,7 +34,7 @@ fun ChatScreenDesktop(
                 voiceState = voiceState,
                 messages = chatState,
                 listState = listState,
-                chatViewModel = chatViewModel,
+                chatComponent = component,
                 isActiveJob = isActiveJob.value,
                 onChatTextField = onChatTextField
             )

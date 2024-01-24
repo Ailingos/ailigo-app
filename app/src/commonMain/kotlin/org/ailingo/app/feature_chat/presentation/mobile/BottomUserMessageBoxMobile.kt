@@ -24,10 +24,11 @@ import compose.icons.feathericons.Send
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.ailingo.app.SharedRes
-import org.ailingo.app.core.util.VoiceStates
-import org.ailingo.app.core.util.VoiceToTextParser
+import org.ailingo.app.core.helper_voice.VoiceStates
+import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.feature_chat.data.model.Message
 import org.ailingo.app.feature_chat.presentation.ChatScreenComponent
+import org.ailingo.app.feature_chat.presentation.ChatScreenEvents
 
 @Composable
 fun BottomUserMessageBoxMobile(
@@ -36,7 +37,7 @@ fun BottomUserMessageBoxMobile(
     voiceState: State<VoiceStates>,
     messages: List<Message>,
     listState: LazyListState,
-    chatViewModel: ChatScreenComponent,
+    component: ChatScreenComponent,
     isActiveJob: Boolean,
     onChatTextField: (TextFieldValue) -> Unit
 ) {
@@ -74,7 +75,7 @@ fun BottomUserMessageBoxMobile(
                     if (!isActiveJob) {
                         IconButton(onClick = {
                             if (chatField.text.isNotBlank()) {
-                                chatViewModel.sendMessage(chatField.text)
+                                component.onEvent(ChatScreenEvents.MessageSent(chatField.text))
                                 onChatTextField(TextFieldValue(""))
                                 scope.launch {
                                     listState.scrollToItem(messages.size - 1)

@@ -21,7 +21,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -35,7 +34,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
-import cafe.adriel.voyager.navigator.Navigator
 import javazoom.jl.player.advanced.AdvancedPlayer
 import javazoom.jl.player.advanced.PlaybackEvent
 import javazoom.jl.player.advanced.PlaybackListener
@@ -46,7 +44,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.ailingo.app.core.util.VoiceStates
-import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.database.HistoryDictionaryDatabase
 import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.feature_topics.data.Topic
@@ -285,7 +282,8 @@ actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
             .fillMaxSize()
     ) {
         Row(
-            modifier = Modifier.fillMaxSize().horizontalScroll(horizontalScrollState).padding(16.dp),
+            modifier = Modifier.fillMaxSize().horizontalScroll(horizontalScrollState)
+                .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             repeat(columnsCount) { columnIndex ->
@@ -313,12 +311,11 @@ actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
 
 @Composable
 actual fun UploadAvatarForPhone(
-    navigator: Navigator,
-    voiceToTextParser: VoiceToTextParser,
     registerViewModel: RegistrationViewModel,
-    login: MutableState<TextFieldValue>,
-    password: MutableState<TextFieldValue>,
-    email: MutableState<TextFieldValue>,
-    name: MutableState<TextFieldValue>,
-    savedPhoto: MutableState<String>
-) {}
+    login: String,
+    password: String,
+    email: String,
+    name: String,
+    onNavigateToRegisterScreen: () -> Unit
+) {
+}

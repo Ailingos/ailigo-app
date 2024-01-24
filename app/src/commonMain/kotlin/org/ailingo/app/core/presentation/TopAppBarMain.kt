@@ -31,6 +31,7 @@ fun TopAppBarMain(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.White
         ),
+
         navigationIcon = {
             if (screenInfo.screenWidthInfo is WindowInfo.WindowType.MobileWindowInfo) {
                 IconButton(

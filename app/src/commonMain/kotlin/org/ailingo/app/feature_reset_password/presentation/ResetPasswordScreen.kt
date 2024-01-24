@@ -28,77 +28,72 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.CustomTextFieldImpl
 import org.ailingo.app.SharedRes
-import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.feature_get_started.presentation.GetStartedScreen
 
 @OptIn(ExperimentalComposeUiApi::class)
-data class ResetPasswordScreen(val voiceToTextParser: VoiceToTextParser): Screen {
-    @Composable
-    override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().padding(16.dp)
-        ) {
-            var email by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue(""))
-            }
-            val focusManager = LocalFocusManager.current
-            val keyboardController = LocalSoftwareKeyboardController.current
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                stringResource(SharedRes.strings.reset_your_password),
-                style = MaterialTheme.typography.headlineLarge
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            CustomTextFieldImpl(
-                textValue = email,
-                onValueChange = {
-                    email = it
-                },
-                label = { Text(text = stringResource(SharedRes.strings.email)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        // Focus on password field when 'Next' is clicked
-                        focusManager.clearFocus()
-                        keyboardController?.hide()
-                    }
-                ),
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                modifier = Modifier
-                    .width(OutlinedTextFieldDefaults.MinWidth)
-                    .height(OutlinedTextFieldDefaults.MinHeight),
-                shape = MaterialTheme.shapes.small,
-                onClick = {
-
-                }
-            ) {
-                Text(stringResource(SharedRes.strings.continue_app))
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                color = MaterialTheme.colorScheme.primary,
-                text = stringResource(SharedRes.strings.back_to_the_selection),
-                modifier = Modifier.clickable {
-                    navigator.push(GetStartedScreen(voiceToTextParser))
-                })
-            Spacer(modifier = Modifier.weight(1f))
+@Composable
+fun ResetPasswordScreen(
+    component: ResetPasswordScreenComponent
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize().padding(16.dp)
+    ) {
+        var email by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+            mutableStateOf(TextFieldValue(""))
         }
+        val focusManager = LocalFocusManager.current
+        val keyboardController = LocalSoftwareKeyboardController.current
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            stringResource(SharedRes.strings.reset_your_password),
+            style = MaterialTheme.typography.headlineLarge
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CustomTextFieldImpl(
+            textValue = email,
+            onValueChange = {
+                email = it
+            },
+            label = { Text(text = stringResource(SharedRes.strings.email)) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    // Focus on password field when 'Next' is clicked
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                }
+            ),
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            modifier = Modifier
+                .width(OutlinedTextFieldDefaults.MinWidth)
+                .height(OutlinedTextFieldDefaults.MinHeight),
+            shape = MaterialTheme.shapes.small,
+            onClick = {
+
+            }
+        ) {
+            Text(stringResource(SharedRes.strings.continue_app))
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            color = MaterialTheme.colorScheme.primary,
+            text = stringResource(SharedRes.strings.back_to_the_selection),
+            modifier = Modifier.clickable {
+                component.onEvent(ResetPasswordEvent.OnNavigateGetStartedScreen)
+            })
+        Spacer(modifier = Modifier.weight(1f))
     }
+
 }

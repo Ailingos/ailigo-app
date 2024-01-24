@@ -6,14 +6,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.navigator.Navigator
 import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.SharedRes
-import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.feature_register.presentation.RegisterScreen
 
 @Composable
-fun LoginSignUpSection(navigator: Navigator, voiceToTextParser: VoiceToTextParser) {
+fun LoginSignUpSection(
+    onClick: () -> Unit
+) {
     Row {
         Text(stringResource(SharedRes.strings.dont_have_an_account))
         Text(" ")
@@ -21,7 +20,7 @@ fun LoginSignUpSection(navigator: Navigator, voiceToTextParser: VoiceToTextParse
             color = MaterialTheme.colorScheme.primary,
             text = stringResource(SharedRes.strings.sign_up),
             modifier = Modifier.clickable {
-                navigator.push(RegisterScreen(voiceToTextParser))
+                onClick()
             }
         )
     }

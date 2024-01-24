@@ -1,4 +1,4 @@
-package org.ailingo.app.feature_register.presentation
+package org.ailingo.app.feature_upload_avatar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +23,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,44 +33,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.Navigator
 import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.ailingo.app.SharedRes
 import org.ailingo.app.UploadAvatarForPhone
-import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 import org.ailingo.app.feature_register.data.model_upload_image.UploadImageUiState
+import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.getPlatformName
 import org.ailingo.app.selectImageWebAndDesktop
 
 
 @Composable
 fun RegisterUploadAvatarEmpty(
-    navigator: Navigator,
-    voiceToTextParser: VoiceToTextParser,
     registerViewModel: RegistrationViewModel,
-    login: MutableState<TextFieldValue>,
-    password: MutableState<TextFieldValue>,
-    email: MutableState<TextFieldValue>,
-    name: MutableState<TextFieldValue>,
-    savedPhoto: MutableState<String>
+    login: String,
+    password: String,
+    email: String,
+    name: String,
+    onNavigateToRegisterScreen: () -> Unit
 ) {
+    var savedPhoto by remember {
+        mutableStateOf("")
+    }
     if (getPlatformName() == "Android") {
         UploadAvatarForPhone(
-            navigator,
-            voiceToTextParser,
             registerViewModel,
             login,
             password,
             email,
             name,
-            savedPhoto
+            onNavigateToRegisterScreen = onNavigateToRegisterScreen
         )
     } else {
         val imageState = registerViewModel.imageState.collectAsState()
@@ -81,7 +77,6 @@ fun RegisterUploadAvatarEmpty(
         val scope = rememberCoroutineScope()
         LaunchedEffect(base64Image) {
             if (base64Image?.isNotEmpty() == true) {
-                print(base64Image)
                 registerViewModel.uploadImage(base64Image!!)
             }
         }
@@ -120,9 +115,9 @@ fun RegisterUploadAvatarEmpty(
                                 ) {
                                     when (imageState.value) {
                                         UploadImageUiState.EmptyImage -> {
-                                            if (savedPhoto.value.isNotEmpty()) {
+                                            if (savedPhoto.isNotEmpty()) {
                                                 Image(
-                                                    painter = rememberImagePainter(savedPhoto.value),
+                                                    painter = rememberImagePainter(savedPhoto),
                                                     contentDescription = null,
                                                     modifier = Modifier.fillMaxSize(),
                                                     contentScale = ContentScale.Crop
@@ -162,10 +157,9 @@ fun RegisterUploadAvatarEmpty(
                                         }
 
                                         is UploadImageUiState.Success -> {
-                                            savedPhoto.value =
-                                                (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.image.url
+                                            savedPhoto = ((imageState.value as UploadImageUiState.Success).uploadImageResponse.data.image.url)
                                             Image(
-                                                painter = rememberImagePainter(savedPhoto.value),
+                                                painter = rememberImagePainter(savedPhoto),
                                                 contentDescription = null,
                                                 modifier = Modifier.fillMaxSize(),
                                                 contentScale = ContentScale.Crop
@@ -176,7 +170,7 @@ fun RegisterUploadAvatarEmpty(
                             }
                             Spacer(modifier = Modifier.height(16.dp))
                             ElevatedButton(onClick = {
-                                navigator.push(RegisterScreen(voiceToTextParser = voiceToTextParser))
+                                onNavigateToRegisterScreen()
                             }, shape = MaterialTheme.shapes.small) {
                                 Text("Back to the input fields")
                             }
@@ -200,10 +194,10 @@ fun RegisterUploadAvatarEmpty(
                                 )
                             }
 
-                            if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
+                            if (imageState.value is UploadImageUiState.Success && savedPhoto.isNotEmpty()) {
                                 OutlinedButton(
                                     onClick = {
-                                        savedPhoto.value = ""
+                                        savedPhoto = ""
                                         base64Image = null
                                         registerViewModel.backToEmptyUploadAvatar()
                                     },
@@ -216,7 +210,7 @@ fun RegisterUploadAvatarEmpty(
                                 }
                             }
 
-                            if (imageState.value is UploadImageUiState.EmptyImage && savedPhoto.value.isEmpty()) {
+                            if (imageState.value is UploadImageUiState.EmptyImage && savedPhoto.isEmpty()) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -236,23 +230,23 @@ fun RegisterUploadAvatarEmpty(
                             }
                             if (imageState.value !is UploadImageUiState.LoadingImage) {
                                 OutlinedButton(onClick = {
-                                    if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
+                                    if (imageState.value is UploadImageUiState.Success && savedPhoto.isNotEmpty()) {
                                         registerViewModel.registerUser(
                                             UserRegistrationData(
-                                                login = login.value.text,
-                                                password = password.value.text,
-                                                email = email.value.text,
-                                                name = name.value.text,
-                                                avatar = (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.url
+                                                login = login,
+                                                password = password,
+                                                email = email,
+                                                name = name,
+                                                avatar = savedPhoto
                                             )
                                         )
                                     } else {
                                         registerViewModel.registerUser(
                                             UserRegistrationData(
-                                                login = login.value.text,
-                                                password = password.value.text,
-                                                email = email.value.text,
-                                                name = name.value.text,
+                                                login = login,
+                                                password = password,
+                                                email = email,
+                                                name = name,
                                                 avatar = ""
                                             )
                                         )

@@ -12,30 +12,20 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.launch
+import org.ailingo.app.RootComponent
 import org.ailingo.app.core.presentation.utils.DrawerItems
-import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.feature_chat.presentation.ChatScreen
-import org.ailingo.app.feature_dictionary.presentation.DictionaryScreen
-import org.ailingo.app.feature_dictionary_history.domain.DictionaryRepository
-import org.ailingo.app.feature_get_started.presentation.GetStartedScreen
-import org.ailingo.app.feature_topics.presentation.TopicsScreen
 
 
 @Composable
 fun AppDrawerContent(
-    historyDictionaryRepository: Deferred<DictionaryRepository>,
-    voiceToTextParser: VoiceToTextParser,
     drawerState: DrawerState,
-    scope: CoroutineScope,
+    root: RootComponent,
     modifier: Modifier = Modifier
 ) {
     val items = listOf(
@@ -44,8 +34,7 @@ fun AppDrawerContent(
         DrawerItems.Dictionary,
         DrawerItems.Exit,
     )
-    val navigator = LocalNavigator.currentOrThrow
-
+    val scope = rememberCoroutineScope()
     LazyColumn(
         modifier = modifier
             .width(250.dp)
@@ -60,31 +49,31 @@ fun AppDrawerContent(
                 modifier = Modifier.clickable {
                     when (item) {
                         DrawerItems.Dictionary -> {
-                            navigator.push(DictionaryScreen(historyDictionaryRepository))
                             scope.launch {
                                 drawerState.close()
                             }
+                            root.navigateToDictionaryScreen()
                         }
 
                         DrawerItems.Exit -> {
-                            navigator.push(GetStartedScreen(voiceToTextParser))
                             scope.launch {
                                 drawerState.close()
                             }
+                            root.navigateToLandingScreen()
                         }
 
                         DrawerItems.FreeMode -> {
                             scope.launch {
-                                navigator.push(ChatScreen(voiceToTextParser))
                                 drawerState.close()
                             }
+                            root.navigateToChatScreen()
                         }
 
                         DrawerItems.Topics -> {
                             scope.launch {
-                                navigator.push(TopicsScreen())
                                 drawerState.close()
                             }
+                            root.navigateToTopicsScreen()
                         }
                     }
                 },

@@ -40,7 +40,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,15 +60,12 @@ import androidx.compose.ui.unit.dp
 import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import cafe.adriel.voyager.navigator.Navigator
 import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
-import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.database.HistoryDictionaryDatabase
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 import org.ailingo.app.feature_register.data.model_upload_image.UploadImageUiState
-import org.ailingo.app.feature_register.presentation.RegisterScreen
 import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.feature_topics.data.Topic
 
@@ -113,14 +109,12 @@ actual class DriverFactory(private val context: Context) {
 
 @Composable
 actual fun UploadAvatarForPhone(
-    navigator: Navigator,
-    voiceToTextParser: VoiceToTextParser,
     registerViewModel: RegistrationViewModel,
-    login: MutableState<TextFieldValue>,
-    password: MutableState<TextFieldValue>,
-    email: MutableState<TextFieldValue>,
-    name: MutableState<TextFieldValue>,
-    savedPhoto: MutableState<String>
+    login: String,
+    password: String,
+    email: String,
+    name: String,
+    onNavigateToRegisterScreen: () -> Unit
 ) {
     val context = LocalContext.current
     var selectedImageUri by remember {
@@ -128,6 +122,9 @@ actual fun UploadAvatarForPhone(
     }
     var base64Image by remember {
         mutableStateOf<String?>(null)
+    }
+    var savedPhoto by remember {
+        mutableStateOf("")
     }
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -178,9 +175,9 @@ actual fun UploadAvatarForPhone(
                         ) {
                             when (imageState.value) {
                                 UploadImageUiState.EmptyImage -> {
-                                    if (savedPhoto.value.isNotEmpty()) {
+                                    if (savedPhoto.isNotEmpty()) {
                                         Image(
-                                            painter = rememberImagePainter(savedPhoto.value),
+                                            painter = rememberImagePainter(savedPhoto),
                                             contentDescription = null,
                                             modifier = Modifier.fillMaxWidth().aspectRatio(1f),
                                             contentScale = ContentScale.Crop,
@@ -220,9 +217,9 @@ actual fun UploadAvatarForPhone(
                                 }
 
                                 is UploadImageUiState.Success -> {
-                                    savedPhoto.value = (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.image.url
+                                    savedPhoto = (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.image.url
                                     Image(
-                                        painter = rememberImagePainter(savedPhoto.value),
+                                        painter = rememberImagePainter(savedPhoto),
                                         contentDescription = null,
                                         modifier = Modifier.fillMaxWidth().aspectRatio(1f),
                                         contentScale = ContentScale.Crop
@@ -233,7 +230,7 @@ actual fun UploadAvatarForPhone(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     ElevatedButton(onClick = {
-                        navigator.push(RegisterScreen(voiceToTextParser = voiceToTextParser))
+                       onNavigateToRegisterScreen()
                     }, shape = MaterialTheme.shapes.small) {
                         Text("Back to the input fields")
                     }
@@ -257,10 +254,10 @@ actual fun UploadAvatarForPhone(
                         )
                     }
 
-                    if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
+                    if (imageState.value is UploadImageUiState.Success && savedPhoto.isNotEmpty()) {
                         OutlinedButton(
                             onClick = {
-                                savedPhoto.value = ""
+                                savedPhoto = ""
                                 base64Image = null
                                 registerViewModel.backToEmptyUploadAvatar()
                             },
@@ -273,7 +270,7 @@ actual fun UploadAvatarForPhone(
                         }
                     }
 
-                    if (imageState.value is UploadImageUiState.EmptyImage && savedPhoto.value.isEmpty()) {
+                    if (imageState.value is UploadImageUiState.EmptyImage && savedPhoto.isEmpty()) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -293,23 +290,23 @@ actual fun UploadAvatarForPhone(
                     }
                     if (imageState.value !is UploadImageUiState.LoadingImage) {
                         OutlinedButton(onClick = {
-                            if (imageState.value is UploadImageUiState.Success && savedPhoto.value.isNotEmpty()) {
+                            if (imageState.value is UploadImageUiState.Success && savedPhoto.isNotEmpty()) {
                                 registerViewModel.registerUser(
                                     UserRegistrationData(
-                                        login = login.value.text,
-                                        password = password.value.text,
-                                        email = email.value.text,
-                                        name = name.value.text,
+                                        login = login,
+                                        password = password,
+                                        email = email,
+                                        name = name,
                                         avatar = (imageState.value as UploadImageUiState.Success).uploadImageResponse.data.url
                                     )
                                 )
                             } else {
                                 registerViewModel.registerUser(
                                     UserRegistrationData(
-                                        login = login.value.text,
-                                        password = password.value.text,
-                                        email = email.value.text,
-                                        name = name.value.text,
+                                        login = login,
+                                        password = password,
+                                        email = email,
+                                        name = name,
                                         avatar = ""
                                     )
                                 )

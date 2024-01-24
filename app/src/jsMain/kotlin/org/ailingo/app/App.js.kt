@@ -22,7 +22,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,11 +47,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.worker.WebWorkerDriver
-import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.await
-import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.database.HistoryDictionaryDatabase
 import org.ailingo.app.feature_register.presentation.RegistrationViewModel
 import org.ailingo.app.feature_topics.data.Topic
@@ -194,40 +191,40 @@ actual fun CustomTextFieldImpl(
         shortcutEvent = null
     }
 
-        OutlinedTextField(
-            value = textValue,
-            onValueChange = {
-                if (!isCtrlPressed) {
-                    textHistory.add(textValue)
-                    onValueChange(it)
-                }
-            },
-            label = label,
-            placeholder = placeholder,
-            textStyle = textStyle,
-            isError = false,
-            keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
-            singleLine = singleLine,
-            maxLines = maxLines,
-            trailingIcon = trailingIcon,
-            leadingIcon = leadingIcon,
-            modifier = modifier.onPreviewKeyEvent {
-                isCtrlPressed = it.isCtrlPressed
-                shortcutEvent = it.filterKeyDown()?.toShortcutEvent()
-                false
-            },
-            enabled = enabled,
-            readOnly = readOnly,
-            prefix = prefix,
-            suffix = suffix,
-            supportingText = supportingText,
-            visualTransformation = visualTransformation,
-            minLines = minLines,
-            interactionSource = interactionSource,
-            shape = shape,
-            colors = colors
-        )
+    OutlinedTextField(
+        value = textValue,
+        onValueChange = {
+            if (!isCtrlPressed) {
+                textHistory.add(textValue)
+                onValueChange(it)
+            }
+        },
+        label = label,
+        placeholder = placeholder,
+        textStyle = textStyle,
+        isError = false,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        trailingIcon = trailingIcon,
+        leadingIcon = leadingIcon,
+        modifier = modifier.onPreviewKeyEvent {
+            isCtrlPressed = it.isCtrlPressed
+            shortcutEvent = it.filterKeyDown()?.toShortcutEvent()
+            false
+        },
+        enabled = enabled,
+        readOnly = readOnly,
+        prefix = prefix,
+        suffix = suffix,
+        supportingText = supportingText,
+        visualTransformation = visualTransformation,
+        minLines = minLines,
+        interactionSource = interactionSource,
+        shape = shape,
+        colors = colors
+    )
 
 }
 
@@ -303,7 +300,6 @@ private fun TextFieldValue.replaceSelected(replacement: String) =
     copy(text = text.replaceRange(selection.min, selection.max, replacement), TextRange(0, 0))
 
 
-
 @Composable
 actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
     val horizontalScrollbarStyle = ScrollbarStyle(
@@ -323,7 +319,8 @@ actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
             .fillMaxSize()
     ) {
         Row(
-            modifier = Modifier.fillMaxSize().horizontalScroll(horizontalScrollState).padding(16.dp),
+            modifier = Modifier.fillMaxSize().horizontalScroll(horizontalScrollState)
+                .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             repeat(columnsCount) { columnIndex ->
@@ -352,12 +349,11 @@ actual fun TopicsForDesktopAndWeb(topics: List<Topic>) {
 
 @Composable
 actual fun UploadAvatarForPhone(
-    navigator: Navigator,
-    voiceToTextParser: VoiceToTextParser,
     registerViewModel: RegistrationViewModel,
-    login: MutableState<TextFieldValue>,
-    password: MutableState<TextFieldValue>,
-    email: MutableState<TextFieldValue>,
-    name: MutableState<TextFieldValue>,
-    savedPhoto: MutableState<String>
-) {}
+    login: String,
+    password: String,
+    email: String,
+    name: String,
+    onNavigateToRegisterScreen: () -> Unit
+) {
+}

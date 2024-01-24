@@ -22,23 +22,19 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.Navigator
-import org.ailingo.app.core.util.VoiceToTextParser
-import org.ailingo.app.feature_reset_password.presentation.ResetPasswordScreen
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginMainScreen(
-    navigator: Navigator,
     onLoginUser: () -> Unit,
-    voiceToTextParser: VoiceToTextParser,
     login: TextFieldValue,
     onLoginChange: (TextFieldValue) -> Unit,
     password: TextFieldValue,
     onPasswordChange: (TextFieldValue) -> Unit,
     passwordVisible: Boolean,
     onPasswordVisibleChange: () -> Unit,
-    isLoading: MutableState<Boolean>
+    isLoading: MutableState<Boolean>,
+    component: LoginScreenComponent
 ) {
     val focusManager = LocalFocusManager.current
     val passwordFieldFocusRequester = rememberUpdatedState(FocusRequester())
@@ -85,7 +81,9 @@ fun LoginMainScreen(
                 showErrorText = showPasswordIsEmpty.value
             )
             Spacer(modifier = Modifier.height(12.dp))
-            LoginForgotPasswordLink(onClick = { navigator.push(ResetPasswordScreen(voiceToTextParser)) })
+            LoginForgotPasswordLink(onClick = {
+                component.onEvent(LoginScreenEvent.OnNavigateToResetPasswordScreen)
+            })
             Spacer(modifier = Modifier.height(16.dp))
             LoginButton(
                 onClick = onLoginUser,
@@ -96,7 +94,9 @@ fun LoginMainScreen(
                 isLoading
             )
             Spacer(modifier = Modifier.height(8.dp))
-            LoginSignUpSection(navigator = navigator, voiceToTextParser = voiceToTextParser)
+            LoginSignUpSection(onClick = {
+                component.onEvent(LoginScreenEvent.OnNavigateToRegisterScreen)
+            })
         }
     }
 }

@@ -6,9 +6,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.libres)
     alias(libs.plugins.buildConfig)
-    kotlin("plugin.serialization") version "1.9.20"
+    alias(libs.plugins.kotlinSerialization)
     id("dev.icerock.mobile.multiplatform-resources")
     id("app.cash.sqldelight")
+    id("kotlin-parcelize")
 }
 
 
@@ -64,7 +65,6 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.material3)
                 implementation(libs.libres)
-                implementation(libs.voyager.navigator)
                 implementation(libs.composeImageLoader)
                 implementation(libs.napier)
                 implementation(libs.composeIcons.featherIcons)
@@ -81,6 +81,10 @@ kotlin {
                 //local database
                 implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
                 implementation("app.cash.sqldelight:runtime:2.0.1")
+
+                implementation(libs.decompose)
+                implementation(libs.decompose.jetbrains)
+                implementation(libs.kotlinx.serialization.json)
             }
         }
 
@@ -100,6 +104,7 @@ kotlin {
                 implementation(libs.ktor.client.okhttp)
                 //local database
                 implementation("app.cash.sqldelight:android-driver:2.0.1")
+                implementation(libs.decompose)
             }
         }
 
@@ -129,15 +134,12 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.html.core)
-//                local database
-//                implementation (npm("sql.js", "1.6.2"))
-              //  implementation (devNpm("copy-webpack-plugin", "9.1.0"))
                 implementation("app.cash.sqldelight:web-worker-driver:2.0.1")
                 implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.1"))
                 implementation(npm("sql.js", "1.8.0"))
 
                 implementation(npm("copy-webpack-plugin", "11.0.0"))
-                  implementation(npm("@sqlite.org/sqlite-wasm", "3.43.2-build1"))
+                implementation(npm("@sqlite.org/sqlite-wasm", "3.43.2-build1"))
             }
         }
 
@@ -147,6 +149,7 @@ kotlin {
 //                implementation("app.cash.sqldelight:native-driver:2.0.0")
 //            }
 //        }
+
         targets.all {
             compilations.all {
                 compilerOptions.configure {

@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.arkivanov.decompose.retainedComponent
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_dictionary_history.di.AppModule
 
@@ -47,9 +48,14 @@ class AppActivity : ComponentActivity() {
                 recordAudioLauncher.launch(Manifest.permission.RECORD_AUDIO)
             }
 
+            val root = retainedComponent {
+                RootComponent(it)
+            }
+
             App(
                 voiceToTextParser,
-                historyDictionaryRepository = AppModule(LocalContext.current.applicationContext).dictionaryRepository
+                historyDictionaryRepository = AppModule(LocalContext.current.applicationContext).dictionaryRepository,
+                root
             )
 
         }

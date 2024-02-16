@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_topics.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -7,33 +8,35 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import org.ailingo.app.SharedRes
 import org.ailingo.app.TopicsForDesktopAndWeb
 import org.ailingo.app.core.helper_window_info.WindowInfo
 import org.ailingo.app.core.helper_window_info.rememberWindowInfo
 import org.ailingo.app.feature_topics.data.Topic
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun TopicsScreen(
     component: TopicsScreenComponent
 ) {
     val topics = listOf(
-        Topic(SharedRes.strings.trips, SharedRes.images.trips),
-        Topic(SharedRes.strings.food_and_drinks, SharedRes.images.food),
-        Topic(SharedRes.strings.movies, SharedRes.images.film),
-        Topic(SharedRes.strings.cartoons, SharedRes.images.cartoon),
-        Topic(SharedRes.strings.culture_and_art, SharedRes.images.culture),
-        Topic(SharedRes.strings.technologies, SharedRes.images.technology),
-        Topic(SharedRes.strings.fashion_and_style, SharedRes.images.fashion),
-        Topic(SharedRes.strings.news, SharedRes.images.news),
-        Topic(SharedRes.strings.health_and_medicine, SharedRes.images.health),
-        Topic(SharedRes.strings.science_and_education, SharedRes.images.science),
-        Topic(SharedRes.strings.sport, SharedRes.images.sport),
-        Topic(SharedRes.strings.literature, SharedRes.images.literature),
-        Topic(SharedRes.strings.nature_and_ecology, SharedRes.images.nature),
-        Topic(SharedRes.strings.history, SharedRes.images.history),
-        Topic(SharedRes.strings.business, SharedRes.images.business)
+        Topic(Res.string.trips, Res.drawable.trips),
+        Topic(Res.string.food_and_drinks, Res.drawable.food),
+        Topic(Res.string.movies, Res.drawable.film),
+        Topic(Res.string.cartoons, Res.drawable.cartoon),
+        Topic(Res.string.culture_and_art, Res.drawable.culture),
+        Topic(Res.string.technologies, Res.drawable.technology),
+        Topic(Res.string.fashion_and_style, Res.drawable.fashion),
+        Topic(Res.string.news, Res.drawable.news),
+        Topic(Res.string.health_and_medicine, Res.drawable.health),
+        Topic(Res.string.science_and_education, Res.drawable.science),
+        Topic(Res.string.sport, Res.drawable.sport),
+        Topic(Res.string.literature, Res.drawable.literature),
+        Topic(Res.string.nature_and_ecology, Res.drawable.nature),
+        Topic(Res.string.history, Res.drawable.history),
+        Topic(Res.string.business, Res.drawable.business)
     )
+
     val screenInfo = rememberWindowInfo()
     if (screenInfo.screenWidthInfo is WindowInfo.WindowType.DesktopWindowInfo) {
         TopicsForDesktopAndWeb(topics)

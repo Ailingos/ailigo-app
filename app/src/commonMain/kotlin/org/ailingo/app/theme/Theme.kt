@@ -1,5 +1,6 @@
 package org.ailingo.app.theme
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -15,8 +16,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.icerock.moko.resources.compose.fontFamilyResource
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
@@ -101,32 +102,33 @@ private val AppTypography = Typography(
 
 internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun AppTheme(
     content: @Composable() () -> Unit
 ) {
-    val fontFamilyAtypDisplayMedium: FontFamily = fontFamilyResource(SharedRes.fonts.AtypDisplay.medium)
-    val fontFamilyUbuntuLight: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.light)
-    val fontFamilyUbuntuRegular: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.regular)
-    val fontFamilyUbuntuMedium: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.medium)
-    val fontFamilyUbuntuBold: FontFamily = fontFamilyResource(SharedRes.fonts.Ubuntu.bold)
-    val fontFamilyNunitoSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.bold)
-    val fontFamilyNunitoSansSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.semiBold)
-    val fontFamilyNunitoSansSemiMedium: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.medium)
-    val fontFamilyNunitoSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.regular)
-    val fontFamilyNunitoSansLight: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.light)
-    val fontFamilyOpenSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.bold)
-    val fontFamilyOpenSansSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.semiBold)
-    val fontFamilyOpenSansMedium: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.medium)
-    val fontFamilyOpenSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.regular)
-    val fontFamilyOpenSansLight: FontFamily = fontFamilyResource(SharedRes.fonts.NunitoSans.light)
-    val fontFamilyPTSansBold: FontFamily = fontFamilyResource(SharedRes.fonts.PTSansCaption.bold)
-    val fontFamilyPTSansRegular: FontFamily = fontFamilyResource(SharedRes.fonts.PTSansCaption.regular)
-    val fontFamilyPTSansRubikBold: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.bold)
-    val fontFamilyPTSansRubikSemiBold: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.semiBold)
-    val fontFamilyPTSansRubikMedium: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.medium)
-    val fontFamilyPTSansRubikRegular: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.regular)
-    val fontFamilyPTSansRubikLight: FontFamily = fontFamilyResource(SharedRes.fonts.Rubik.light)
+    val fontFamilyAtypDisplayMedium = FontFamily(Font(Res.font.AtypDisplay_Medium))
+    val fontFamilyUbuntuLight = FontFamily(Font(Res.font.Ubuntu_Light))
+    val fontFamilyUbuntuRegular = FontFamily(Font(Res.font.Ubuntu_Regular))
+    val fontFamilyUbuntuMedium = FontFamily(Font(Res.font.Ubuntu_Medium))
+    val fontFamilyUbuntuBold = FontFamily(Font(Res.font.Ubuntu_Bold))
+    val fontFamilyNunitoSansBold = FontFamily(Font(Res.font.NunitoSans_Bold))
+    val fontFamilyNunitoSansSemiBold = FontFamily(Font(Res.font.NunitoSans_SemiBold))
+    val fontFamilyNunitoSansSemiMedium = FontFamily(Font(Res.font.NunitoSans_Medium))
+    val fontFamilyNunitoSansRegular = FontFamily(Font(Res.font.NunitoSans_Regular))
+    val fontFamilyNunitoSansLight = FontFamily(Font(Res.font.NunitoSans_Light))
+    val fontFamilyOpenSansBold = FontFamily(Font(Res.font.OpenSans_Bold))
+    val fontFamilyOpenSansSemiBold = FontFamily(Font(Res.font.OpenSans_SemiBold))
+    val fontFamilyOpenSansMedium = FontFamily(Font(Res.font.OpenSans_Medium))
+    val fontFamilyOpenSansRegular = FontFamily(Font(Res.font.OpenSans_Regular))
+    val fontFamilyOpenSansLight = FontFamily(Font(Res.font.OpenSans_Light))
+    val fontFamilyPTSansBold = FontFamily(Font(Res.font.PTSansCaption_Bold))
+    val fontFamilyPTSansRegular = FontFamily(Font(Res.font.PTSansCaption_Regular))
+    val fontFamilyPTSansRubikBold = FontFamily(Font(Res.font.Rubik_Bold))
+    val fontFamilyPTSansRubikSemiBold = FontFamily(Font(Res.font.Rubik_SemiBold))
+    val fontFamilyPTSansRubikMedium = FontFamily(Font(Res.font.Rubik_Medium))
+    val fontFamilyPTSansRubikRegular = FontFamily(Font(Res.font.Rubik_Regular))
+    val fontFamilyPTSansRubikLight = FontFamily(Font(Res.font.Rubik_Light))
 
     val MyTypography = Typography(
         displayLarge = TextStyle(

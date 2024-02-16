@@ -75,14 +75,20 @@ external object VoiceToText {
     fun setListeningCallback(callback: (Boolean) -> Unit)
 }
 
-internal actual fun getPlatformName(): String {
+actual fun getPlatformName(): String {
     return "Web"
 }
 
-internal actual fun playSound(sound: String) {
-    val audio = Audio(sound)
-    audio.play()
+actual fun playSound(sound: String) {
+    try {
+        val audio = Audio(sound)
+        audio.play()
+    } catch (e: Exception) {
+        println("Error: Failed to play the sound '$sound'. ${e.message}")
+        e.printStackTrace()
+    }
 }
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -254,7 +260,8 @@ private suspend fun ShortcutEventHandler(
         }
 
         ShortcutEvent.COPY -> {
-            // Unused - seems to work out of the box
+            val selectedText = textValue.text.substring(textValue.selection.min, textValue.selection.max)
+            window.navigator.clipboard.writeText(selectedText)
         }
 
         ShortcutEvent.PASTE -> {
@@ -293,6 +300,7 @@ private fun KeyEvent.toShortcutEvent() = when {
     isCtrlPressed && key == Key.V -> ShortcutEvent.PASTE
     isCtrlPressed && key == Key.A -> ShortcutEvent.HIGHLIGHT_ALL
     isCtrlPressed && key == Key.Z -> ShortcutEvent.UNDO
+    isCtrlPressed && key == Key.C -> ShortcutEvent.COPY
     else -> null
 }
 

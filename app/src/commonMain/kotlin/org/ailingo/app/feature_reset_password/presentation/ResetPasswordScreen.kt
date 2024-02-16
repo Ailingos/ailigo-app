@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_reset_password.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +21,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -28,11 +28,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.CustomTextFieldImpl
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ResetPasswordScreen(
     component: ResetPasswordScreenComponent
@@ -49,7 +49,7 @@ fun ResetPasswordScreen(
         val keyboardController = LocalSoftwareKeyboardController.current
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            stringResource(SharedRes.strings.reset_your_password),
+            stringResource(Res.string.reset_your_password),
             style = MaterialTheme.typography.headlineLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -59,7 +59,7 @@ fun ResetPasswordScreen(
             onValueChange = {
                 email = it
             },
-            label = { Text(text = stringResource(SharedRes.strings.email)) },
+            label = { Text(text = stringResource(Res.string.email)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email,
@@ -84,12 +84,12 @@ fun ResetPasswordScreen(
 
             }
         ) {
-            Text(stringResource(SharedRes.strings.continue_app))
+            Text(stringResource(Res.string.continue_app))
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             color = MaterialTheme.colorScheme.primary,
-            text = stringResource(SharedRes.strings.back_to_the_selection),
+            text = stringResource(Res.string.back_to_the_selection),
             modifier = Modifier.clickable {
                 component.onEvent(ResetPasswordEvent.OnNavigateGetStartedScreen)
             })

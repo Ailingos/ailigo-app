@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_login.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -11,9 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LoginButton(
     onClick: () -> Unit,
@@ -38,7 +40,7 @@ fun LoginButton(
             }
         },
     ) {
-        Text(stringResource(SharedRes.strings.continue_app))
+        Text(stringResource(Res.string.continue_app))
     }
     Spacer(modifier = Modifier.height(16.dp))
 }

@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_register.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RegisterError(
     errorMessage: String,
@@ -30,7 +32,7 @@ fun RegisterError(
             Text(errorMessage, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = onBackToEmptyState) {
-                Text(stringResource(SharedRes.strings.back))
+                Text(stringResource(Res.string.back))
             }
         }
     }

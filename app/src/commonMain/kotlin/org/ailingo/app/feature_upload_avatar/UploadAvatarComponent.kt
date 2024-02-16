@@ -75,7 +75,7 @@ class UploadAvatarComponent(
 
     private val coroutineScope = componentCoroutineScope()
 
-    private fun registerUser(user: UserRegistrationData) {
+    fun registerUser(user: UserRegistrationData) {
         coroutineScope.launch {
             _registerState.value = RegisterUiState.Loading
             val httpClient = HttpClient {
@@ -120,7 +120,7 @@ class UploadAvatarComponent(
     private val uploadImageKey = "f90248ad8f4b1e262a5e8e7603645cc1"
 
     @OptIn(InternalAPI::class)
-    private fun uploadImage(base64Image: String) {
+    fun uploadImage(base64Image: String) {
         _imageState.value = UploadImageUiState.LoadingImage
         val httpClient = HttpClient {
             install(ContentNegotiation) {

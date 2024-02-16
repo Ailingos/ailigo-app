@@ -26,10 +26,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import app.cash.sqldelight.db.SqlDriver
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.launch
 import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.core.helper_window_info.WindowInfo

@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_upload_avatar
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,17 +37,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
-import dev.icerock.moko.resources.compose.painterResource
-import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
-import org.ailingo.app.SharedRes
 import org.ailingo.app.UploadAvatarForPhone
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 import org.ailingo.app.feature_register.data.model_upload_image.UploadImageUiState
 import org.ailingo.app.getPlatformName
 import org.ailingo.app.selectImageWebAndDesktop
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RegisterUploadAvatarEmpty(
     registerComponent: UploadAvatarComponent,
@@ -87,12 +89,12 @@ fun RegisterUploadAvatarEmpty(
             ) {
                 Column {
                     Text(
-                        stringResource(SharedRes.strings.lets_add_your_avatar),
+                        stringResource(Res.string.lets_add_your_avatar),
                         style = MaterialTheme.typography.displaySmall
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        stringResource(SharedRes.strings.lets_other_get_to_know_you),
+                        stringResource(Res.string.lets_other_get_to_know_you),
                         style = MaterialTheme.typography.titleMedium,
                         color = Color.DarkGray,
                     )
@@ -123,7 +125,7 @@ fun RegisterUploadAvatarEmpty(
                                                 )
                                             } else {
                                                 Image(
-                                                    painter = painterResource(SharedRes.images.defaultProfilePhoto),
+                                                    painter = painterResource(Res.drawable.defaultProfilePhoto),
                                                     contentDescription = null,
                                                     modifier = Modifier.fillMaxSize(),
                                                     contentScale = ContentScale.Crop
@@ -189,7 +191,7 @@ fun RegisterUploadAvatarEmpty(
                                 shape = MaterialTheme.shapes.small
                             ) {
                                 Text(
-                                    stringResource(SharedRes.strings.choose_image),
+                                    stringResource(Res.string.choose_image),
                                     color = Color.Black
                                 )
                             }
@@ -215,14 +217,14 @@ fun RegisterUploadAvatarEmpty(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Icon(
-                                        painter = painterResource(SharedRes.images.ArrowForwardIOS),
+                                        painter = painterResource(Res.drawable.ArrowForwardIOS),
                                         contentDescription = null,
                                         modifier = Modifier.size(16.dp),
                                         tint = Color.DarkGray
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
                                     Text(
-                                        stringResource(SharedRes.strings.continue_with_default_image),
+                                        stringResource(Res.string.continue_with_default_image),
                                         style = MaterialTheme.typography.titleMedium,
                                         color = Color.DarkGray
                                     )
@@ -256,7 +258,7 @@ fun RegisterUploadAvatarEmpty(
                                         )
                                     }
                                 }, shape = MaterialTheme.shapes.small) {
-                                    Text(stringResource(SharedRes.strings.continue_app))
+                                    Text(stringResource(Res.string.continue_app))
                                 }
                             }
                         }

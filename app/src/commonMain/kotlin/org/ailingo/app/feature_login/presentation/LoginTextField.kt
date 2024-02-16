@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_login.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActionScope
@@ -12,11 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.CustomTextFieldImpl
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LoginTextField(
     textValue: TextFieldValue,
@@ -30,7 +32,7 @@ fun LoginTextField(
             onValueChange = {
                 onValueChange(it)
             },
-            label = { Text(text = stringResource(SharedRes.strings.login)) },
+            label = { Text(text = stringResource(Res.string.login)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next
@@ -43,7 +45,7 @@ fun LoginTextField(
 
         if (showErrorText) {
             Text(
-                text = stringResource(SharedRes.strings.login_cannot_be_empty),
+                text = stringResource(Res.string.login_cannot_be_empty),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp, start = 16.dp)

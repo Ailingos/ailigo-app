@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_dictionary.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,13 +24,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import org.ailingo.app.SharedRes
 import org.ailingo.app.feature_dictionary.presentation.utils.ErrorDictionaryScreen
 import org.ailingo.app.feature_dictionary.presentation.utils.LoadingDictionaryScreen
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
 @Composable
 fun DictionaryScreen(
     component: DictionaryScreenComponent
@@ -103,7 +104,7 @@ fun DictionaryScreen(
                     item {
                         if (listOfExamples?.isNotEmpty() == true) {
                             Text(
-                                stringResource(SharedRes.strings.usage_examples),
+                                stringResource(Res.string.usage_examples),
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Spacer(modifier = Modifier.height(4.dp))
@@ -115,7 +116,7 @@ fun DictionaryScreen(
                     item {
                         if (listOfDefinitions?.isNotEmpty() == true) {
                             Text(
-                                stringResource(SharedRes.strings.definitions),
+                                stringResource(Res.string.definitions),
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Spacer(modifier = Modifier.height(4.dp))
@@ -126,7 +127,7 @@ fun DictionaryScreen(
                     }
                 } else {
                     item {
-                        Text(stringResource(SharedRes.strings.no_definitions))
+                        Text(stringResource(Res.string.no_definitions))
                     }
                 }
             }

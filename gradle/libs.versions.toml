@@ -3,7 +3,7 @@
 kotlin = "1.9.21"
 
 agp = "7.4.0"
-compose = "1.5.11"
+compose = "1.6.0-rc01"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.7.2"
 compose-uitooling = "1.5.4"
@@ -16,11 +16,11 @@ ktor = "2.3.5"
 composeIcons = "1.1.0"
 kotlinx-serialization = "1.6.2"
 google-cloud-speech = "2.5.1"
-extensionsComposeJetbrains = "2.1.4-compose-experimental"
-decompose = "2.2.0-alpha03"
+extensionsComposeJetbrains = "3.0.0-alpha01"
+decompose = "3.0.0-alpha01"
 
 [libraries]
-decompose-jetbrains = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "extensionsComposeJetbrains" }
+decompose-jetbrains = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "extensionsComposeJetbrains" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }

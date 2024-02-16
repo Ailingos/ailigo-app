@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_register.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,11 +45,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import org.ailingo.app.CustomTextFieldImpl
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RegisterScreen(
     component: RegisterScreenComponent
@@ -106,7 +108,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp)
         ) {
             Text(
-                stringResource(SharedRes.strings.create_your_account),
+                stringResource(Res.string.create_your_account),
                 style = MaterialTheme.typography.headlineLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -116,7 +118,7 @@ fun RegisterScreen(
                     onValueChange = {
                         login.value = it
                     },
-                    label = { Text(text = stringResource(SharedRes.strings.login)) },
+                    label = { Text(text = stringResource(Res.string.login)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Email,
@@ -153,7 +155,7 @@ fun RegisterScreen(
                     onValueChange = {
                         password.value = it
                     },
-                    label = { Text(text = stringResource(SharedRes.strings.password)) },
+                    label = { Text(text = stringResource(Res.string.password)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Password,
@@ -192,7 +194,7 @@ fun RegisterScreen(
                     onValueChange = {
                         email.value = it
                     },
-                    label = { Text(text = stringResource(SharedRes.strings.email)) },
+                    label = { Text(text = stringResource(Res.string.email)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Email,
@@ -230,7 +232,7 @@ fun RegisterScreen(
                     onValueChange = {
                         name.value = it
                     },
-                    label = { Text(text = stringResource(SharedRes.strings.name)) },
+                    label = { Text(text = stringResource(Res.string.name)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Email,
@@ -308,17 +310,17 @@ fun RegisterScreen(
                     }
                 }
             ) {
-                Text(stringResource(SharedRes.strings.next))
+                Text(stringResource(Res.string.next))
             }
             Spacer(modifier = Modifier.height(16.dp))
             Row {
                 Text(
-                    stringResource(SharedRes.strings.already_have_an_account)
+                    stringResource(Res.string.already_have_an_account)
                 )
                 Text(" ")
                 Text(
                     color = MaterialTheme.colorScheme.primary,
-                    text = stringResource(SharedRes.strings.log_in),
+                    text = stringResource(Res.string.log_in),
                     modifier = Modifier.clickable {
                         component.onEvent(RegisterScreenEvent.OnNavigateToLoginScreen)
                     }

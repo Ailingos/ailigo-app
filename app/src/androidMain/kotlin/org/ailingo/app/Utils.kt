@@ -1,5 +1,6 @@
 package org.ailingo.app
 
+import ailingo.app.generated.resources.Res
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
@@ -61,13 +62,14 @@ import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.seiko.imageloader.rememberImagePainter
-import dev.icerock.moko.resources.compose.painterResource
-import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.database.HistoryDictionaryDatabase
 import org.ailingo.app.feature_register.data.model.UserRegistrationData
 import org.ailingo.app.feature_register.data.model_upload_image.UploadImageUiState
 import org.ailingo.app.feature_topics.data.Topic
 import org.ailingo.app.feature_upload_avatar.UploadAvatarComponent
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 internal actual fun openUrl(url: String?) {
     val uri = url?.let { Uri.parse(it) } ?: return
@@ -107,6 +109,7 @@ actual class DriverFactory(private val context: Context) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun UploadAvatarForPhone(
     uploadAvatarComponent: UploadAvatarComponent,
@@ -146,13 +149,13 @@ actual fun UploadAvatarForPhone(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                stringResource(SharedRes.strings.lets_add_your_avatar),
+                stringResource(Res.string.lets_add_your_avatar),
                 style = MaterialTheme.typography.displaySmall,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                stringResource(SharedRes.strings.lets_other_get_to_know_you),
+                stringResource(Res.string.lets_other_get_to_know_you),
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.DarkGray,
                 textAlign = TextAlign.Center
@@ -184,7 +187,7 @@ actual fun UploadAvatarForPhone(
                                         )
                                     } else {
                                         Image(
-                                            painter = painterResource(SharedRes.images.defaultProfilePhoto),
+                                            painter = painterResource(Res.drawable.defaultProfilePhoto),
                                             contentDescription = null,
                                             modifier = Modifier.aspectRatio(1f),
                                             contentScale = ContentScale.Crop
@@ -249,7 +252,7 @@ actual fun UploadAvatarForPhone(
                         shape = MaterialTheme.shapes.small
                     ) {
                         Text(
-                            stringResource(SharedRes.strings.choose_image),
+                            org.jetbrains.compose.resources.stringResource(Res.string.choose_image),
                             color = Color.Black
                         )
                     }
@@ -259,7 +262,7 @@ actual fun UploadAvatarForPhone(
                             onClick = {
                                 savedPhoto = ""
                                 base64Image = null
-                                uploadAvatarComponent.backToEmptyUploadAvatar()
+                                //uploadAvatarComponent.backToEmptyUploadAvatar()
                             },
                             shape = MaterialTheme.shapes.small
                         ) {
@@ -275,14 +278,14 @@ actual fun UploadAvatarForPhone(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                painter = painterResource(SharedRes.images.ArrowForwardIOS),
+                                painter = painterResource(Res.drawable.ArrowForwardIOS),
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
                                 tint = Color.DarkGray
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                stringResource(SharedRes.strings.continue_with_default_image),
+                                stringResource(Res.string.continue_with_default_image),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color.DarkGray
                             )
@@ -312,7 +315,7 @@ actual fun UploadAvatarForPhone(
                                 )
                             }
                         }, shape = MaterialTheme.shapes.small) {
-                            Text(stringResource(SharedRes.strings.continue_app))
+                            Text(stringResource(Res.string.continue_app))
                         }
                     }
                 }

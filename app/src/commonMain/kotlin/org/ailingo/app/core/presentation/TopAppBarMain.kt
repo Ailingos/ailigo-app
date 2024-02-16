@@ -1,5 +1,6 @@
 package org.ailingo.app.core.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,12 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Menu
-import dev.icerock.moko.resources.compose.painterResource
-import org.ailingo.app.SharedRes
 import org.ailingo.app.core.helper_window_info.WindowInfo
 import org.ailingo.app.core.helper_window_info.rememberWindowInfo
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun TopAppBarMain(
     onOpenNavigation: () -> Unit,
@@ -45,7 +46,7 @@ fun TopAppBarMain(
         },
         title = {
             Icon(
-                painter = painterResource(SharedRes.images.ailingologowithoutbackground),
+                painter = painterResource(Res.drawable.ailingologowithoutbackground),
                 contentDescription = null,
                 tint = Color.Black,
                 modifier = Modifier.height(30.dp)

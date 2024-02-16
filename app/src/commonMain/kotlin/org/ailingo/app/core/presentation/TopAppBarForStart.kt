@@ -1,5 +1,6 @@
 package org.ailingo.app.core.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,16 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.painterResource
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun TopAppBarForStart() {
     CenterAlignedTopAppBar(
         title = {
             Icon(
-                painter = painterResource(SharedRes.images.ailingologowithoutbackground),
+                painter = painterResource(Res.drawable.ailingologowithoutbackground),
                 contentDescription = null,
                 tint = Color.Black,
                 modifier = Modifier.height(40.dp),

@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.libres)
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinSerialization)
-    id("dev.icerock.mobile.multiplatform-resources")
+//    id("dev.icerock.mobile.multiplatform-resources")
     id("app.cash.sqldelight")
     id("kotlin-parcelize")
 }
@@ -85,6 +85,9 @@ kotlin {
                 implementation(libs.decompose)
                 implementation(libs.decompose.jetbrains)
                 implementation(libs.kotlinx.serialization.json)
+
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
             }
         }
 
@@ -231,11 +234,11 @@ buildConfig {
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
 }
 
-multiplatformResources {
-    multiplatformResourcesPackage = "org.ailingo.app" // required
-    multiplatformResourcesClassName = "SharedRes" // optional, default MR
-    disableStaticFrameworkWarning = true
-}
+//multiplatformResources {
+//    multiplatformResourcesPackage = "org.ailingo.app" // required
+//    multiplatformResourcesClassName = "SharedRes" // optional, default MR
+//    disableStaticFrameworkWarning = true
+//}
 
 sqldelight {
     databases {
@@ -250,8 +253,8 @@ dependencies {
     implementation("androidx.core:core:1.10.1")
 
     //strings, images, fonts res
-    commonMainApi("dev.icerock.moko:resources:0.22.0")
-    commonMainApi("dev.icerock.moko:resources-compose:0.22.0")
+//    commonMainApi("dev.icerock.moko:resources:0.22.0")
+//    commonMainApi("dev.icerock.moko:resources-compose:0.22.0")
 
     // only ViewModel, EventsDispatcher, Dispatchers.UI
     commonMainApi("dev.icerock.moko:mvvm-core:0.16.1")

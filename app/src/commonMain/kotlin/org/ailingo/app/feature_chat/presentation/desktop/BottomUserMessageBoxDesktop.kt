@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_chat.presentation.desktop
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -19,17 +20,18 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Mic
 import compose.icons.feathericons.MicOff
 import compose.icons.feathericons.Send
-import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.ailingo.app.CustomTextFieldImpl
-import org.ailingo.app.SharedRes
 import org.ailingo.app.core.helper_voice.VoiceStates
 import org.ailingo.app.core.helper_voice.VoiceToTextParser
 import org.ailingo.app.feature_chat.data.model.Message
 import org.ailingo.app.feature_chat.presentation.ChatScreenComponent
 import org.ailingo.app.feature_chat.presentation.ChatScreenEvents
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun BottomUserMessageBox(
     chatTextField: TextFieldValue,
@@ -56,7 +58,7 @@ fun BottomUserMessageBox(
             modifier = Modifier.weight(4f),
             shape = RoundedCornerShape(18.dp),
             label = {
-                Text(stringResource(SharedRes.strings.message))
+                Text(stringResource(Res.string.message))
             },
             maxLines = 5,
             trailingIcon = {

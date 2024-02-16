@@ -1,6 +1,8 @@
 package org.ailingo.app.feature_topics.data
 
-import dev.icerock.moko.resources.ImageResource
-import dev.icerock.moko.resources.StringResource
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 
-data class Topic(val title: StringResource, val image: ImageResource)
+
+data class Topic @OptIn(ExperimentalResourceApi::class) constructor(val title: StringResource, val image: DrawableResource)

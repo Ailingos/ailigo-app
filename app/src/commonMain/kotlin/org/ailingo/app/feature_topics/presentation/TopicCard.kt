@@ -25,10 +25,12 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.painterResource
-import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.feature_topics.data.Topic
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun TopicCard(topic: Topic, modifier: Modifier = Modifier) {
     val gradient = Brush.verticalGradient(

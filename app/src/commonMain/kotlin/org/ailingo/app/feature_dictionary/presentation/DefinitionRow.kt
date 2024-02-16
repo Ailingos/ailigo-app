@@ -16,13 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Volume2
-import dev.icerock.moko.resources.compose.fontFamilyResource
-import org.ailingo.app.SharedRes
 import org.ailingo.app.feature_dictionary.data.model.Def
 import org.ailingo.app.feature_dictionary.presentation.utils.getPartOfSpeechLabel
 import org.ailingo.app.feature_dictionary_examples.data.model.WordInfoItem
@@ -41,9 +37,8 @@ fun DefinitionRowInfo(definition: Def, responseForExamples: List<WordInfoItem>?)
             style = MaterialTheme.typography.titleLarge,
         )
         Spacer(modifier = Modifier.width(8.dp))
-        val fontFamilyForTranscription: FontFamily =
-            fontFamilyResource(SharedRes.fonts.NotoSans.light)
-        Text("[" + definition.ts + "]", fontFamily = fontFamilyForTranscription, fontSize = 16.sp)
+        //val fontFamilyForTranscription: FontFamily = fontFamilyResource(SharedRes.fonts.NotoSans.light)
+       // Text("[" + definition.ts + "]", fontFamily = fontFamilyForTranscription, fontSize = 16.sp)
         Spacer(modifier = Modifier.width(8.dp))
         Text(getPartOfSpeechLabel(definition.pos))
         val listOfAllAudio = responseForExamples?.flatMap { wordInfoItem ->

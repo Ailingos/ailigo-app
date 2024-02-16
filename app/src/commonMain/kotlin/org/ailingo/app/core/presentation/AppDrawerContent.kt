@@ -16,11 +16,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.ailingo.app.RootComponent
 import org.ailingo.app.core.presentation.utils.DrawerItems
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AppDrawerContent(
     drawerState: DrawerState,

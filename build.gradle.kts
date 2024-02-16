@@ -6,7 +6,6 @@ buildscript {
         maven(url = "https://dl.bintray.com/icerockdev/plugins")
     }
     dependencies {
-        classpath("dev.icerock.moko:resources-generator:0.22.0")
         classpath("app.cash.sqldelight:gradle-plugin:2.0.1")
     }
 }

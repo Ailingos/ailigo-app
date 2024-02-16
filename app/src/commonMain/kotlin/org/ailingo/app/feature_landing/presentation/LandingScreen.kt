@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_landing.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,12 +49,13 @@ import compose.icons.feathericons.MessageSquare
 import compose.icons.feathericons.Mic
 import compose.icons.feathericons.Phone
 import compose.icons.feathericons.Volume2
-import dev.icerock.moko.resources.compose.painterResource
-import dev.icerock.moko.resources.compose.stringResource
-import org.ailingo.app.SharedRes
 import org.ailingo.app.core.helper_window_info.rememberWindowInfo
 import org.ailingo.app.theme.ColorForMainTextDictionary
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LandingScreen(
     component: LandingScreenComponent
@@ -119,7 +121,7 @@ fun LandingScreen(
                 modifier = Modifier.height(screenHeight + 100.dp).width(screenWidth)
             ) {
                 Image(
-                    painter = painterResource(SharedRes.images.backHeader),
+                    painter = painterResource(Res.drawable.backHeader),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.height(screenHeight).width(screenWidth)
@@ -173,7 +175,7 @@ fun LandingScreen(
             }
             Spacer(modifier = Modifier.height(64.dp))
             Text(
-                text = stringResource(SharedRes.strings.made_for),
+                text = stringResource(Res.string.made_for),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(64.dp))
@@ -203,17 +205,17 @@ fun LandingScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = stringResource(SharedRes.strings.whats_new),
+                    text = stringResource(Res.string.whats_new),
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Blue
                 )
                 Text(
-                    text = stringResource(SharedRes.strings.private_police),
+                    text = stringResource(Res.string.private_police),
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Blue
                 )
                 Text(
-                    text = stringResource(SharedRes.strings.press_kit),
+                    text = stringResource(Res.string.press_kit),
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Blue
                 )
@@ -251,6 +253,7 @@ fun RowScope.InfoRow(info: Info) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun HeaderLanding(
     component: LandingScreenComponent
@@ -266,7 +269,7 @@ fun HeaderLanding(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(SharedRes.images.ailingologowithoutbackground),
+                painter = painterResource(Res.drawable.ailingologowithoutbackground),
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.height(40.dp)
@@ -280,7 +283,7 @@ fun HeaderLanding(
                 )
             ) {
                 Text(
-                    stringResource(SharedRes.strings.login),
+                    stringResource(Res.string.login),
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
                 )
@@ -289,14 +292,16 @@ fun HeaderLanding(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RowScope.DisplayPhone() {
     Image(
-        painterResource(SharedRes.images.LandgingPhone),
+        painterResource(Res.drawable.LandgingPhone),
         contentDescription = null,
     )
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RowScope.DisplayGooglePlay() {
     Column(
@@ -311,7 +316,7 @@ fun RowScope.DisplayGooglePlay() {
                 modifier = Modifier.size(100.dp)
             ) {
                 Image(
-                    painter = painterResource(SharedRes.images.logo),
+                    painter = painterResource(Res.drawable.logo),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize().padding(16.dp)
                 )
@@ -332,7 +337,7 @@ fun RowScope.DisplayGooglePlay() {
         )
 
         Image(
-            painter = painterResource(SharedRes.images.googlePlay),
+            painter = painterResource(Res.drawable.googlePlay),
             modifier = Modifier.width(200.dp).height(60.dp),
             contentScale = ContentScale.FillBounds,
             contentDescription = null

@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_login.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -19,12 +20,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
 import org.ailingo.app.CustomTextFieldImpl
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 @Composable
 fun LoginPasswordTextField(
     value: TextFieldValue,
@@ -46,7 +47,7 @@ fun LoginPasswordTextField(
             trailingIcon = {
                 LoginPasswordVisibilityIcon(passwordVisible, onPasswordVisibleChange)
             },
-            label = { Text(text = stringResource(SharedRes.strings.password)) },
+            label = { Text(text = stringResource(Res.string.password)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Password,
@@ -65,7 +66,7 @@ fun LoginPasswordTextField(
         )
         if (showErrorText) {
             Text(
-                text = stringResource(SharedRes.strings.password_cannot_be_empty),
+                text = stringResource(Res.string.password_cannot_be_empty),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp, start = 16.dp)

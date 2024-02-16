@@ -1,18 +1,21 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package org.ailingo.app.core.presentation.utils
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowRightCircle
 import compose.icons.feathericons.Book
 import compose.icons.feathericons.MessageCircle
-import dev.icerock.moko.resources.StringResource
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 
 sealed class DrawerItems(val title: StringResource, val icon: ImageVector) {
-    data object FreeMode: DrawerItems(SharedRes.strings.free_mode, FeatherIcons.ArrowRightCircle)
-    data object Topics: DrawerItems(SharedRes.strings.topics, FeatherIcons.MessageCircle)
-    data object Dictionary: DrawerItems(SharedRes.strings.dictionary, FeatherIcons.Book)
-    data object Exit: DrawerItems(SharedRes.strings.exit, Icons.Filled.ExitToApp)
+    data object FreeMode: DrawerItems(Res.string.free_mode, FeatherIcons.ArrowRightCircle)
+    data object Topics: DrawerItems(Res.string.topics, FeatherIcons.MessageCircle)
+    data object Dictionary: DrawerItems(Res.string.dictionary, FeatherIcons.Book)
+    data object Exit: DrawerItems(Res.string.exit, Icons.AutoMirrored.Filled.ExitToApp)
 }

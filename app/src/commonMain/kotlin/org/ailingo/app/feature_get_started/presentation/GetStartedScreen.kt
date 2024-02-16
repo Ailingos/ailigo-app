@@ -1,5 +1,6 @@
 package org.ailingo.app.feature_get_started.presentation
 
+import ailingo.app.generated.resources.Res
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,9 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import org.ailingo.app.SharedRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun GetStartedScreen(
     component: GetStartedScreenComponent
@@ -28,7 +30,7 @@ fun GetStartedScreen(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
         Text(
-            stringResource(SharedRes.strings.get_started),
+            stringResource(Res.string.get_started),
             style = MaterialTheme.typography.headlineLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -36,13 +38,13 @@ fun GetStartedScreen(
             Button(shape = MaterialTheme.shapes.small, onClick = {
                 component.onEvent(GetStartedScreenEvent.OnNavigateToLoginScreen)
             }) {
-                Text(stringResource(SharedRes.strings.log_in))
+                Text(stringResource(Res.string.log_in))
             }
             Spacer(modifier = Modifier.width(16.dp))
             Button(shape = MaterialTheme.shapes.small, onClick = {
                 component.onEvent(GetStartedScreenEvent.OnNavigateToRegisterScreen)
             }) {
-                Text(stringResource(SharedRes.strings.sign_up))
+                Text(stringResource(Res.string.sign_up))
             }
         }
     }

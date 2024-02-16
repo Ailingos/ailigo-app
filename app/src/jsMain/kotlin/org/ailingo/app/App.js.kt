@@ -80,12 +80,13 @@ actual fun getPlatformName(): String {
 }
 
 actual fun playSound(sound: String) {
-    try {
-        val audio = Audio(sound)
-        audio.play()
-    } catch (e: Exception) {
-        println("Error: Failed to play the sound '$sound'. ${e.message}")
-        e.printStackTrace()
+    if (sound == "") return
+    val audio = Audio(sound)
+    val playPromise = audio.play()
+    if (playPromise !== undefined) {
+        playPromise.catch { error ->
+            console.log(error)
+        }
     }
 }
 
@@ -260,7 +261,8 @@ private suspend fun ShortcutEventHandler(
         }
 
         ShortcutEvent.COPY -> {
-            val selectedText = textValue.text.substring(textValue.selection.min, textValue.selection.max)
+            val selectedText =
+                textValue.text.substring(textValue.selection.min, textValue.selection.max)
             window.navigator.clipboard.writeText(selectedText)
         }
 

@@ -1,9 +1,11 @@
 package org.ailingo.app.feature_login.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
@@ -11,6 +13,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kotlinx.coroutines.delay
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.presentation.ChatScreen
 
@@ -27,11 +30,26 @@ data class LoginScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
         var password by rememberSaveable {
             mutableStateOf("pass")
         }
+        var passwordVisible by rememberSaveable {
+            mutableStateOf(false)
+        }
+        val isLoading = remember {
+            mutableStateOf(true)
+        }
+        LaunchedEffect(isLoading.value) {
+            if (isLoading.value) {
+                delay(500L) //just for cute ui
+                isLoading.value = false
+            }
+        }
+
         when (loginState.value) {
             LoginUiState.Empty -> {
                 LoginMainScreen(
                     navigator,
-                    loginViewModel,
+                    onLoginUser = {
+                        loginViewModel.loginUser(login, password)
+                    },
                     voiceToTextParser,
                     login = login,
                     onLoginChange = {
@@ -40,7 +58,12 @@ data class LoginScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
                     password = password,
                     onPasswordChange = {
                         password = it
-                    }
+                    },
+                    passwordVisible,
+                    onPasswordVisibleChange = {
+                        passwordVisible = !passwordVisible
+                    },
+                    isLoading
                 )
             }
 
@@ -53,7 +76,8 @@ data class LoginScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
             }
 
             is LoginUiState.Success -> {
-                navigator.push(ChatScreen(voiceToTextParser))
+                val coins = (loginState.value as LoginUiState.Success).coins
+                navigator.push(ChatScreen(voiceToTextParser, loginState))
             }
         }
     }

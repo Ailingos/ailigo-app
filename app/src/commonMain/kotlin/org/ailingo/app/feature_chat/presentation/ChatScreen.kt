@@ -1,12 +1,16 @@
 package org.ailingo.app.feature_chat.presentation
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -14,14 +18,25 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.ailingo.app.core.helper_window_info.WindowInfo
 import org.ailingo.app.core.helper_window_info.rememberWindowInfo
 import org.ailingo.app.core.util.VoiceToTextParser
+import org.ailingo.app.feature_login.presentation.LoginUiState
 
-data class ChatScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
+data class ChatScreen(
+    val voiceToTextParser: VoiceToTextParser,
+    val loginState: State<LoginUiState>?
+    ) : Screen {
 
     @Composable
     override fun Content() {
+
+        val state by rememberSaveable{
+            mutableStateOf(loginState?.value)
+        }
         val voiceState = voiceToTextParser.voiceState.collectAsState()
         val textField = remember {
             mutableStateOf("")
+        }
+        val coinsTemp by remember {
+            mutableStateOf(0)
         }
         val chatViewModel = getViewModel(Unit, viewModelFactory { ChatViewModel() })
         val chatState = chatViewModel.chatState
@@ -38,15 +53,22 @@ data class ChatScreen(val voiceToTextParser: VoiceToTextParser) : Screen {
         val screenInfo = rememberWindowInfo()
 
         if (screenInfo.screenWidthInfo is WindowInfo.WindowType.DesktopWindowInfo) {
-            ChatScreenDesktop(
-                voiceToTextParser,
-                textField,
-                chatState,
-                listState,
-                voiceState,
-                chatViewModel,
-                isActiveJob
-            )
+            Column {
+                //if (state is LoginUiState.Success){
+                    Text("Coins ${(state as LoginUiState.Success).coins}")
+                    Text("Streak ${(state as LoginUiState.Success).streak}")
+                //}
+
+                ChatScreenDesktop(
+                    voiceToTextParser,
+                    textField,
+                    chatState,
+                    listState,
+                    voiceState,
+                    chatViewModel,
+                    isActiveJob)
+            }
+
         } else {
             ChatScreenMobile(
                 voiceToTextParser,

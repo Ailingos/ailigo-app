@@ -19,17 +19,20 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.launch
 import org.ailingo.app.core.presentation.utils.DrawerItems
 import org.ailingo.app.core.util.VoiceToTextParser
 import org.ailingo.app.feature_chat.presentation.ChatScreen
 import org.ailingo.app.feature_dictionary.presentation.DictionaryScreen
+import org.ailingo.app.feature_dictionary_history.domain.DictionaryRepository
 import org.ailingo.app.feature_get_started.presentation.GetStartedScreen
 import org.ailingo.app.feature_topics.presentation.TopicsScreen
 
 
 @Composable
 fun AppDrawerContent(
+    historyDictionaryRepository: Deferred<DictionaryRepository>,
     voiceToTextParser: VoiceToTextParser,
     drawerState: DrawerState,
     scope: CoroutineScope,
@@ -57,7 +60,7 @@ fun AppDrawerContent(
                 modifier = Modifier.clickable {
                     when (item) {
                         DrawerItems.Dictionary -> {
-                            navigator.push(DictionaryScreen())
+                            navigator.push(DictionaryScreen(historyDictionaryRepository))
                             scope.launch {
                                 drawerState.close()
                             }
@@ -72,7 +75,7 @@ fun AppDrawerContent(
 
                         DrawerItems.FreeMode -> {
                             scope.launch {
-                                navigator.push(ChatScreen(voiceToTextParser))
+                                navigator.push(ChatScreen(voiceToTextParser, null))
                                 drawerState.close()
                             }
                         }
